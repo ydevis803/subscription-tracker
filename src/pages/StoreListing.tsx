@@ -45,6 +45,9 @@ export default function StoreListing() {
           <Link to="/__store" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
             Screenshots
           </Link>
+          <Link to="/__readiness" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
+            Readiness
+          </Link>
         </div>
       </div>
 

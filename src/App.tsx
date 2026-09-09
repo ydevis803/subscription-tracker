@@ -34,6 +34,7 @@ const Support = lazy(() => import('@/pages/legal/Support'))
 const DeleteAccount = lazy(() => import('@/pages/legal/DeleteAccount'))
 const StorePreview = lazy(() => import('@/pages/StorePreview'))
 const StoreListing = lazy(() => import('@/pages/StoreListing'))
+const Readiness = lazy(() => import('@/pages/Readiness'))
 import { useReminderScheduler } from '@/lib/useReminderScheduler'
 const SignUp = lazy(() => import('@/pages/auth/SignUp'))
 const SignIn = lazy(() => import('@/pages/auth/SignIn'))
@@ -130,6 +131,7 @@ function AppRoutes() {
       {/* Owner-only store screenshot staging: development builds, or production with ?key=VITE_STORE_PREVIEW_KEY. Demo data only. */}
       <Route path="/__store" element={<StorePreview />} />
       <Route path="/__listing" element={<StoreListing />} />
+      <Route path="/__readiness" element={<Readiness />} />
       {/* Legal, support and deletion pages are reachable before any account exists. */}
       <Route path="/legal/privacy" element={<Privacy />} />
       <Route path="/legal/terms" element={<Terms />} />

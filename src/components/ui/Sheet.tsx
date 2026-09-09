@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { IconButton } from './Button'
+import { pushEntry } from '@/lib/navigation'
 
 let sheetCounter = 0
 // A sheet that unmounts and immediately remounts (React StrictMode in development) must reuse its
@@ -33,6 +34,7 @@ export function Sheet({
     // Push a history entry so the device/browser Back button closes the sheet instead of leaving the page.
     const base = (window.history.state as Record<string, unknown> | null) ?? {}
     let id: number
+    let pushed = true
     if (pendingBack && base.sheet === pendingBack.id) {
       window.clearTimeout(pendingBack.timer)
       id = pendingBack.id
@@ -40,9 +42,10 @@ export function Sheet({
     } else {
       id = ++sheetCounter
       const idx = typeof base.idx === 'number' ? base.idx : 0
-      window.history.pushState({ ...base, idx: idx + 1, sheet: id }, '', window.location.href)
+      // At the browser's history cap no entry is added; then Back must not be used to close, or it leaves the app.
+      pushed = pushEntry({ ...base, idx: idx + 1, sheet: id })
     }
-    entry.current = id
+    entry.current = pushed ? id : null
     const onPop = () => {
       if (entry.current === id) {
         entry.current = null

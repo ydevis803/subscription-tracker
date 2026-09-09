@@ -41,7 +41,9 @@ export default function Readiness() {
       })
     const fetchStatus = async (path: string) => {
       try {
-        return (await fetch(path, { cache: 'no-store' })).status
+        const res = await fetch(path, { cache: 'no-store' })
+        await res.arrayBuffer().catch(() => undefined)
+        return res.status
       } catch {
         return 0
       }

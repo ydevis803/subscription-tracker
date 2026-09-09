@@ -7,6 +7,7 @@ import { ToastProvider } from '@/components/ui/Toast'
 import { OfflineBanner } from '@/components/app/OfflineBanner'
 import { CrashTest, ErrorBoundary } from '@/components/app/ErrorBoundary'
 import { flushAnalytics } from '@/lib/analytics'
+import { noteNavigation } from '@/lib/navigation'
 const OwnerAnalytics = lazy(() => import('@/pages/OwnerAnalytics'))
 import { Logo } from '@/components/ui/Logo'
 import { AppShell } from '@/components/layout/AppShell'
@@ -109,6 +110,7 @@ function AppRoutes() {
   // Remember where each screen was scrolled to, restore it on Back, start at the top on forward navigation.
   useEffect(() => {
     const key = location.key
+    noteNavigation(navigationType)
     const onScroll = () => scrollPositions.current.set(key, window.scrollY)
     window.addEventListener('scroll', onScroll, { passive: true })
     if (navigationType === 'POP') {

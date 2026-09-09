@@ -39,7 +39,9 @@ function writeQueue(q: { event: AnalyticsEvent; day: string }[]) {
 
 async function send(event: AnalyticsEvent, day: string): Promise<boolean> {
   try {
-    const res = await fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event, day }), credentials: 'omit', keepalive: true })
+    const res = await fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event, day }), credentials: 'omit' })
+    // Drain the (empty) body so the browser can release the connection and count the request as finished.
+    await res.arrayBuffer().catch(() => undefined)
     return res.ok
   } catch {
     return false

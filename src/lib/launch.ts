@@ -77,7 +77,9 @@ export function writeMark(id: string, mark: LaunchMark | null): void {
 
 async function status(path: string): Promise<number> {
   try {
-    return (await fetch(path, { cache: 'no-store' })).status
+    const res = await fetch(path, { cache: 'no-store' })
+    await res.arrayBuffer().catch(() => undefined)
+    return res.status
   } catch {
     return 0
   }

@@ -39,7 +39,8 @@ if (typeof window !== 'undefined') {
 /** Ask the server for anything cheap. Resolves true when it answers, false when the network is down. */
 export async function probeConnection(): Promise<boolean> {
   try {
-    await fetch('/api/auth/me', { method: 'GET', cache: 'no-store', credentials: 'same-origin' })
+    const res = await fetch('/api/auth/me', { method: 'GET', cache: 'no-store', credentials: 'same-origin' })
+    await res.arrayBuffer().catch(() => undefined)
     reportOnline()
     return true
   } catch {

@@ -250,7 +250,9 @@ export function GooglePlayPrep() {
       setExtra((x) => ({ ...x, urlStatus: { ...x.urlStatus, [id]: 'pending' } }))
       let status = 0
       try {
-        status = (await fetch(u.pathname + u.search, { cache: 'no-store' })).status
+        const res = await fetch(u.pathname + u.search, { cache: 'no-store' })
+        await res.arrayBuffer().catch(() => undefined)
+        status = res.status
       } catch {
         status = 0
       }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { completeOnboarding } from '@/db/repo'
 import { LegalLinks } from '@/components/app/LegalLayout'
 import { Logo } from '@/components/ui/Logo'
+import { pushEntry } from '@/lib/navigation'
 import { track } from '@/lib/analytics'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { CURRENCIES, currencySymbol, formatMoney, toMonthly, validateBudget } from '@/lib/money'
@@ -76,17 +77,21 @@ export default function Onboarding() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Only pushes that really added a history entry may be unwound later (a tab at the browser's history cap adds none).
+  const realPushes = useRef(0)
   const next = () => {
     const step = Math.min(draft.step + 1, STEPS - 1)
     const base = (window.history.state as Record<string, unknown> | null) ?? {}
     const idx = typeof base.idx === 'number' ? base.idx : 0
-    window.history.pushState({ ...base, idx: idx + 1, onboardingStep: step }, '', window.location.href)
+    if (pushEntry({ ...base, idx: idx + 1, onboardingStep: step })) realPushes.current++
     patch({ step })
   }
   const back = () => {
     const state = window.history.state as { onboardingStep?: unknown; idx?: unknown } | null
-    if (state?.onboardingStep === draft.step && typeof state.idx === 'number' && state.idx > 0) window.history.back()
-    else patch({ step: Math.max(draft.step - 1, 0) })
+    if (state?.onboardingStep === draft.step && typeof state.idx === 'number' && state.idx > 0 && realPushes.current > 0) {
+      realPushes.current--
+      window.history.back()
+    } else patch({ step: Math.max(draft.step - 1, 0) })
   }
 
   const { currency, services, leadDays } = draft
@@ -131,7 +136,7 @@ export default function Onboarding() {
       // Unwind only the step entries this document pushed, so Back from the dashboard does not walk through
       // finished onboarding and we never step back into an earlier document.
       const state = window.history.state as { onboardingStep?: unknown } | null
-      const unwind = state?.onboardingStep === draft.step ? Math.max(0, draft.step - stepAtMount.current) : 0
+      const unwind = state?.onboardingStep === draft.step ? Math.min(Math.max(0, draft.step - stepAtMount.current), realPushes.current) : 0
       if (unwind > 0) navigate(-unwind)
       if (mode === 'add') window.setTimeout(() => navigate('/subscriptions/new'), unwind > 0 ? 80 : 0)
       else if (unwind === 0) navigate('/', { replace: true })

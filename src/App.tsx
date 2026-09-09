@@ -5,6 +5,7 @@ import { useProfile } from '@/hooks/useData'
 import { AuthProvider, useAuth } from '@/auth/AuthContext'
 import { ToastProvider } from '@/components/ui/Toast'
 import { OfflineBanner } from '@/components/app/OfflineBanner'
+import { CrashTest, ErrorBoundary } from '@/components/app/ErrorBoundary'
 import { Logo } from '@/components/ui/Logo'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, ErrorState, Skeleton } from '@/components/ui/Primitives'
@@ -45,11 +46,13 @@ type Boot = 'loading' | 'ready' | 'error'
 
 export default function App() {
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <ScopedApp />
-      </AuthProvider>
-    </ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <ScopedApp />
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   )
 }
 
@@ -128,6 +131,7 @@ function AppRoutes() {
   const authRoutes = (
     <>
       {import.meta.env.DEV && <Route path="/__splash" element={<Splash />} />}
+      {import.meta.env.DEV && <Route path="/__crash" element={<CrashTest />} />}
       {/* Owner-only store screenshot staging: development builds, or production with ?key=VITE_STORE_PREVIEW_KEY. Demo data only. */}
       <Route path="/__store" element={<StorePreview />} />
       <Route path="/__listing" element={<StoreListing />} />

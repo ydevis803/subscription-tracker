@@ -78,8 +78,10 @@ const probeButtons = async (path, max = 8) => {
     // An already-selected filter, tab or radio is meant to stay put when tapped again.
     const [pressed, checked, , selected] = pressedBefore.split('|')
     if (pressed === 'true' || checked === 'true' || selected === 'true') continue
+    await target.scrollIntoViewIfNeeded().catch(() => undefined)
+    await page.waitForTimeout(200)
     await target.click({ timeout: 4000 }).catch(() => undefined)
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(700)
     const after = await page.evaluate(() => ({ url: location.href, text: document.body.innerText, dialog: !!document.querySelector('[role=dialog]'), toast: !!document.querySelector('[role=status]') }))
     const pressedAfter = await target.evaluate((e) => e.getAttribute('aria-pressed') + '|' + e.getAttribute('aria-checked') + '|' + e.getAttribute('aria-expanded') + '|' + e.getAttribute('aria-selected')).catch(() => 'gone')
     const changed = before.url !== after.url || after.dialog !== before.dialog || after.toast || before.text !== after.text || pressedBefore !== pressedAfter

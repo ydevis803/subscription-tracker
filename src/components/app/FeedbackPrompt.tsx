@@ -106,7 +106,7 @@ export function FeedbackPrompt() {
           </span>
           <div>
             <p className="text-[1rem] font-bold leading-tight text-navy-900">{score === 5 ? 'Love it? A rating helps others find it.' : 'Glad it is working. A rating helps others find it.'}</p>
-            <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{storeUrl() ? 'Opens the store listing in a new tab.' : 'The store listing is not live yet. Tapping records that you would rate it, and we will not ask again.'}</p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{storeUrl() ? 'Opens the store listing in a new tab.' : 'A thumbs up is recorded on this device only, and we will not ask again.'}</p>
           </div>
         </div>
         <div className="mt-4 space-y-2">
@@ -121,10 +121,10 @@ export function FeedbackPrompt() {
               await recordRatingOutcome('rated', score ?? 5).catch(() => undefined)
               setStoreOpen(false)
               setHidden(true)
-              toast.success(url ? 'Thank you for rating' : 'Thank you. Noted, and we will not ask again.')
+              toast.success(url ? 'Thank you for rating' : 'Thank you. We will not ask again.')
             }}
           >
-            {storeUrl() ? 'Rate on the App Store' : 'Rate on the App Store (coming soon)'}
+            {storeUrl() ? 'Rate on the App Store' : 'Send a thumbs up'}
           </Button>
           <Button
             full

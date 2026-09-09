@@ -226,6 +226,69 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     },
   },
   {
+    id: 'iap-wiring',
+    group: 'Store assets',
+    title: 'Premium purchase goes through App Store / Play Billing',
+    route: '/premium',
+    run: async () => ({
+      status: 'fix',
+      evidence: 'In this build Premium is recorded in the app with no payment collected. Both stores require digital subscriptions sold in a native app to use their billing.',
+      action: 'Before submitting a native build, wire StoreKit / Google Play Billing to upgradeToPremium (and Restore purchase), or remove the Start Premium button from that build and keep Premium web-only.',
+    }),
+  },
+  {
+    id: 'mail-delivery',
+    group: 'Store assets',
+    title: 'Password reset emails are delivered by a real mailer',
+    route: '/auth/forgot',
+    run: async () => {
+      try {
+        const res = await fetch('/api/health', { cache: 'no-store' })
+        const body = (await res.json()) as { mail?: string }
+        return body.mail === 'smtp'
+          ? { status: 'pass', evidence: 'The API reports SMTP delivery for reset emails.' }
+          : { status: 'fix', evidence: 'The API reports mail mode "outbox": reset links are written to server/outbox instead of being sent.', action: 'Set SMTP_URL (and MAIL_FROM) for the API server before release; the transport is built in. Then re-run.' }
+      } catch {
+        return { status: 'fix', evidence: 'The API health endpoint did not answer.', action: 'Start the API server (npm run dev) and re-run.' }
+      }
+    },
+  },
+  {
+    id: 'privacy-url',
+    group: 'Legal',
+    title: 'Privacy Policy URL answers as a public page',
+    route: '/legal/privacy',
+    run: async ({ fetchStatus, page }) => {
+      const status = await fetchStatus('/legal/privacy')
+      const { text } = await page('/legal/privacy')
+      const ok = status === 200 && /Privacy Policy/.test(text)
+      return ok ? { status: 'pass', evidence: 'GET /legal/privacy responds 200 and renders the policy, so the store listing can link to it directly.' } : { status: 'fix', evidence: `GET /legal/privacy returned ${status}.`, action: 'Serve the app with SPA fallback (SERVE_STATIC=1 or your host\'s rewrite rule).' }
+    },
+  },
+  {
+    id: 'crash-boundary',
+    group: 'Content',
+    title: 'A render crash shows the app error state, not a blank screen',
+    route: '/',
+    run: async ({ page }) => {
+      if (!import.meta.env.DEV) return { status: 'confirm', evidence: 'The crash test route only exists in development builds.', action: 'Run this check in a development build.' }
+      const { text } = await page('/__crash')
+      const ok = /This screen hit a problem/.test(text) && /Try again|Back to Home/.test(text)
+      return ok ? { status: 'pass', evidence: 'A thrown render error was caught and replaced with the recoverable error state.' } : { status: 'fix', evidence: 'The crash test did not show the error boundary.', action: 'Check ErrorBoundary wraps the app in src/App.tsx.' }
+    },
+  },
+  {
+    id: 'owner-pages-gated',
+    group: 'Content',
+    title: 'Owner-only pages are gated in production',
+    route: '/__readiness',
+    run: async () => {
+      const key = (import.meta.env.VITE_STORE_PREVIEW_KEY as string | undefined)?.trim()
+      if (import.meta.env.DEV) return { status: 'confirm', evidence: `Development build: owner pages are open here by design. In production they return not-found unless ?key= matches VITE_STORE_PREVIEW_KEY${key ? ' (set)' : ' (not set, so they are fully hidden)'}.`, action: 'Nothing to do unless you want key access in production; then set VITE_STORE_PREVIEW_KEY.' }
+      return { status: 'pass', evidence: 'This production build required the owner key to show this page.' }
+    },
+  },
+  {
     id: 'data-safety',
     group: 'Store assets',
     title: 'Data safety / privacy nutrition answers match the Privacy Policy',

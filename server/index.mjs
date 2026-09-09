@@ -22,7 +22,7 @@ import {
   verifyPassword,
   writeSnapshot,
 } from './auth.mjs'
-import { sendMail } from './mailer.mjs'
+import { mailMode, sendMail } from './mailer.mjs'
 
 const PORT = Number(process.env.API_PORT ?? 8787)
 const COOKIE = 'st_session'
@@ -109,7 +109,7 @@ const validPassword = (p) => typeof p === 'string' && p.length >= 8 && p.length 
 const clientIp = (req) => (req.headers['x-forwarded-for']?.split(',')[0] ?? req.socket.remoteAddress ?? '').trim()
 
 const routes = {
-  'GET /api/health': async () => ({ ok: true }),
+  'GET /api/health': async () => ({ ok: true, mail: mailMode }),
 
   'POST /api/auth/sign-up': async (req, res) => {
     assertSameOrigin(req)

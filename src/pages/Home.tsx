@@ -9,6 +9,7 @@ import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { Page } from '@/components/layout/AppShell'
 import { Card, EmptyState, ListSkeleton, ProgressBar, SectionTitle, ServiceMark, Skeleton } from '@/components/ui/Primitives'
 import { Deferred } from '@/components/app/Deferred'
+import { Logo } from '@/components/ui/Logo'
 import type { CancellationNote, PriceChange, RenewalCheck, Settings, Subscription } from '@/db/schema'
 import { Icon, type IconName } from '@/components/ui/Icon'
 import { IconButton, TextLink } from '@/components/ui/Button'
@@ -151,9 +152,12 @@ export default function Home() {
       <div className="bg-navy-900 pb-16 text-white">
         <div className="mx-auto max-w-[480px] px-4 pt-4 safe-top">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex items-center gap-3">
+              <Logo size={36} tile={false} className="shrink-0" />
+              <div>
               <p className="text-[0.8125rem] font-medium text-navy-100">{greeting()}</p>
               <h1 className="text-[1.375rem] font-bold leading-tight">{profile ? profile.name || 'Your subscriptions' : <Skeleton className="h-6 w-28 bg-navy-700" />}</h1>
+              </div>
             </div>
             <IconButton icon="bell" label={model && model.alerts.length > 0 ? `Reminders, ${model.alerts.length} ${model.alerts.length === 1 ? 'item needs' : 'items need'} a decision` : 'Reminders'} variant="light" onClick={() => navigate('/notes')}>
               {model && model.alerts.length > 0 && (

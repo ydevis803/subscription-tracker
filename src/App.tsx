@@ -5,6 +5,7 @@ import { useProfile } from '@/hooks/useData'
 import { AuthProvider, useAuth } from '@/auth/AuthContext'
 import { ToastProvider } from '@/components/ui/Toast'
 import { OfflineBanner } from '@/components/app/OfflineBanner'
+import { Logo } from '@/components/ui/Logo'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, ErrorState, Skeleton } from '@/components/ui/Primitives'
 import { Spinner } from '@/components/ui/Button'
@@ -123,6 +124,7 @@ function AppRoutes() {
 
   const authRoutes = (
     <>
+      {import.meta.env.DEV && <Route path="/__splash" element={<Splash />} />}
       {/* Legal, support and deletion pages are reachable before any account exists. */}
       <Route path="/legal/privacy" element={<Privacy />} />
       <Route path="/legal/terms" element={<Terms />} />
@@ -209,12 +211,8 @@ function PageSkeleton() {
 
 function Splash({ message = 'Opening your subscriptions…' }: { message?: string }) {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-navy-900 text-white" aria-busy="true">
-      <svg width="72" height="72" viewBox="0 0 128 128" aria-hidden="true">
-        <rect width="128" height="128" rx="28" fill="#12294B" />
-        <circle cx="64" cy="64" r="34" fill="none" stroke="#5EEAD4" strokeWidth="10" />
-        <path d="M64 38v26l16 10" fill="none" stroke="#FF7A6B" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+    <div className="flex min-h-dvh flex-col items-center justify-center bg-navy-900 px-6 text-center text-white safe-top safe-bottom" aria-busy="true">
+      <Logo size={96} tileFill="#12294B" className="shrink-0" />
       <p className="mt-5 text-lg font-bold">Subscription Tracker</p>
       <p className="mt-1 text-sm text-navy-100">{message}</p>
       <Spinner className="mt-6 text-mint-400" />

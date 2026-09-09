@@ -16,7 +16,8 @@
     "audit:a11y": "node scripts/a11y-audit.mjs",
     "test:permissions": "node scripts/permissions-test.mjs",
     "test:journeys": "node scripts/journeys-test.mjs",
-    "qa:visual": "node scripts/visual-qa.mjs"
+    "qa:visual": "node scripts/visual-qa.mjs",
+    "logo:export": "node scripts/logo-export.mjs"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

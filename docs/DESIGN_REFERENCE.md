@@ -8,6 +8,10 @@ npm run screenshots
 
 The script (`scripts/screenshots.mjs`) drives the installed Google Chrome through `playwright-core` in a fresh profile, so it never touches real user data. Captures are 375×812 at 2x; full pages are rendered at their natural height so the bottom navigation sits at the real bottom.
 
+## Logo
+
+See `docs/brand/logo-sheet.png` for the mark at every size on light and dark. Navy tile #0B1F3A (rx 30/128), mint receipt #2DD4BF with three navy line items, coral renewal dot #FF6B5B ringed in navy. Never add text to the mark; never thin the shapes.
+
 ## Design rules the screenshots encode
 
 - Navy (`#0B1F3A`) for headers, primary buttons and the bottom nav active state. Mint (`#2DD4BF`) for positive money, confirmations and the main call to action on onboarding and Premium. Coral (`#FF6B5B`) only for urgency: renewals within 3 days, price increases, cancellation notes, destructive actions.

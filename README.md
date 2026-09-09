@@ -100,6 +100,10 @@ Screens other than Home and onboarding are code-split and lazy-loaded behind a p
 
 `npm run audit:a11y` (dev server running) runs axe-core (WCAG 2.1 A/AA and best practice) on every screen and sheet, tabs through each page to confirm a visible focus style, submits an empty form to confirm errors are linked to their fields and announced, and loads Home with reduced motion to confirm no animation runs. Conventions: every icon-only control has an `aria-label`; field messages are linked with `aria-describedby` and use `role="alert"`; status is always text or an icon as well as colour (badges, alerts, progress bars carry labels and values); the focus ring is a 3px mint outline; font sizes are in rem so browser text scaling applies; `text-faint` (#5F6F86) and `coral-700` (#B03A2B) meet 4.5:1 on white and the tinted surfaces; service marks pick white or navy initials by contrast.
 
+## Logo
+
+The mark is a mint receipt with three bold line items and a coral renewal dot on a navy tile, inspired by the receipt symbol but drawn with thick shapes only, no text, so it reads at 16 px. Source of truth: `src/components/ui/Logo.tsx` (React) and `public/icon.svg` (favicon and manifest), kept identical. `npm run logo:export` renders the PNG sizes (180 for iOS, 192 and 512, plus a maskable 512 with the art inside the safe zone) and `docs/brand/logo-sheet.png`, which shows the mark at 512 to 16 px on white, canvas and navy. It appears in the Home header (no tile, on navy), the onboarding welcome and the loading splash (lighter navy tile on navy).
+
 ## Visual reference
 
 The data model, indexes and migration rules are described in `docs/DATA_MODEL.md`. Reference screenshots of every screen live in `docs/screenshots/` and are indexed in `docs/DESIGN_REFERENCE.md`. Regenerate them with `npm run screenshots` while the dev server is running.

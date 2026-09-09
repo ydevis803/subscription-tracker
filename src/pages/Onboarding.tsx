@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { completeOnboarding } from '@/db/repo'
 import { LegalLinks } from '@/components/app/LegalLayout'
+import { Logo } from '@/components/ui/Logo'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { CURRENCIES, currencySymbol, formatMoney, toMonthly, validateBudget } from '@/lib/money'
 import { describeError } from '@/lib/errors'
@@ -402,11 +403,7 @@ function Welcome({ onNext }: { onNext: () => void }) {
         <span className="w-11 text-right text-[0.75rem] font-semibold text-navy-100">1/{STEPS}</span>
       </div>
       <div className="flex flex-1 flex-col justify-center px-6 py-10">
-        <svg width="64" height="64" viewBox="0 0 128 128" aria-hidden="true">
-          <rect width="128" height="128" rx="28" fill="#12294B" />
-          <circle cx="64" cy="64" r="34" fill="none" stroke="#5EEAD4" strokeWidth="10" />
-          <path d="M64 38v26l16 10" fill="none" stroke="#FF7A6B" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <Logo size={64} tileFill="#12294B" />
         <h1 className="mt-8 text-[2.125rem] font-bold leading-[1.1]">
           Know your monthly total <span className="text-mint-400">before</span> the next charge lands.
         </h1>

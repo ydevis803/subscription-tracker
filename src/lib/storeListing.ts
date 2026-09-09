@@ -64,7 +64,7 @@ PREMIUM
 Premium removes the ${FREE_SUBSCRIPTION_LIMIT}-subscription limit and adds a 12-month projection, a price-increase impact report and an unused-subscription detector, for ${price('monthly')} a month or ${price('yearly')} a year (save ${YEARLY_SAVING_PCT}%). A ${TRIAL_DAYS}-day trial needs no card.
 
 PRIVACY
-No adverts, no analytics trackers, no data brokers. Without an account, your data stays on your device. With an account, only you can read it, and you can export or delete everything from Settings.`
+No adverts, no third-party trackers, no data brokers; only seven anonymous milestone counts with no identifier. Without an account, your data stays on your device. With an account, only you can read it, and you can export or delete everything from Settings.`
 
 export const KEYWORDS = ['subscription tracker', 'recurring charges', 'renewal reminder', 'monthly budget', 'cancel subscriptions', 'bill tracker', 'subscription manager', 'price increase', 'free trial tracker', 'spending insights']
 

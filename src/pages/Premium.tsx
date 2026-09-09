@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { useSmartBack } from '@/lib/navigation'
+import { track } from '@/lib/analytics'
 import { useNavigate } from 'react-router-dom'
 import { downgradeToFree, endTrialNow, startTrial, upgradeToPremium } from '@/db/repo'
 import { FREE_SUBSCRIPTION_LIMIT, type PremiumInterval } from '@/db/schema'
@@ -23,6 +24,9 @@ import { AccountExplainerSheet } from '@/components/app/Account'
 export default function Premium() {
   const navigate = useNavigate()
   const goBack = useSmartBack()
+  useEffect(() => {
+    void track('premium_view')
+  }, [])
   const toast = useToast()
   const profile = useProfile()
   const subs = useSubscriptions()

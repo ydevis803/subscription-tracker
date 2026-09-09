@@ -3,6 +3,9 @@ import { existsSync, readFileSync, statSync } from 'node:fs'
 import { extname, join, resolve } from 'node:path'
 import {
   allow,
+  ANALYTICS_EVENTS,
+  analyticsSummary,
+  recordEvent,
   consumeResetToken,
   countOwnedRows,
   deleteUser,
@@ -110,6 +113,26 @@ const clientIp = (req) => (req.headers['x-forwarded-for']?.split(',')[0] ?? req.
 
 const routes = {
   'GET /api/health': async () => ({ ok: true, mail: mailMode }),
+
+  /** Anonymous milestone counter: body is { event, day } and nothing else is read or stored. */
+  'POST /api/analytics': async (req) => {
+    assertSameOrigin(req)
+    if (!allow(`analytics|${clientIp(req)}`, 60, 15 * 60000)) throw new HttpError(429, 'Too many events')
+    const { event, day } = await readBody(req)
+    if (typeof event !== 'string' || !ANALYTICS_EVENTS.has(event)) throw new HttpError(400, 'Unknown event')
+    if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day)) throw new HttpError(400, 'Bad day')
+    recordEvent(event, day)
+    return { ok: true }
+  },
+
+  /** Owner dashboard: totals per event. Needs X-Owner-Key = OWNER_KEY; when no OWNER_KEY is set, only loopback callers may read it. */
+  'GET /api/analytics/summary': async (req) => {
+    const key = process.env.OWNER_KEY?.trim()
+    const ip = clientIp(req)
+    const loopback = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1'
+    if (key ? req.headers['x-owner-key'] !== key : !loopback) throw new HttpError(401, 'Owner key required')
+    return { ...analyticsSummary(), ownerKeyRequired: !!key }
+  },
 
   'POST /api/auth/sign-up': async (req, res) => {
     assertSameOrigin(req)

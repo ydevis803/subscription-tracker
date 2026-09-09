@@ -15,7 +15,7 @@ export default function Privacy() {
         <ul>
           <li>Without an account, everything you enter stays in your browser on your device. Nothing is uploaded.</li>
           <li>With an account, the same data is backed up to our server so you can restore it on another device.</li>
-          <li>There are no adverts, no advertising identifiers, no analytics trackers and no data brokers.</li>
+          <li>There are no adverts, no advertising identifiers, no third-party analytics trackers and no data brokers. The app counts seven anonymous milestones (such as “onboarding completed”) with no identifier attached.</li>
           <li>You can export or delete everything at any time from Settings.</li>
         </ul>
       </LegalSection>
@@ -35,6 +35,9 @@ export default function Privacy() {
         </p>
         <p>
           <strong>Plan</strong>: whether you are on Free, a trial or Premium, and your own billing history for Premium. In this build the plan is recorded locally; no card details are collected.
+        </p>
+        <p>
+          <strong>Anonymous milestone counts</strong>: once per profile, the app tells our server that a milestone happened (onboarding started or completed, first renewal check, a return on day two or day seven, the plan screen viewed, a trial or plan started) together with the date. Nothing else is sent: no identifier, no account, no amounts, no names, and the server only keeps a number per milestone per day.
         </p>
         <p>
           <strong>Technical data</strong>: a session token in a cookie when signed in, your IP address in temporary rate-limit counters, and unsaved form drafts in your browser's local storage. Drafts never include passwords and expire after seven days.

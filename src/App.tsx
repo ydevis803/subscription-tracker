@@ -6,6 +6,8 @@ import { AuthProvider, useAuth } from '@/auth/AuthContext'
 import { ToastProvider } from '@/components/ui/Toast'
 import { OfflineBanner } from '@/components/app/OfflineBanner'
 import { CrashTest, ErrorBoundary } from '@/components/app/ErrorBoundary'
+import { flushAnalytics } from '@/lib/analytics'
+const OwnerAnalytics = lazy(() => import('@/pages/OwnerAnalytics'))
 import { Logo } from '@/components/ui/Logo'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, ErrorState, Skeleton } from '@/components/ui/Primitives'
@@ -87,6 +89,10 @@ function AppRoutes() {
 
   useEffect(() => {
     void start()
+    void flushAnalytics()
+    const onOnline = () => void flushAnalytics()
+    window.addEventListener('online', onOnline)
+    return () => window.removeEventListener('online', onOnline)
   }, [start])
 
   // Once Home is up and the browser is idle, fetch the chunks behind the tabs so the first tap never waits.
@@ -138,6 +144,7 @@ function AppRoutes() {
       <Route path="/__listing" element={<StoreListing />} />
       <Route path="/__readiness" element={<Readiness />} />
       <Route path="/__launch" element={<Launch />} />
+      <Route path="/__analytics" element={<OwnerAnalytics />} />
       {/* Legal, support and deletion pages are reachable before any account exists. */}
       <Route path="/legal/privacy" element={<Privacy />} />
       <Route path="/legal/terms" element={<Terms />} />

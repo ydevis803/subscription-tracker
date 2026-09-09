@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { completeOnboarding } from '@/db/repo'
 import { LegalLinks } from '@/components/app/LegalLayout'
 import { Logo } from '@/components/ui/Logo'
+import { track } from '@/lib/analytics'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { CURRENCIES, currencySymbol, formatMoney, toMonthly, validateBudget } from '@/lib/money'
 import { describeError } from '@/lib/errors'
@@ -41,6 +42,9 @@ function readDraft(): Draft {
 }
 
 export default function Onboarding() {
+  useEffect(() => {
+    void track('onboarding_started')
+  }, [])
   const navigate = useNavigate()
   const toast = useToast()
   const [draft, setDraft] = useState<Draft>(readDraft)

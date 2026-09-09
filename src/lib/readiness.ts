@@ -293,6 +293,6 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     group: 'Store assets',
     title: 'Data safety / privacy nutrition answers match the Privacy Policy',
     route: '/legal/privacy',
-    run: async () => ({ status: 'confirm', evidence: `Declare: email and name (account, optional), financial info the user enters (subscription amounts), app activity (checks, notes), diagnostics none, no tracking, no ads. Version ${APP_VERSION}.`, action: 'Fill the store questionnaires from the “Data types we use” section and mark data as encrypted in transit and deletable by the user.' }),
+    run: async () => ({ status: 'confirm', evidence: `Declare: email and name (account, optional), financial info the user enters (subscription amounts), app activity (checks, notes), anonymous milestone counts with no identifier (analytics, not linked to the user), diagnostics none, no tracking, no ads. Version ${APP_VERSION}.`, action: 'Fill the store questionnaires from the “Data types we use” section and mark data as encrypted in transit and deletable by the user.' }),
   },
 ]

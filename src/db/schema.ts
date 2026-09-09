@@ -192,6 +192,8 @@ export interface Settings {
     estimatedAtStart: number
     dismissedAt: string | null
   }
+  /** Milestone analytics already sent for this profile (event → ISO time). Guarantees each fires once. See src/lib/analytics.ts. */
+  analyticsSent?: Record<string, string>
   /** Private feedback notes, newest last. Stored only with the user's own data; never posted anywhere. */
   feedback?: { at: string; score: number | null; message: string; source: 'prompt' | 'settings' }[]
   createdAt?: string

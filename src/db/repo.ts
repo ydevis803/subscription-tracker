@@ -1,3 +1,4 @@
+import { track, trackReturn } from '@/lib/analytics'
 import { clearQueryCache } from '@/hooks/queryCache'
 import {
   CATEGORIES,
@@ -191,6 +192,10 @@ export async function recordVisit(): Promise<string | null> {
     if (previous === today) return current.lastVisit ?? null
     await db.settings.update(1, { checkIns: [...checkIns, today].slice(-90), lastVisit: previous, updatedAt: nowISO() })
     return previous
+  }).then(async (previous) => {
+    const profile = await db.profile.get(1)
+    if (profile?.createdAt) await trackReturn(profile.createdAt)
+    return previous
   })
 }
 
@@ -295,6 +300,7 @@ export async function completeOnboarding(input: {
       completedAt: nowISO(),
     },
   })
+  await track('onboarding_completed')
 }
 
 /** Create subscriptions from onboarding presets. Renewal dates are estimates until the user confirms them. */
@@ -462,6 +468,7 @@ export async function snoozeNote(id: number, days: number): Promise<string> {
 // ---------- Premium ----------
 
 export async function upgradeToPremium(interval: PremiumInterval): Promise<void> {
+  void track('premium_conversion')
   const today = todayISO()
   const renews = interval === 'monthly' ? toISO(addMonths(new Date(), 1)) : toISO(addYears(new Date(), 1))
   await db.transaction('rw', db.profile, db.billingEvents, async () => {
@@ -479,6 +486,7 @@ export async function upgradeToPremium(interval: PremiumInterval): Promise<void>
 
 /** Start the one seven-day trial. Today counts as day 1; the last day is inclusive. */
 export async function startTrial(): Promise<{ startedOn: string; endsOn: string }> {
+  void track('premium_conversion')
   return db.transaction('rw', [db.profile, db.billingEvents], async () => {
     const profile = await db.profile.get(1)
     if (!profile) throw new Error('Profile not found')
@@ -683,7 +691,7 @@ export async function completeCheck(checkId: number, summary: CheckSummary): Pro
  * Complete the check if every renewal in its window has a decision. Reads everything fresh from the
  * database (not from live-query snapshots) so the summary always reflects the last decision made.
  */
-export async function finishCheckIfDone(checkId: number): Promise<CheckSummary | null> {
+async function finishCheckIfDoneInner(checkId: number): Promise<CheckSummary | null> {
   return db.transaction('rw', [db.renewalChecks, db.subscriptions], async () => {
     const check = await db.renewalChecks.get(checkId)
     if (!check) return null
@@ -771,4 +779,10 @@ export async function auditIntegrity(): Promise<{ ownerId: OwnerId; total: numbe
   const wrongOwner = rows.filter((r) => (r.ownerId ?? null) !== ownerId).length
   const orphans = prices.filter((p) => !ids.has(p.subscriptionId)).length + notes.filter((n) => !ids.has(n.subscriptionId)).length
   return { ownerId, total: rows.length, wrongOwner, orphans }
+}
+
+export async function finishCheckIfDone(checkId: number): Promise<CheckSummary | null> {
+  const summary = await finishCheckIfDoneInner(checkId)
+  if (summary) await track('first_core_action') // no-op after the first time
+  return summary
 }

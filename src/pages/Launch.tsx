@@ -78,6 +78,9 @@ export default function Launch() {
           <Link to="/__readiness" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
             Readiness
           </Link>
+          <Link to="/__analytics" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
+            Analytics
+          </Link>
         </div>
       </div>
 

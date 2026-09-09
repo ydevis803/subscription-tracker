@@ -285,6 +285,32 @@ export function countOwnedRows(userId) {
   }
 }
 
+// ---------- Count-only analytics (no identifiers, no user rows) ----------
+export const ANALYTICS_EVENTS = new Set(['onboarding_started', 'onboarding_completed', 'first_core_action', 'day_two_return', 'day_seven_return', 'premium_view', 'premium_conversion'])
+
+export function recordEvent(event, day) {
+  db.prepare('INSERT INTO analytics_events (day, event, count) VALUES (?, ?, 1) ON CONFLICT(day, event) DO UPDATE SET count = count + 1').run(day, event)
+}
+
+export function analyticsSummary() {
+  const rows = db.prepare('SELECT day, event, count FROM analytics_events ORDER BY day').all()
+  const totals = {}
+  const last7 = {}
+  const prior7 = {}
+  const byDay = new Map()
+  const dayMs = 86400000
+  const today = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z').getTime()
+  for (const r of rows) {
+    totals[r.event] = (totals[r.event] ?? 0) + r.count
+    const age = Math.round((today - new Date(r.day + 'T00:00:00Z').getTime()) / dayMs)
+    if (age >= 0 && age < 7) last7[r.event] = (last7[r.event] ?? 0) + r.count
+    else if (age >= 7 && age < 14) prior7[r.event] = (prior7[r.event] ?? 0) + r.count
+    if (!byDay.has(r.day)) byDay.set(r.day, {})
+    byDay.get(r.day)[r.event] = r.count
+  }
+  return { totals, last7, prior7, days: [...byDay.entries()].slice(-30).map(([day, counts]) => ({ day, counts })) }
+}
+
 /** Sliding-window limiter keyed by caller; returns true when the call is allowed. */
 const buckets = new Map()
 export function allow(key, max, windowMs) {

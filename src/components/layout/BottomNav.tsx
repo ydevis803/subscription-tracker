@@ -12,7 +12,7 @@ const items: { to: string; label: string; icon: IconName }[] = [
 /** Which destination a path belongs to, so nested screens keep their parent tab lit. */
 export function activeTabFor(pathname: string): string {
   if (pathname.startsWith('/subscriptions')) return '/subscriptions'
-  if (pathname.startsWith('/total')) return '/'
+  if (pathname.startsWith('/total') || pathname.startsWith('/week')) return '/'
   if (pathname.startsWith('/calendar') || pathname.startsWith('/timeline')) return '/calendar'
   if (pathname.startsWith('/insights') || pathname.startsWith('/history')) return '/insights'
   if (pathname.startsWith('/profile') || pathname.startsWith('/settings') || pathname.startsWith('/premium')) return '/profile'

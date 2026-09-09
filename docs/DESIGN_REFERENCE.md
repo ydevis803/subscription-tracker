@@ -36,50 +36,51 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 03-onboarding-limit-and-headsup | Question 2: monthly limit pills or custom amount, heads-up window (1/3/7/14 days) |
 | 04-onboarding-first-win | Personalized first win: monthly total vs limit, next charge, picked services with estimated dates |
 | 05-onboarding-first-win-no-picks | First win when nothing was picked: limit and heads-up recap, add first subscription or explore samples |
-| 06-home-dashboard | Navy hero with tappable monthly total (opens the Monthly total screen), Today card (week check-in dots, one Next up action, wins today, a daily rotating insight/milestone/recommendation, welcome-back line after a gap) and budget bar, upcoming-window stats, "Check your next 30 days" card with mint Start check, decision alerts, upcoming renewals, category snapshot; "Renewal timeline" entry card |
+| 06-home-dashboard | Navy hero with monthly total and budget bar, upcoming-window stats, milestone card when newly earned, Today card (next action, week check-ins, wins, streak, fresh reward), check card, Your week entry, Continue card, decision alerts, upcoming renewals, category snapshot |
 | 07-check-review-item | Renewal check: progress "1 of N" with saved cue, one renewal card, mint Keep it plus Remind me and Cancel it |
 | 08-check-complete | Renewal check completion: animated mint check, "all clear for 30 days", monthly total now, kept/reminders/cancelled |
 | 09-home-all-clear | Dashboard after a check: mint "All clear · checked today" card with next check date and Check again |
 | 10-monthly-total | Monthly total screen: navy hero with a-year/a-day figures and change vs last month, "How this number is made" rules and per-subscription shares, limit field with specific validation, suggested limit and limit history, six-month trend |
-| 11-subscriptions-list | Search, status chips, Filters panel toggle and Sort select, results bar, rows, floating add button |
-| 12-subscription-add-form | Grouped form cards, name suggestions from the service catalogue, segmented controls, sticky submit |
-| 13-subscription-detail | Amount hero, renewal banner (shows "Estimated date" for setup picks), stats, pause/mark paid, notes, price history, details, cancel/delete |
-| 14-subscription-edit-form-price-change | Edit form with the coral price-change notice and reason field |
-| 15-sheet-cancellation-note | Bottom sheet: reason, note, remind-on date |
-| 16-sheet-log-price-change | Bottom sheet: new price, effective date, reason |
-| 17-sheet-confirm-cancel | Confirmation sheet, coral confirm |
-| 18-renewal-calendar | Search and filters, month grid (tap a day for its sheet, swipe to change month) with dots and day totals, settled card when nothing remains, category totals bar, timeline with inline notes |
-| 19-calendar-day-sheet | Calendar day sheet: that day's charges and total, Mark as paid / Open for charges due today, "Add a subscription renewing this day" |
-| 20-calendar-month-settled | Calendar completion state: "<Month> is settled" with what went out and what is next, See next month / Open timeline; past days shown paid |
-| 21-timeline-first-visit | Renewal timeline on first visit: navy explanation card, horizon slider (7 to 90 days) with animated total, category totals, running-total rows, Add to calendar / Copy summary bar |
-| 22-timeline-category-highlight | Timeline with one category highlighted: total switches to that category, other charges dim, Show all link |
-| 23-timeline-row-actions | Timeline row expanded: Add note and Open actions |
-| 24-insights-free | Highlights (plain-language observations), filters for the monthly total, donut, category bars, billing mix, "Price changes" entry card, biggest items, locked Premium cards; an off state with "Turn on insights" when the Settings toggle is off |
-| 25-price-history | Header + to log a change (subscription picker then price sheet), search, direction chips and sort, price drift summary, change rows with percentage badges; empty state offers to log a change |
-| 26-cancellation-notes | Progress card (decisions made of total, freed per month, next milestone), Next up card with Keep / Cancel / Snooze, all-decided state, search and reason chips, open notes with Done / cancel / snooze / delete |
-| 27-profile | Avatar, plan badge, stats, save-progress or account card, upgrade card, links |
-| 28-sheet-edit-profile | Name and email sheet |
-| 29-settings | Money, reminders, display, data sections (Account section when signed in) |
-| 30-premium-plans | Navy feature hero, yearly/monthly options, mint CTA |
-| 31-sheet-premium-confirm | Plan confirmation sheet |
-| 32-sheet-account-explainer | Friendly explanation shown before creating an account |
-| 33-auth-sign-up | Create account: name, email, password with show toggle |
-| 34-auth-sign-in | Sign in with forgot-password link |
-| 35-auth-forgot-password | Request a reset link |
-| 36-auth-reset-link-missing | Reset page opened without a valid link |
-| 37-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
-| 38-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
-| 39-sheet-paywall | Paywall sheet shown when adding past the free limit |
-| 40-premium-activated | Success state after activation |
-| 41-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
-| 42-premium-manage | Active plan card, billing history, end Premium |
-| 43-profile-premium | Profile with Premium badge |
-| 44-sheet-confirm-erase | Erase-all confirmation |
-| 45-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
-| 46-subscriptions-empty | List empty state |
-| 47-calendar-empty | Calendar empty state |
-| 48-insights-empty | Insights empty state |
-| 49-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
-| 50-price-history-empty | Price history empty state |
-| 51-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
-| 52-not-found | Unknown route |
+| 11-weekly-summary | Weekly summary: labeled week range with This/Last week toggle, three numbered insights (actions by day strip, monthly total start vs now, recommended next action with why) |
+| 12-subscriptions-list | Search, status chips, Filters panel toggle and Sort select, results bar, rows, floating add button |
+| 13-subscription-add-form | Grouped form cards, name suggestions from the service catalogue, segmented controls, sticky submit |
+| 14-subscription-detail | Amount hero, renewal banner (shows "Estimated date" for setup picks), stats, pause/mark paid, notes, price history, details, cancel/delete |
+| 15-subscription-edit-form-price-change | Edit form with the coral price-change notice and reason field |
+| 16-sheet-cancellation-note | Bottom sheet: reason, note, remind-on date |
+| 17-sheet-log-price-change | Bottom sheet: new price, effective date, reason |
+| 18-sheet-confirm-cancel | Confirmation sheet, coral confirm |
+| 19-renewal-calendar | Search and filters, month grid (tap a day for its sheet, swipe to change month) with dots and day totals, settled card when nothing remains, category totals bar, timeline with inline notes |
+| 20-calendar-day-sheet | Calendar day sheet: that day's charges and total, Mark as paid / Open for charges due today, "Add a subscription renewing this day" |
+| 21-calendar-month-settled | Calendar completion state: "<Month> is settled" with what went out and what is next, See next month / Open timeline; past days shown paid |
+| 22-timeline-first-visit | Renewal timeline on first visit: navy explanation card, horizon slider (7 to 90 days) with animated total, category totals, running-total rows, Add to calendar / Copy summary bar |
+| 23-timeline-category-highlight | Timeline with one category highlighted: total switches to that category, other charges dim, Show all link |
+| 24-timeline-row-actions | Timeline row expanded: Add note and Open actions |
+| 25-insights-free | Highlights (plain-language observations), filters for the monthly total, donut, category bars, billing mix, "Price changes" entry card, biggest items, locked Premium cards; an off state with "Turn on insights" when the Settings toggle is off |
+| 26-price-history | Header + to log a change (subscription picker then price sheet), search, direction chips and sort, price drift summary, change rows with percentage badges; empty state offers to log a change |
+| 27-cancellation-notes | Progress card (decisions made of total, freed per month, next milestone), Next up card with Keep / Cancel / Snooze, all-decided state, search and reason chips, open notes with Done / cancel / snooze / delete |
+| 28-profile | Avatar, plan badge, stats, save-progress or account card, upgrade card, links |
+| 29-sheet-edit-profile | Name and email sheet |
+| 30-settings | Money, reminders, display, data sections (Account section when signed in) |
+| 31-premium-plans | Navy feature hero, yearly/monthly options, mint CTA |
+| 32-sheet-premium-confirm | Plan confirmation sheet |
+| 33-sheet-account-explainer | Friendly explanation shown before creating an account |
+| 34-auth-sign-up | Create account: name, email, password with show toggle |
+| 35-auth-sign-in | Sign in with forgot-password link |
+| 36-auth-forgot-password | Request a reset link |
+| 37-auth-reset-link-missing | Reset page opened without a valid link |
+| 38-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
+| 39-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
+| 40-sheet-paywall | Paywall sheet shown when adding past the free limit |
+| 41-premium-activated | Success state after activation |
+| 42-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
+| 43-premium-manage | Active plan card, billing history, end Premium |
+| 44-profile-premium | Profile with Premium badge |
+| 45-sheet-confirm-erase | Erase-all confirmation |
+| 46-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
+| 47-subscriptions-empty | List empty state |
+| 48-calendar-empty | Calendar empty state |
+| 49-insights-empty | Insights empty state |
+| 50-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
+| 51-price-history-empty | Price history empty state |
+| 52-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
+| 53-not-found | Unknown route |

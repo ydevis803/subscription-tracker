@@ -16,6 +16,7 @@ import { CheckCard } from '@/components/app/CheckCard'
 import { ContinueCard } from '@/components/app/RecentActivity'
 import { TodayCard } from '@/components/app/TodayCard'
 import { MilestoneCard } from '@/components/app/MilestoneCard'
+import { weeklySummary } from '@/lib/weekly'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useScopeKey } from '@/auth/AuthContext'
@@ -138,6 +139,10 @@ export default function Home() {
     [subs, notes, settings, activeCheck, latestCheck],
   )
   const checkHandledByToday = todayAction?.kind === 'resume-check' || todayAction?.kind === 'start-check' || todayAction?.kind === 'confirm-renewal'
+  const week = useMemo(
+    () => (subs && notes && priceChanges && settings && allChecks && activeCheck !== undefined && latestCheck !== undefined ? weeklySummary({ subs, notes, changes: priceChanges, checks: allChecks, settings, active: activeCheck, latest: latestCheck, currency, offset: 0 }) : null),
+    [subs, notes, priceChanges, settings, allChecks, activeCheck, latestCheck, currency],
+  )
   const headline = useMemo(() => (subs && priceChanges ? headlineInsights(subs, priceChanges, currency, budget)[0] ?? null : null), [subs, priceChanges, currency, budget])
 
   return (
@@ -221,6 +226,24 @@ export default function Home() {
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
         )}
         {subs && !checkHandledByToday && <CheckCard subs={subs} currency={currency} />}
+        {week && (
+          <Card className="overflow-hidden">
+            <button type="button" onClick={() => navigate('/week')} className="flex w-full items-center gap-3 p-4 text-left active:bg-navy-50">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+                <Icon name="chart" size={22} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-semibold text-ink">Your week · {week.range.label}</span>
+                <span className="block text-[13px] text-muted">
+                  {week.completed.total === 0 ? 'Nothing logged yet' : `${week.completed.total} ${week.completed.total === 1 ? 'action' : 'actions'} on ${week.completed.activeDays} ${week.completed.activeDays === 1 ? 'day' : 'days'}`}
+                  {' · '}
+                  {Math.abs(week.change.delta) < 0.005 ? 'total unchanged' : `total ${week.change.delta < 0 ? 'down' : 'up'} ${formatMoney(Math.abs(week.change.delta), currency)}`}
+                </span>
+              </span>
+              <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />
+            </button>
+          </Card>
+        )}
         <ContinueCard />
 
         {model && model.alerts.length > 0 && (

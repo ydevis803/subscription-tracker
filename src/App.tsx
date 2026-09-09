@@ -23,6 +23,7 @@ import NotFound from '@/pages/NotFound'
 import RenewalCheck from '@/pages/RenewalCheck'
 import Timeline from '@/pages/Timeline'
 import MonthlyTotal from '@/pages/MonthlyTotal'
+import WeeklySummary from '@/pages/WeeklySummary'
 import SignUp from '@/pages/auth/SignUp'
 import SignIn from '@/pages/auth/SignIn'
 import ForgotPassword from '@/pages/auth/ForgotPassword'
@@ -132,6 +133,7 @@ function AppRoutes() {
         <Route path="/check" element={<RenewalCheck />} />
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/total" element={<MonthlyTotal />} />
+        <Route path="/week" element={<WeeklySummary />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/history" element={<PriceHistory />} />

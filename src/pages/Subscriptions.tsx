@@ -146,9 +146,18 @@ export default function Subscriptions() {
           </Card>
         )}
 
-        {base && list && base.length > 0 && <ResultsBar shown={list.length} total={base.length} noun={base.length === 1 ? 'subscription' : 'subscriptions'} active={filtersActive} onClear={clear} />}
+        {base && list && base.length > 0 && (
+          <ResultsBar
+            shown={list.length}
+            total={base.length}
+            noun={base.length === 1 ? 'subscription' : 'subscriptions'}
+            active={filtersActive}
+            onClear={clear}
+            extra={profile && !isPremium(profile) && used >= FREE_SUBSCRIPTION_LIMIT - 2 && used < FREE_SUBSCRIPTION_LIMIT ? ` · ${used} of ${FREE_SUBSCRIPTION_LIMIT} free` : undefined}
+          />
+        )}
 
-        {profile && !isPremium(profile) && used >= FREE_SUBSCRIPTION_LIMIT - 2 && <UpgradeBanner used={used} compact />}
+        {profile && !isPremium(profile) && used >= FREE_SUBSCRIPTION_LIMIT && <UpgradeBanner used={used} compact />}
 
         {!list || !base ? (
           <ListSkeleton rows={5} />

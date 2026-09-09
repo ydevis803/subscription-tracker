@@ -147,6 +147,9 @@ export interface Settings {
   bestStreak?: number
   /** Milestone id → ISO timestamp of when its card was shown. A milestone is celebrated once. */
   milestonesSeen?: Record<string, string>
+  /** When the one-time Premium offer after the first completed check was shown, and when it was dismissed. */
+  premiumOfferSeen?: string
+  premiumOfferDismissed?: string
   /** When to nudge the user to check renewals and the monthly total. See src/lib/reminders.ts. */
   reminderSchedule?: {
     days: number[]

@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FREE_SUBSCRIPTION_LIMIT, PREMIUM_PRICING } from '@/db/schema'
+import { FREE_SUBSCRIPTION_LIMIT, PREMIUM_PRICING, type RenewalCheck, type Settings } from '@/db/schema'
+import { updateSettings } from '@/db/repo'
 import { PREMIUM_FEATURES } from '@/lib/plan'
 import { Sheet } from '@/components/ui/Sheet'
 import { Button } from '@/components/ui/Button'
@@ -69,6 +71,54 @@ export function UpgradeBanner({ used, compact }: { used: number; compact?: boole
       <button onClick={() => navigate('/premium')} className="h-10 shrink-0 rounded-xl bg-white/10 px-3 text-[13px] font-semibold hover:bg-white/15">
         Upgrade
       </button>
+    </Card>
+  )
+}
+
+/**
+ * Shown once, on Home, after the first completed renewal check (a meaningful first win), and only to
+ * free users. Dismissible, never blocking, recorded so it does not return.
+ */
+export function FirstWinOffer({ settings, checks }: { settings: Settings; checks: RenewalCheck[] }) {
+  const navigate = useNavigate()
+  const [hidden, setHidden] = useState(false)
+  const firstWin = checks.some((c) => c.completedAt && c.summary && c.summary.reviewed > 0)
+  const shown = settings.premiumOfferSeen
+  useEffect(() => {
+    if (firstWin && !shown) void updateSettings({ premiumOfferSeen: new Date().toISOString() })
+  }, [firstWin, shown])
+  if (!firstWin || hidden || settings.premiumOfferDismissed) return null
+  // Stays for the visit it first appeared in; on later visits it is gone even if it was never dismissed.
+  if (shown && shown < new Date(Date.now() - 10 * 60000).toISOString()) return null
+  const reviewed = checks.filter((c) => c.completedAt && c.summary).reduce((n, c) => n + (c.summary?.reviewed ?? 0), 0)
+  return (
+    <Card className="p-4">
+      <div className="flex items-start gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-900 text-mint-400">
+          <Icon name="crown" size={20} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[15px] font-semibold text-ink">Nice work on your first check</p>
+          <p className="text-[13px] leading-snug text-muted">
+            You reviewed {reviewed} {reviewed === 1 ? 'renewal' : 'renewals'}. Premium keeps the whole year in view: a 12-month projection, price-increase impact and an unused-plan detector, for ${PREMIUM_PRICING.monthly.toFixed(2)}/mo or ${PREMIUM_PRICING.yearly.toFixed(2)}/yr.
+          </p>
+          <div className="mt-3 flex gap-2">
+            <Button size="sm" onClick={() => navigate('/premium')}>
+              See Premium
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                setHidden(true)
+                void updateSettings({ premiumOfferDismissed: new Date().toISOString() })
+              }}
+            >
+              Not now
+            </Button>
+          </div>
+        </div>
+      </div>
     </Card>
   )
 }

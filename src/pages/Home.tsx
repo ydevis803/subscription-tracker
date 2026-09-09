@@ -16,6 +16,7 @@ import { CheckCard } from '@/components/app/CheckCard'
 import { ContinueCard } from '@/components/app/RecentActivity'
 import { TodayCard } from '@/components/app/TodayCard'
 import { MilestoneCard } from '@/components/app/MilestoneCard'
+import { FirstWinOffer } from '@/components/app/Paywall'
 import { weeklySummary } from '@/lib/weekly'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -222,6 +223,7 @@ export default function Home() {
         {subs && notes && settings && priceChanges && allChecks && (
           <MilestoneCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} currency={currency} />
         )}
+        {profile && settings && allChecks && !isPremium(profile) && <FirstWinOffer settings={settings} checks={allChecks} />}
         {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined && (
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
         )}
@@ -374,7 +376,7 @@ export default function Home() {
           />
         )}
 
-        {profile && !isPremium(profile) && subs && used >= FREE_SUBSCRIPTION_LIMIT - 3 && <UpgradeBanner used={used} />}
+        {profile && !isPremium(profile) && subs && used >= FREE_SUBSCRIPTION_LIMIT && <UpgradeBanner used={used} />}
 
         <div className="grid grid-cols-2 gap-3">
           <QuickAction icon="plus" label="Add subscription" onClick={() => navigate('/subscriptions/new')} />

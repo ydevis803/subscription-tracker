@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { describeDays, isPaused, scheduleOf } from '@/lib/reminders'
+import { isPremium, price } from '@/lib/plan'
+import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { formatDate } from '@/lib/dates'
 import { describeError } from '@/lib/errors'
 import { useNavigate } from 'react-router-dom'
@@ -255,6 +257,23 @@ export default function Settings() {
             </Card>
           </section>
         )}
+
+        <section>
+          <SectionTitle>Plan</SectionTitle>
+          <Card className="overflow-hidden">
+            <Row onClick={() => navigate('/premium')}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isPremium(profile) ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-navy-700'}`}>
+                <Icon name="crown" size={20} />
+              </span>
+              <span className="flex-1">
+                <span className="block text-[15px] font-semibold text-ink">{isPremium(profile) ? `Premium ${profile.premiumInterval}` : 'Free plan'}</span>
+                <span className="block text-[13px] text-muted">
+                  {isPremium(profile) ? 'Manage or restore your plan' : `Up to ${FREE_SUBSCRIPTION_LIMIT} subscriptions · Premium is ${price('monthly')}/mo or ${price('yearly')}/yr`}
+                </span>
+              </span>
+            </Row>
+          </Card>
+        </section>
 
         <p className="px-1 text-center text-[12px] text-faint">Subscription Tracker 1.0 · {auth.status === 'signed-in' ? 'Backed up to your account' : 'Data is stored locally in your browser'}</p>
       </Page>

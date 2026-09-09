@@ -104,15 +104,10 @@ export function premiumBenefits(subs: Subscription[], changes: PriceChange[], no
     out.push({ icon: 'chart', title: 'Insights that go a year ahead', body: 'A 12-month projection, a price-increase impact report and an unused-subscription detector, all built from your own history.', from: 'Spending insights' })
   }
   if (out.length < 3) {
-    out.push({ icon: 'note', title: 'Export everything, any time', body: 'A full JSON backup of subscriptions, notes and history whenever you want it.', from: 'Subscription list' })
+    out.push({ icon: 'pause', title: 'Catch plans you stopped using', body: 'The unused detector watches pauses, trials and your own notes so money you may not need never slips by.', from: 'Cancellation notes and spending insights' })
   }
   return out.slice(0, 3)
 }
 
-export const PREMIUM_FEATURES = [
-  'Unlimited subscriptions',
-  'Spending trends and 12-month projection',
-  'Price-increase impact report',
-  'Unused subscription detector',
-  'Export your data any time',
-]
+/** Exactly what Premium adds. Everything else in the app, including export, stays free. */
+export const PREMIUM_FEATURES = ['Unlimited subscriptions (free covers ten)', 'Spending trends and 12-month projection', 'Price-increase impact report', 'Unused subscription detector']

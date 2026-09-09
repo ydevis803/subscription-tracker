@@ -31,7 +31,7 @@ export default function Support() {
         <ul className="mt-2 divide-y divide-line">
           {FAQ.map((f, i) => (
             <li key={f.q}>
-              <button type="button" onClick={() => setOpen(open === i ? null : i)} aria-expanded={open === i} className="flex min-h-12 w-full items-center gap-3 py-2 text-left">
+              <button type="button" onClick={() => setOpen(open === i ? null : i)} aria-expanded={open === i} className="flex min-h-12 w-full items-center gap-3 rounded-xl py-2 text-left active:bg-navy-50">
                 <span className="flex-1 text-[0.9375rem] font-semibold text-ink">{f.q}</span>
                 <Icon name="chevronDown" size={18} className={`shrink-0 text-faint transition-transform ${open === i ? 'rotate-180' : ''}`} />
               </button>

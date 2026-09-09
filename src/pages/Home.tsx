@@ -324,7 +324,7 @@ export default function Home() {
           <Card className="overflow-hidden">
             <button onClick={() => navigate('/timeline')} className="flex w-full items-center gap-3 p-4 text-left active:bg-navy-50">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-coral-100 text-coral-700">
-                <Icon name="trend" size={22} />
+                <Icon name="clock" size={22} />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[0.9375rem] font-semibold text-ink">Renewal timeline</span>

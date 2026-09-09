@@ -24,7 +24,7 @@ export function BottomNav() {
   const active = activeTabFor(pathname)
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur safe-bottom" aria-label="Main">
-      <div className="mx-auto flex max-w-[480px]">
+      <div className="mx-auto flex max-w-[480px] sm:border-x sm:border-line">
         {items.map((it) => {
           const isActive = active === it.to
           return (
@@ -32,7 +32,7 @@ export function BottomNav() {
               key={it.to}
               to={it.to}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex h-16 flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-semibold transition-colors ${
+              className={`flex h-16 flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-semibold transition-colors active:bg-navy-50 ${
                 isActive ? 'text-navy-900' : 'text-faint hover:text-muted'
               }`}
             >

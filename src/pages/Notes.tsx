@@ -92,7 +92,7 @@ export default function Notes() {
           <IconButton icon="plus" label="Add note" variant="primary" onClick={() => setPicker(true)} />
         }
       />
-      <Page className="space-y-4">
+      <Page className="space-y-5">
         {!model || !progress ? (
           <ListSkeleton rows={3} />
         ) : model.totalAll === 0 ? (

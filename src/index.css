@@ -55,6 +55,12 @@
   button { cursor: pointer; }
   /* One visible focus style everywhere: a mint ring that reads on white, canvas and navy. */
   :focus-visible { outline: 3px solid var(--color-mint-600); outline-offset: 2px; border-radius: 0.5rem; }
+  /* Every tap answers: a short press-down on anything interactive, and a hover tint where a pointer exists. */
+  button, a[href], [role="button"] { transition: transform 90ms ease, opacity 90ms ease, background-color 120ms ease, color 120ms ease; }
+  button:not(:disabled):active, a[href]:active, [role="button"]:active { transform: scale(0.985); opacity: 0.88; }
+  @media (hover: hover) {
+    button:not(:disabled):hover, a[href]:hover, [role="button"]:hover { filter: brightness(0.975); }
+  }
   input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; }
 }
 .tabular { font-variant-numeric: tabular-nums; }

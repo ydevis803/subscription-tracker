@@ -9,7 +9,7 @@ export function AuthLayout({ title, subtitle, backTo = '/', children, footer }: 
     <div className="min-h-dvh bg-canvas">
       <div className="mx-auto w-full max-w-[480px] pb-10">
         <PageHeader title={title} back backTo={backTo} />
-        <Page className="space-y-4">
+        <Page className="space-y-5">
           {subtitle && <p className="px-1 text-[0.9375rem] leading-relaxed text-muted">{subtitle}</p>}
           <Card className="p-4">{children}</Card>
           {footer}

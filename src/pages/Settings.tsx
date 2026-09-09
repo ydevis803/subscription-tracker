@@ -110,7 +110,7 @@ export default function Settings() {
     return (
       <div>
         <PageHeader title="Settings" back backTo="/profile" />
-        <Page className="space-y-4">
+        <Page className="space-y-5">
           <Skeleton className="h-40" />
           <Skeleton className="h-56" />
         </Page>
@@ -130,7 +130,7 @@ export default function Settings() {
           </span>
         }
       />
-      <Page className="space-y-6">
+      <Page className="space-y-5">
         <section>
           <SectionTitle>Money</SectionTitle>
           <Card className="space-y-4 p-4">

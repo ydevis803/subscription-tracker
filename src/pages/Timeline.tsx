@@ -191,7 +191,7 @@ export default function Timeline() {
           ) : undefined
         }
       />
-      <Page className="space-y-4 pb-24">
+      <Page className="space-y-5 pb-24">
         {!introSeen && settings && (
           <Card className="fade border-navy-800 bg-navy-900 p-4 text-white">
             <p className="text-[0.9375rem] font-semibold">Your money, in the order it leaves</p>
@@ -244,7 +244,7 @@ export default function Timeline() {
                 type="button"
                 onClick={() => patch({ horizon: h })}
                 aria-pressed={view.horizon === h}
-                className={`h-11 min-w-11 rounded-full px-2 text-[0.8125rem] font-semibold ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted'}`}
+                className={`h-11 min-w-11 rounded-full px-2 text-[0.8125rem] font-semibold transition-colors ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted hover:bg-navy-50 active:bg-navy-100'}`}
               >
                 {h}d
               </button>

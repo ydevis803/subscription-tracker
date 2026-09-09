@@ -201,7 +201,7 @@ export default function Calendar() {
           ) : undefined
         }
       />
-      <Page className="space-y-4">
+      <Page className="space-y-5">
         <SearchField value={view.query} onChange={(q) => patch({ query: q })} placeholder="Search renewals by name" label="Search renewals" />
         <div className="flex gap-2">
           <FilterToggle open={view.panelOpen} count={activeCount} onClick={() => patch({ panelOpen: !view.panelOpen })} />

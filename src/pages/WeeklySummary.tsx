@@ -74,7 +74,7 @@ export default function WeeklySummary() {
   return (
     <div>
       <PageHeader title="Your week" large back backTo="/" subtitle={summary ? summary.range.label : undefined} />
-      <Page className="space-y-4">
+      <Page className="space-y-5">
         <SegmentedControl
           value={offset === 0 ? 'this' : 'last'}
           onChange={(v) => setOffset(v === 'this' ? 0 : -1)}

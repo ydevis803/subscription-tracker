@@ -196,7 +196,7 @@ export default function RenewalCheck() {
             </span>
           }
         />
-        <Page className="space-y-4">
+        <Page className="space-y-5">
           {loading ? (
             <>
               <Skeleton className="h-3" />

@@ -68,7 +68,7 @@ export default function PriceHistory() {
         subtitle={model ? `${model.increases} ${model.increases === 1 ? 'increase' : 'increases'} · ${model.decreases} ${model.decreases === 1 ? 'decrease' : 'decreases'}` : undefined}
         right={<IconButton icon="plus" label="Log a price change" variant="primary" onClick={() => setPicker(true)} />}
       />
-      <Page className="space-y-4">
+      <Page className="space-y-5">
         {!model ? (
           <ListSkeleton rows={4} />
         ) : model.all.length === 0 ? (

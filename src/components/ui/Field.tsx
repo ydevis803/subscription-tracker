@@ -108,7 +108,7 @@ export function Toggle({
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="flex min-h-14 w-full items-center gap-4 py-2 text-left"
+      className="flex min-h-14 w-full items-center gap-4 rounded-xl py-2 text-left active:bg-navy-50"
     >
       <span className="flex-1">
         <span className="block text-[0.9375rem] font-medium text-ink">{label}</span>
@@ -142,7 +142,7 @@ export function SegmentedControl<T extends string>({
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={`h-11 flex-1 rounded-xl text-sm font-semibold transition-colors ${
-            value === o.value ? 'bg-white text-navy-900 shadow-sm' : 'text-muted'
+            value === o.value ? 'bg-white text-navy-900 shadow-sm' : 'text-muted hover:text-navy-900 active:bg-navy-100'
           }`}
         >
           {o.label}

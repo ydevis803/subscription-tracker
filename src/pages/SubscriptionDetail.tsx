@@ -64,7 +64,7 @@ export default function SubscriptionDetail() {
     return (
       <div>
         <PageHeader title="Subscription" back backTo="/subscriptions" />
-        <Page className="space-y-4">
+        <Page className="space-y-5">
           <Skeleton className="h-40" />
           <ListSkeleton rows={2} />
         </Page>

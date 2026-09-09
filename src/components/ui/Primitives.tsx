@@ -92,7 +92,7 @@ export function EmptyState({
   )
 }
 
-export function ErrorState({ title = 'Something went wrong', body, onRetry }: { title?: string; body: string; onRetry?: () => void }) {
+export function ErrorState({ title = 'That did not load', body, onRetry }: { title?: string; body: string; onRetry?: () => void }) {
   return (
     <div className="fade flex flex-col items-center px-6 py-10 text-center" role="alert">
       <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-coral-100 text-coral-700">

@@ -15,7 +15,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variantClass: Record<Variant, string> = {
   primary: 'bg-navy-900 text-white hover:bg-navy-800 active:bg-navy-950 disabled:bg-navy-200',
   mint: 'bg-mint-500 text-navy-900 hover:bg-mint-400 active:bg-mint-600 disabled:bg-mint-100 disabled:text-muted',
-  coral: 'bg-coral-700 text-white hover:bg-coral-600 active:bg-coral-700 disabled:bg-coral-100 disabled:text-coral-700',
+  coral: 'bg-coral-500 text-navy-900 hover:bg-coral-400 active:bg-coral-600 disabled:bg-coral-100 disabled:text-muted',
   secondary: 'bg-navy-50 text-navy-900 hover:bg-navy-100 active:bg-navy-200 disabled:text-faint',
   ghost: 'bg-transparent text-navy-900 hover:bg-navy-50 active:bg-navy-100 disabled:text-faint',
   danger: 'bg-coral-50 text-coral-700 hover:bg-coral-100 active:bg-coral-100 disabled:text-faint',
@@ -102,7 +102,7 @@ export function Chip({ selected, children, className = '', ...rest }: ButtonHTML
       type="button"
       aria-pressed={selected}
       className={`h-11 rounded-full px-3.5 text-[0.8125rem] font-semibold transition-colors ${
-        selected ? 'bg-navy-900 text-white' : 'border border-line bg-white text-muted hover:bg-navy-50'
+        selected ? 'bg-navy-900 text-white active:bg-navy-800' : 'border border-line bg-white text-muted hover:bg-navy-50 active:bg-navy-100'
       } ${className}`}
       {...rest}
     >

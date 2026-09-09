@@ -170,7 +170,7 @@ export default function Premium() {
             <Icon name="crown" size={24} />
           </span>
           <h2 className="mt-4 text-[1.75rem] font-bold leading-[1.1]">
-            {premium ? 'Every charge, in view. Always.' : trial.status === 'active' ? `Premium trial · day ${trial.day} of ${TRIAL_DAYS}` : trial.status === 'ended' ? 'Your trial ended. Keep the whole year in view?' : 'Know every charge before it lands. All of them.'}
+            {premium ? 'Every charge, in view. Always.' : trial.status === 'active' ? `Premium trial · day ${trial.day} of ${TRIAL_DAYS}` : trial.status === 'ended' ? 'Your trial ended. Keep the whole year in view?' : 'Every charge in view before it lands.'}
           </h2>
           <p className="mt-3 text-[0.9375rem] leading-relaxed text-navy-100">
             {premium

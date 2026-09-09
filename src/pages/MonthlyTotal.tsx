@@ -87,7 +87,7 @@ export default function MonthlyTotal() {
   return (
     <div>
       <PageHeader title="Monthly total" large back backTo="/" subtitle={model ? `${model.counted.length} ${model.counted.length === 1 ? 'subscription counts' : 'subscriptions count'} toward it` : undefined} />
-      <Page className="space-y-4">
+      <Page className="space-y-5">
         {!model || !settings ? (
           <>
             <Skeleton className="h-40" />

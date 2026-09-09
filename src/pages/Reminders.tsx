@@ -75,7 +75,7 @@ export default function Reminders() {
           </span>
         }
       />
-      <Page className="space-y-6">
+      <Page className="space-y-5">
         {!settings ? (
           <>
             <Skeleton className="h-40" />

@@ -41,7 +41,7 @@ async function call(method: string, path: string, body?: unknown, headers: Recor
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await call(method, path, body)
   const data = (await res.json().catch(() => ({}))) as { error?: string } & T
-  if (!res.ok) throw new ApiError(res.status, data.error ?? 'Something went wrong')
+  if (!res.ok) throw new ApiError(res.status, data.error ?? 'The server could not complete that request')
   return data
 }
 
@@ -59,7 +59,7 @@ async function pull(etag?: string | null): Promise<PullResult> {
   const res = await call('GET', '/api/data', undefined, etag ? { 'If-None-Match': etag } : {})
   if (res.status === 304) return { snapshot: null, updatedAt: null, etag: etag ?? null, unchanged: true }
   const data = (await res.json().catch(() => ({}))) as { error?: string; snapshot: unknown | null; updatedAt: string | null }
-  if (!res.ok) throw new ApiError(res.status, data.error ?? 'Something went wrong')
+  if (!res.ok) throw new ApiError(res.status, data.error ?? 'The server could not complete that request')
   return { snapshot: data.snapshot, updatedAt: data.updatedAt, etag: res.headers.get('ETag'), unchanged: false }
 }
 

@@ -122,7 +122,7 @@ export default function Subscriptions() {
   return (
     <div>
       <PageHeader title="Subscriptions" large subtitle={subs ? `${used} tracked · ${formatMoney(monthlyEquivalent(subs), currency)} per month` : undefined} />
-      <Page className="space-y-4 pb-20">
+      <Page className="space-y-5 pb-20">
         <SearchField value={view.query} onChange={(q) => patch({ query: q })} placeholder="Search name, card, notes or price" label="Search subscriptions" />
 
         <div className="flex flex-wrap gap-2" aria-label="Filter by status">

@@ -109,13 +109,13 @@ export function ConfirmSheet({
     <Sheet open={open} onClose={onClose} title={title}>
       <p className="text-[0.9375rem] leading-relaxed text-muted">{body}</p>
       <div className="mt-6 flex gap-3">
-        <button onClick={onClose} className="h-12 flex-1 rounded-2xl bg-navy-50 font-semibold text-navy-900">
+        <button onClick={onClose} className="h-12 flex-1 rounded-2xl bg-navy-50 font-semibold text-navy-900 hover:bg-navy-100 active:bg-navy-200">
           Keep it
         </button>
         <button
           onClick={onConfirm}
           disabled={loading}
-          className={`h-12 flex-1 rounded-2xl font-semibold text-white disabled:opacity-60 ${tone === 'danger' ? 'bg-coral-700' : 'bg-navy-900'}`}
+          className={`h-12 flex-1 rounded-2xl font-semibold disabled:opacity-60 ${tone === 'danger' ? 'bg-coral-500 text-navy-900 hover:bg-coral-400 active:bg-coral-600' : 'bg-navy-900 text-white hover:bg-navy-800 active:bg-navy-950'}`}
         >
           {loading ? 'Working…' : confirmLabel}
         </button>

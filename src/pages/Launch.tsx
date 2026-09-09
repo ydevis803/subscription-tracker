@@ -7,6 +7,7 @@ import { Card, Skeleton } from '@/components/ui/Primitives'
 import { useToast } from '@/components/ui/Toast'
 import { LAUNCH_ITEMS, expectedOrigin, onLiveOrigin, readMarks, writeMark, type AutoResult, type LaunchMark } from '@/lib/launch'
 import { ALL_GUIDES, detectPlatform, installGuide } from '@/lib/install'
+import { AppStorePrep } from '@/components/app/AppStorePrep'
 import NotFound from '@/pages/NotFound'
 
 /**
@@ -153,6 +154,8 @@ export default function Launch() {
             )
           })}
         </Card>
+
+        <AppStorePrep />
 
         <Card className="p-4">
           <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-mint-700">Add to Home Screen · what users are told</p>

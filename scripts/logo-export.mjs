@@ -2,7 +2,7 @@
  * Renders public/icon.svg to the PNG sizes the manifest and iOS need, and a brand sheet that shows the mark
  * at 512, 128, 64, 32 and 16 px on light and dark backgrounds:
  *   node scripts/logo-export.mjs
- * Outputs: public/icon-180.png, icon-192.png, icon-512.png, icon-maskable-512.png, docs/brand/logo-sheet.png
+ * Outputs: public/icon-180.png, icon-192.png, icon-512.png, icon-maskable-512.png, icon-1024.png (opaque square for App Store Connect), docs/brand/logo-sheet.png
  */
 import { mkdirSync, readFileSync } from 'node:fs'
 import { chromium } from 'playwright-core'
@@ -19,16 +19,19 @@ const browser = await chromium.launch({ executablePath: CHROME, headless: true }
 const page = await browser.newPage()
 mkdirSync('docs/brand', { recursive: true })
 
-async function png(url, size, path) {
+async function png(url, size, path, opaque = false) {
   await page.setViewportSize({ width: size, height: size })
-  await page.setContent(`<body style="margin:0;background:transparent"><img src="${url}" width="${size}" height="${size}" style="display:block"></body>`)
+  await page.setContent(`<body style="margin:0;background:${opaque ? '#0B1F3A' : 'transparent'}"><img src="${url}" width="${size}" height="${size}" style="display:block"></body>`)
   await page.waitForTimeout(80)
-  await page.screenshot({ path, omitBackground: true, clip: { x: 0, y: 0, width: size, height: size } })
+  await page.screenshot({ path, omitBackground: !opaque, clip: { x: 0, y: 0, width: size, height: size } })
 }
 await png(dataUrl, 180, 'public/icon-180.png')
 await png(dataUrl, 192, 'public/icon-192.png')
 await png(dataUrl, 512, 'public/icon-512.png')
 await png(maskableUrl, 512, 'public/icon-maskable-512.png')
+// App Store Connect: 1024 px, square corners, no alpha (Apple applies its own mask).
+const squareUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" fill="#0B1F3A"/>${shapes}</svg>`)
+await png(squareUrl, 1024, 'public/icon-1024.png', true)
 
 // Brand sheet
 const sizes = [512, 128, 64, 32, 16]

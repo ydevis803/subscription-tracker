@@ -102,6 +102,8 @@ Screens other than Home and onboarding are code-split and lazy-loaded behind a p
 
 ## Launch checklist
 
+The launch page also carries an **App Store file preparation** section: Apple Team ID, App Store Connect Issuer ID and Key ID (typed into masked fields and shown only as their last four characters afterwards), a confirmation that the .p8 private key is stored securely outside the app (its contents are never entered or stored), bundle identifier, the final 1024 px opaque icon (`public/icon-1024.png` from `npm run logo:export`), and version plus build number. Each item validates its format, can be marked ready only when valid, loses its ready mark automatically if the value changes, and links to a plain-language explanation of what it is and where to find it. Values live only in this browser's owner storage, never in the subscription database or exports; the copy/download summary carries masked IDs only.
+
 `/__launch` (owner-only) is the web / PWA launch list: app name and icon, public URL, visibility, first-time onboarding, sign-up and login, primary action persistence, Premium boundary, legal pages, support contact, mobile display, and install-to-home-screen. Items can be marked “Tested live” only while the page is open on the published origin (`VITE_APP_URL`); automated pre-checks run on that origin first, and each mark records where and when it was made. The install steps shown to users on /support come from `src/lib/install.ts` and put the reader's own platform first (Safari on iOS, Chrome on Android, Chrome or Edge on desktop).
 
 ## Release blockers

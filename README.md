@@ -13,6 +13,10 @@ npm run dev
 
 Open http://localhost:5173 on a phone-sized viewport. `npm run build` produces a production bundle in `dist/`.
 
+## Permissions
+
+Every personal record belongs to the signed-in account that wrote it; the owner comes from the session, never from the request. There is no admin role because nothing in the product needs one. [docs/PERMISSIONS.md](docs/PERMISSIONS.md) lists the intended permission for every entity and the public surface; `npm run test:permissions` checks the rules against the dev server.
+
 ## Accounts and sync
 
 Guests can use everything without an account; data stays in the browser. A free account backs the data up so it can be restored on another device. Account creation is only suggested when it genuinely matters (saving progress after tracking something, or activating Premium), always preceded by a short explanation of why.

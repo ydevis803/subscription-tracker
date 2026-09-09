@@ -223,6 +223,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       // the local session is removed regardless
     }
+    resetSyncMemory() // forget the pull validator for the account being left
     if (current) await deleteScope(current.id).catch(() => undefined)
     openScope(null)
     await resetAllData().catch(() => undefined)

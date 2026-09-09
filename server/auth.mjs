@@ -63,6 +63,12 @@ export function userForSession(token) {
   return row ?? null
 }
 
+/** Drop sessions and reset tokens that can no longer be used. Called on startup; harmless to repeat. */
+export function purgeExpired() {
+  db.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(nowISO())
+  db.prepare('DELETE FROM password_resets WHERE expires_at <= ? OR used_at IS NOT NULL').run(nowISO())
+}
+
 export function destroySession(token) {
   if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(sha256(token))
 }

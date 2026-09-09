@@ -14,6 +14,7 @@ import {
   destroyAllSessions,
   findUserByEmail,
   publicUser,
+  purgeExpired,
   readSnapshot,
   updateName,
   updatePassword,
@@ -38,8 +39,10 @@ class HttpError extends Error {
   }
 }
 
+// Sent on every response: no MIME sniffing, no framing (clickjacking), referrers stay on our origin.
+const SECURITY_HEADERS = { 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'same-origin', 'Permissions-Policy': 'camera=(), microphone=(), geolocation=()' }
 const json = (res, status, body, extraHeaders = {}) => {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...extraHeaders })
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...SECURITY_HEADERS, ...extraHeaders })
   res.end(JSON.stringify(body))
 }
 const cookieHeader = (token, maxAge) =>
@@ -155,6 +158,8 @@ const routes = {
     assertSameOrigin(req)
     const user = requireUser(req)
     const { currentPassword, newPassword } = await readBody(req)
+    // A stolen session must not become a password oracle: ten guesses per quarter hour, per account.
+    if (!allow(`password|${user.id}`, 10, 15 * 60000)) throw new HttpError(429, 'Too many attempts. Try again in 15 minutes.')
     if (typeof currentPassword !== 'string' || !verifyPassword(currentPassword, user.password_hash)) throw new HttpError(400, 'Current password is incorrect')
     if (!validPassword(newPassword)) throw new HttpError(400, 'New password must be at least 8 characters')
     updatePassword(user.id, newPassword)
@@ -184,6 +189,7 @@ const routes = {
   'POST /api/auth/reset': async (req, res) => {
     assertSameOrigin(req)
     const { token, password } = await readBody(req)
+    if (!allow(`reset|${clientIp(req)}`, 10, 15 * 60000)) throw new HttpError(429, 'Too many attempts. Try again in 15 minutes.')
     if (typeof token !== 'string' || !token) throw new HttpError(400, 'This reset link is not valid')
     if (!validPassword(password)) throw new HttpError(400, 'Password must be at least 8 characters')
     const user = consumeResetToken(token, password)
@@ -196,6 +202,7 @@ const routes = {
     assertSameOrigin(req)
     const user = requireUser(req)
     const { password } = await readBody(req)
+    if (!allow(`password|${user.id}`, 10, 15 * 60000)) throw new HttpError(429, 'Too many attempts. Try again in 15 minutes.')
     if (typeof password !== 'string' || !verifyPassword(password, user.password_hash)) throw new HttpError(400, 'Password is incorrect')
     deleteUser(user.id)
     json(res, 200, { ok: true }, { 'Set-Cookie': cookieHeader('', 0) })
@@ -207,7 +214,7 @@ const routes = {
     // holds this version gets a 304 and skips the download.
     const tag = body.updatedAt ? `"${body.updatedAt}"` : null
     if (tag && req.headers['if-none-match'] === tag) {
-      res.writeHead(304, { ETag: tag, 'Cache-Control': 'no-store' })
+      res.writeHead(304, { ETag: tag, 'Cache-Control': 'no-store', ...SECURITY_HEADERS })
       res.end()
       return
     }
@@ -237,12 +244,13 @@ function serveStatic(req, res) {
   if (!file.startsWith(DIST)) return false
   if (!existsSync(file) || statSync(file).isDirectory()) file = join(DIST, 'index.html')
   const ext = extname(file)
-  res.writeHead(200, { 'Content-Type': MIME[ext] ?? 'application/octet-stream', 'Cache-Control': ext === '.html' ? 'no-store' : 'public, max-age=31536000, immutable' })
+  res.writeHead(200, { 'Content-Type': MIME[ext] ?? 'application/octet-stream', 'Cache-Control': ext === '.html' ? 'no-store' : 'public, max-age=31536000, immutable', ...SECURITY_HEADERS })
   res.end(readFileSync(file))
   return true
 }
 
 migrateLegacySnapshots()
+purgeExpired()
 
 createServer(async (req, res) => {
   const path = new URL(req.url, 'http://x').pathname
@@ -253,6 +261,8 @@ createServer(async (req, res) => {
       if (!res.writableEnded) json(res, 200, body ?? {})
       return
     }
+    // No admin surface exists: every /api route acts only on the signed-in account, so nothing here can read
+    // or change another user's records. Unknown API paths (including anything under /api/admin) are 404.
     if (path.startsWith('/api/')) throw new HttpError(404, 'Not found')
     if (!serveStatic(req, res)) json(res, 404, { error: 'Not found' })
   } catch (e) {

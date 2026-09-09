@@ -7,7 +7,32 @@ export class PlanLimitError extends Error {
   }
 }
 
+export const TRIAL_DAYS = 7
+
+export interface TrialState {
+  status: 'none' | 'active' | 'ended'
+  startedOn: string | null
+  endsOn: string | null
+  /** 1-based day within the trial while active. */
+  day: number
+  daysLeft: number
+}
+
+export function trialState(profile: Profile | undefined | null, today = todayISO()): TrialState {
+  const startedOn = profile?.trialStartedOn ?? null
+  const endsOn = profile?.trialEndsOn ?? null
+  if (!startedOn || !endsOn) return { status: 'none', startedOn: null, endsOn: null, day: 0, daysLeft: 0 }
+  if (today > endsOn) return { status: 'ended', startedOn, endsOn, day: TRIAL_DAYS, daysLeft: 0 }
+  const day = Math.min(TRIAL_DAYS, Math.max(1, -daysUntil(startedOn) + 1))
+  return { status: 'active', startedOn, endsOn, day, daysLeft: daysUntil(endsOn) + 1 }
+}
+
+/** Premium features are on for a paid plan or an active trial. */
 export function isPremium(profile: Profile | undefined | null): boolean {
+  return profile?.plan === 'premium' || trialState(profile).status === 'active'
+}
+
+export function isPaidPremium(profile: Profile | undefined | null): boolean {
   return profile?.plan === 'premium'
 }
 
@@ -28,7 +53,7 @@ import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns'
 import type { CancellationNote, PriceChange } from '@/db/schema'
 import { PREMIUM_PRICING } from '@/db/schema'
 import { formatMoney, isCounted, toMonthly } from '@/lib/money'
-import { daysUntil, renewalsInRange, toISO } from '@/lib/dates'
+import { daysUntil, renewalsInRange, todayISO, toISO } from '@/lib/dates'
 
 export const YEARLY_SAVING_AMOUNT = Math.round((PREMIUM_PRICING.monthly * 12 - PREMIUM_PRICING.yearly) * 100) / 100
 export const YEARLY_SAVING_PCT = Math.round((1 - PREMIUM_PRICING.yearly / (PREMIUM_PRICING.monthly * 12)) * 100)

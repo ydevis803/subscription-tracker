@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { describeDays, isPaused, scheduleOf } from '@/lib/reminders'
-import { isPremium, price } from '@/lib/plan'
+import { isPaidPremium, isPremium, price, TRIAL_DAYS, trialState } from '@/lib/plan'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { formatDate } from '@/lib/dates'
 import { describeError } from '@/lib/errors'
@@ -266,9 +266,15 @@ export default function Settings() {
                 <Icon name="crown" size={20} />
               </span>
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-ink">{isPremium(profile) ? `Premium ${profile.premiumInterval}` : 'Free plan'}</span>
+                <span className="block text-[15px] font-semibold text-ink">
+                  {isPaidPremium(profile) ? `Premium ${profile.premiumInterval}` : trialState(profile).status === 'active' ? `Premium trial · day ${trialState(profile).day} of ${TRIAL_DAYS}` : 'Free plan'}
+                </span>
                 <span className="block text-[13px] text-muted">
-                  {isPremium(profile) ? 'Manage or restore your plan' : `Up to ${FREE_SUBSCRIPTION_LIMIT} subscriptions · Premium is ${price('monthly')}/mo or ${price('yearly')}/yr`}
+                  {isPaidPremium(profile)
+                    ? 'Manage or restore your plan'
+                    : trialState(profile).status === 'active'
+                      ? `Ends ${formatDate(trialState(profile).endsOn!, 'EEE d MMM')} · manage or choose a plan`
+                      : `Up to ${FREE_SUBSCRIPTION_LIMIT} subscriptions · Premium is ${price('monthly')}/mo or ${price('yearly')}/yr`}
                 </span>
               </span>
             </Row>

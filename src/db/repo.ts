@@ -373,6 +373,29 @@ export async function upgradeToPremium(interval: PremiumInterval): Promise<void>
   })
 }
 
+/** Start the one seven-day trial. Today counts as day 1; the last day is inclusive. */
+export async function startTrial(): Promise<{ startedOn: string; endsOn: string }> {
+  return db.transaction('rw', [db.profile, db.billingEvents], async () => {
+    const profile = await db.profile.get(1)
+    if (!profile) throw new Error('Profile not found')
+    if (profile.trialStartedOn) throw new Error('The free trial has already been used on this profile.')
+    const startedOn = todayISO()
+    const endsOn = daysFromToday(6)
+    await db.profile.update(1, { trialStartedOn: startedOn, trialEndsOn: endsOn, trialEndedSeen: null, updatedAt: nowISO() })
+    await db.billingEvents.add({ ownerId: owner(), kind: 'upgrade', plan: 'premium', interval: null, amount: 0, occurredAt: nowISO() })
+    return { startedOn, endsOn }
+  })
+}
+
+/** End the trial today. Nothing else changes; every record stays. */
+export async function endTrialNow(): Promise<void> {
+  await db.profile.update(1, { trialEndsOn: daysFromToday(-1), updatedAt: nowISO() })
+}
+
+export async function markTrialEndedSeen(): Promise<void> {
+  await db.profile.update(1, { trialEndedSeen: nowISO(), updatedAt: nowISO() })
+}
+
 export async function downgradeToFree(): Promise<void> {
   await db.transaction('rw', db.profile, db.billingEvents, async () => {
     await db.profile.update(1, { plan: 'free', premiumInterval: null, premiumRenewsOn: null })

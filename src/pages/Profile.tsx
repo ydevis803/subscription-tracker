@@ -9,7 +9,7 @@ import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useScopeKey } from '@/auth/AuthContext'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
-import { countedForLimit, isPremium, price } from '@/lib/plan'
+import { countedForLimit, isPaidPremium, isPremium, price, trialState } from '@/lib/plan'
 import { formatDate } from '@/lib/dates'
 import { monthlyEquivalent, formatMoney } from '@/lib/money'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -105,7 +105,7 @@ export default function Profile() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h2 className="break-words text-xl font-bold leading-tight text-navy-900">{profile.name || 'Add your name'}</h2>
-                  <Badge tone={premium ? 'mint' : 'gray'}>{premium ? 'Premium' : 'Free'}</Badge>
+                  <Badge tone={premium ? 'mint' : 'gray'}>{isPaidPremium(profile) ? 'Premium' : premium ? `Trial · day ${trialState(profile).day}` : 'Free'}</Badge>
                 </div>
                 <p className="break-all text-[13px] text-muted">{auth.status === 'signed-in' ? auth.user?.email : profile.email || 'No email added'}</p>
                 <p className="text-[12px] text-faint">Tracking since {formatDate(profile.createdAt.slice(0, 10), 'MMM yyyy')}</p>

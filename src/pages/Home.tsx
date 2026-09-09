@@ -17,6 +17,7 @@ import { ContinueCard } from '@/components/app/RecentActivity'
 import { TodayCard } from '@/components/app/TodayCard'
 import { MilestoneCard } from '@/components/app/MilestoneCard'
 import { FirstWinOffer } from '@/components/app/Paywall'
+import { TrialCard, TrialEndedCard } from '@/components/app/TrialCards'
 import { weeklySummary } from '@/lib/weekly'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -227,6 +228,8 @@ export default function Home() {
         {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined && (
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
         )}
+        {profile && subs && priceChanges && notes && <TrialCard profile={profile} subs={subs} changes={priceChanges} notes={notes} currency={currency} />}
+        {profile && subs && <TrialEndedCard profile={profile} subsCount={subs.length} />}
         {subs && !checkHandledByToday && <CheckCard subs={subs} currency={currency} />}
         {week && (
           <Card className="overflow-hidden">

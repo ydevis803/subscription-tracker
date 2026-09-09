@@ -62,26 +62,29 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 29-sheet-edit-profile | Name and email sheet |
 | 30-settings | Money, reminders, display, data sections (Account section when signed in) |
 | 31-reminders | Reminder preferences: next-reminder/paused card with time zone, day chips and presets, time field, pause with resume-by date, honest delivery methods (in-app always on, browser notification while open, push and email not available) |
-| 32-premium-plans | Navy feature hero, yearly/monthly options, mint CTA |
+| 32-premium-plans | Plan page for a free user: outcome hero with prices, three data-driven benefits, yearly/monthly with yearly value, Try Premium free for 7 days, Start Premium, Restore purchase, Keep the free plan |
 | 33-sheet-premium-confirm | Plan confirmation sheet |
-| 34-sheet-account-explainer | Friendly explanation shown before creating an account |
-| 35-auth-sign-up | Create account: name, email, password with show toggle |
-| 36-auth-sign-in | Sign in with forgot-password link |
-| 37-auth-forgot-password | Request a reset link |
-| 38-auth-reset-link-missing | Reset page opened without a valid link |
-| 39-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
-| 40-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
-| 41-sheet-paywall | Paywall sheet shown when adding past the free limit |
-| 42-premium-activated | Success state after activation |
-| 43-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
-| 44-premium-manage | Active plan card, billing history, end Premium |
-| 45-profile-premium | Profile with Premium badge |
-| 46-sheet-confirm-erase | Erase-all confirmation |
-| 47-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
-| 48-subscriptions-empty | List empty state |
-| 49-calendar-empty | Calendar empty state |
-| 50-insights-empty | Insights empty state |
-| 51-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
-| 52-price-history-empty | Price history empty state |
-| 53-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
-| 54-not-found | Unknown route |
+| 34-home-trial-day | Home during the seven-day trial: trial card with day N of 7, start and end dates, progress bar, Manage, and today's personalised Premium win |
+| 35-premium-trial | Plan page during the trial: hero with day count, Your trial card (started, ends with last day included, included benefits, End trial now), benefits, Keep Premium plans |
+| 36-home-trial-ended | Home after the trial ends: one-time card saying nothing was removed, Keep Premium / Stay on free |
+| 37-sheet-account-explainer | Friendly explanation shown before creating an account |
+| 38-auth-sign-up | Create account: name, email, password with show toggle |
+| 39-auth-sign-in | Sign in with forgot-password link |
+| 40-auth-forgot-password | Request a reset link |
+| 41-auth-reset-link-missing | Reset page opened without a valid link |
+| 42-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
+| 43-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
+| 44-sheet-paywall | Paywall sheet shown when adding past the free limit |
+| 45-premium-activated | Success state after activation |
+| 46-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
+| 47-premium-manage | Active plan card, billing history, end Premium |
+| 48-profile-premium | Profile with Premium badge |
+| 49-sheet-confirm-erase | Erase-all confirmation |
+| 50-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
+| 51-subscriptions-empty | List empty state |
+| 52-calendar-empty | Calendar empty state |
+| 53-insights-empty | Insights empty state |
+| 54-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
+| 55-price-history-empty | Price history empty state |
+| 56-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
+| 57-not-found | Unknown route |

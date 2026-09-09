@@ -97,6 +97,11 @@ export interface Profile {
   setupCompletedAt?: string | null
   /** Everything the user answered during onboarding, kept with the profile. */
   onboardingAnswers?: OnboardingAnswers | null
+  /** Seven-day Premium trial: local start day and inclusive last day. Only one trial per profile. */
+  trialStartedOn?: string | null
+  trialEndsOn?: string | null
+  /** When the "trial ended" card was acknowledged, so it shows once. */
+  trialEndedSeen?: string | null
   createdAt: string
   updatedAt?: string
 }

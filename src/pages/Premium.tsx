@@ -1,9 +1,10 @@
 import { useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { downgradeToFree, upgradeToPremium } from '@/db/repo'
+import { downgradeToFree, endTrialNow, startTrial, upgradeToPremium } from '@/db/repo'
 import { FREE_SUBSCRIPTION_LIMIT, type PremiumInterval } from '@/db/schema'
 import { useBillingEvents, useNotes, usePriceChanges, useProfile, useSubscriptions } from '@/hooks/useData'
-import { countedForLimit, isPremium, premiumBenefits, price, YEARLY_PER_MONTH, YEARLY_SAVING_AMOUNT, YEARLY_SAVING_PCT } from '@/lib/plan'
+import { countedForLimit, isPaidPremium, premiumBenefits, price, PREMIUM_FEATURES, TRIAL_DAYS, trialState, YEARLY_PER_MONTH, YEARLY_SAVING_AMOUNT, YEARLY_SAVING_PCT } from '@/lib/plan'
+import { ProgressBar } from '@/components/ui/Primitives'
 import { formatDate } from '@/lib/dates'
 import { formatMoney, monthlyEquivalent } from '@/lib/money'
 import { describeError } from '@/lib/errors'
@@ -37,7 +38,26 @@ export default function Premium() {
   const inFlight = useRef(false)
 
   const currency = profile?.currency ?? 'USD'
-  const premium = isPremium(profile)
+  const premium = isPaidPremium(profile)
+  const trial = trialState(profile)
+  const [endTrial, setEndTrial] = useState(false)
+  const [startingTrial, setStartingTrial] = useState(false)
+
+  const beginTrial = async () => {
+    if (inFlight.current) return
+    inFlight.current = true
+    setStartingTrial(true)
+    try {
+      const { endsOn } = await startTrial()
+      toast.success(`Premium trial started. Ends ${formatDate(endsOn, 'EEE d MMM')}.`)
+      navigate('/')
+    } catch (e) {
+      toast.error(describeError(e, 'start the trial'))
+    } finally {
+      inFlight.current = false
+      setStartingTrial(false)
+    }
+  }
   const used = subs ? countedForLimit(subs) : 0
   const monthly = subs ? monthlyEquivalent(subs) : 0
   const benefits = useMemo(() => (subs && changes && notes ? premiumBenefits(subs, changes, notes, currency) : []), [subs, changes, notes, currency])
@@ -147,11 +167,17 @@ export default function Premium() {
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-500 text-navy-900">
             <Icon name="crown" size={24} />
           </span>
-          <h2 className="mt-4 text-[28px] font-bold leading-[1.1]">{premium ? 'Every charge, in view. Always.' : 'Know every charge before it lands. All of them.'}</h2>
+          <h2 className="mt-4 text-[28px] font-bold leading-[1.1]">
+            {premium ? 'Every charge, in view. Always.' : trial.status === 'active' ? `Premium trial · day ${trial.day} of ${TRIAL_DAYS}` : trial.status === 'ended' ? 'Your trial ended. Keep the whole year in view?' : 'Know every charge before it lands. All of them.'}
+          </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-navy-100">
             {premium
               ? `Premium ${profile.premiumInterval} since ${profile.premiumSince ? formatDate(profile.premiumSince) : 'today'}. Unlimited tracking and every insight, on every device you sign in to.`
-              : `You track ${used} ${used === 1 ? 'subscription' : 'subscriptions'} worth ${formatMoney(monthly, currency)} a month. Free covers ${FREE_SUBSCRIPTION_LIMIT}. Premium removes the cap and adds the reports that find money to keep.`}
+              : trial.status === 'active'
+                ? `Everything Premium is on until ${formatDate(trial.endsOn!, 'EEEE d MMM')}. No card needed. When it ends you go back to Free unless you choose a plan.`
+                : trial.status === 'ended'
+                  ? `Your trial ran ${formatDate(trial.startedOn!, 'd MMM')} to ${formatDate(trial.endsOn!, 'd MMM')}. Nothing was removed. Premium brings the reports back and lifts the ten-subscription limit.`
+                  : `You track ${used} ${used === 1 ? 'subscription' : 'subscriptions'} worth ${formatMoney(monthly, currency)} a month. Free covers ${FREE_SUBSCRIPTION_LIMIT}. Premium removes the cap and adds the reports that find money to keep.`}
           </p>
           {!premium && (
             <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[13px] font-semibold">
@@ -160,6 +186,42 @@ export default function Premium() {
             </p>
           )}
         </div>
+
+        {trial.status === 'active' && (
+          <Card className="border-mint-100 p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[15px] font-bold text-navy-900">Your trial</p>
+              <Badge tone="mint">Day {trial.day} of {TRIAL_DAYS}</Badge>
+            </div>
+            <div className="mt-2">
+              <ProgressBar value={trial.day} max={TRIAL_DAYS} tone="mint" />
+            </div>
+            <dl className="mt-3 grid grid-cols-2 gap-3 text-[13px]">
+              <div>
+                <dt className="font-semibold uppercase tracking-wide text-faint">Started</dt>
+                <dd className="text-ink">{formatDate(trial.startedOn!, 'EEE d MMM')}</dd>
+              </div>
+              <div>
+                <dt className="font-semibold uppercase tracking-wide text-faint">Ends</dt>
+                <dd className="text-ink">{formatDate(trial.endsOn!, 'EEE d MMM')} · last day included</dd>
+              </div>
+            </dl>
+            <p className="mt-3 text-[12px] font-semibold uppercase tracking-wide text-faint">Included</p>
+            <ul className="mt-1 space-y-1.5">
+              {PREMIUM_FEATURES.map((f) => (
+                <li key={f} className="flex items-center gap-2 text-[14px] text-ink">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-mint-100 text-mint-700">
+                    <Icon name="check" size={12} />
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <TextLink icon={null} className="mt-2 text-coral-700" onClick={() => setEndTrial(true)}>
+              End trial now
+            </TextLink>
+          </Card>
+        )}
 
         {/* Three concrete benefits from the user's data */}
         <section>
@@ -236,9 +298,15 @@ export default function Premium() {
                 Yearly is {formatMoney(YEARLY_SAVING_AMOUNT, 'USD')} less than twelve months at {price('monthly')}, and every insight stays unlocked all year.
               </p>
             )}
-            <Button full size="lg" variant="mint" onClick={() => startCheckout()} leading={<Icon name="crown" size={20} />}>
-              Start Premium · {price(interval)}/{interval === 'yearly' ? 'year' : 'month'}
+            {trial.status === 'none' && (
+              <Button full size="lg" variant="mint" loading={startingTrial} onClick={beginTrial} leading={<Icon name="sparkle" size={20} />}>
+                Try Premium free for {TRIAL_DAYS} days
+              </Button>
+            )}
+            <Button full size="lg" variant={trial.status === 'none' ? 'primary' : 'mint'} onClick={() => startCheckout()} leading={<Icon name="crown" size={20} />}>
+              {trial.status === 'active' ? 'Keep Premium' : 'Start Premium'} · {price(interval)}/{interval === 'yearly' ? 'year' : 'month'}
             </Button>
+            {trial.status === 'none' && <p className="text-center text-[12px] text-faint">The trial needs no card and ends on its own after {TRIAL_DAYS} days. One trial per profile.</p>}
             <div className="flex items-center justify-center gap-4">
               <TextLink icon={null} onClick={restore}>
                 {restoring ? 'Checking…' : 'Restore purchase'}
@@ -280,6 +348,26 @@ export default function Premium() {
             ? 'Purchases live on your account. Sign in with the account you bought Premium on and it comes back to this device.'
             : 'Premium needs an owner. Create a free account first so your plan stays with you on every device, then come back here to activate it.'
         }
+      />
+      <ConfirmSheet
+        open={endTrial}
+        onClose={() => setEndTrial(false)}
+        title="End the trial now?"
+        body="Premium reports lock again straight away. Every subscription, note and price change stays exactly as it is, and you can choose a plan any time."
+        confirmLabel="End trial"
+        loading={busy}
+        onConfirm={async () => {
+          setBusy(true)
+          try {
+            await endTrialNow()
+            setEndTrial(false)
+            toast.info('Trial ended. Everything you entered stays.')
+          } catch (e) {
+            toast.error(describeError(e, 'end the trial'))
+          } finally {
+            setBusy(false)
+          }
+        }}
       />
       <ConfirmSheet
         open={cancel}

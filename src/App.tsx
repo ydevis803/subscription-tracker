@@ -1,0 +1,162 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Navigate, Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
+import { ensureInitialized, rolloverRenewals } from '@/db/repo'
+import { useProfile } from '@/hooks/useData'
+import { AuthProvider, useAuth } from '@/auth/AuthContext'
+import { ToastProvider } from '@/components/ui/Toast'
+import { AppShell } from '@/components/layout/AppShell'
+import { ErrorState } from '@/components/ui/Primitives'
+import { Spinner } from '@/components/ui/Button'
+import Onboarding from '@/pages/Onboarding'
+import Home from '@/pages/Home'
+import Subscriptions from '@/pages/Subscriptions'
+import SubscriptionDetail from '@/pages/SubscriptionDetail'
+import SubscriptionForm from '@/pages/SubscriptionForm'
+import Calendar from '@/pages/Calendar'
+import Insights from '@/pages/Insights'
+import PriceHistory from '@/pages/PriceHistory'
+import Notes from '@/pages/Notes'
+import Profile from '@/pages/Profile'
+import Settings from '@/pages/Settings'
+import Premium from '@/pages/Premium'
+import NotFound from '@/pages/NotFound'
+import RenewalCheck from '@/pages/RenewalCheck'
+import Timeline from '@/pages/Timeline'
+import MonthlyTotal from '@/pages/MonthlyTotal'
+import SignUp from '@/pages/auth/SignUp'
+import SignIn from '@/pages/auth/SignIn'
+import ForgotPassword from '@/pages/auth/ForgotPassword'
+import ResetPassword from '@/pages/auth/ResetPassword'
+
+type Boot = 'loading' | 'ready' | 'error'
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <AuthProvider>
+        <ScopedApp />
+      </AuthProvider>
+    </ToastProvider>
+  )
+}
+
+/** Remounts the whole data tree whenever the active account (and therefore database) changes. */
+function ScopedApp() {
+  const { status, scopeKey } = useAuth()
+  if (status === 'loading') return <Splash message="Checking your account…" />
+  return <AppRoutes key={scopeKey} />
+}
+
+function AppRoutes() {
+  const [boot, setBoot] = useState<Boot>('loading')
+  const [bootError, setBootError] = useState('')
+  const profile = useProfile()
+  const location = useLocation()
+  const navigationType = useNavigationType()
+  const scrollPositions = useRef(new Map<string, number>())
+
+  const start = useCallback(async () => {
+    setBoot('loading')
+    try {
+      await ensureInitialized()
+      await rolloverRenewals()
+      setBoot('ready')
+    } catch (e) {
+      setBootError(e instanceof Error ? e.message : 'Local storage could not be opened.')
+      setBoot('error')
+    }
+  }, [])
+
+  useEffect(() => {
+    void start()
+  }, [start])
+
+  // Remember where each screen was scrolled to, restore it on Back, start at the top on forward navigation.
+  useEffect(() => {
+    const key = location.key
+    const onScroll = () => scrollPositions.current.set(key, window.scrollY)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    if (navigationType === 'POP') {
+      const target = scrollPositions.current.get(key) ?? 0
+      const timers = [0, 60, 180, 400].map((ms) => window.setTimeout(() => window.scrollTo({ top: target }), ms))
+      return () => {
+        window.removeEventListener('scroll', onScroll)
+        timers.forEach(clearTimeout)
+      }
+    }
+    window.scrollTo({ top: 0 })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [location.key, navigationType])
+
+  if (boot === 'error') {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-canvas">
+        <ErrorState title="Could not open your data" body={`${bootError} Private browsing or a full disk can block local storage.`} onRetry={start} />
+      </div>
+    )
+  }
+
+  if (boot === 'loading' || !profile) {
+    return <Splash />
+  }
+
+  const authRoutes = (
+    <>
+      <Route path="/auth/sign-up" element={<SignUp />} />
+      <Route path="/auth/sign-in" element={<SignIn />} />
+      <Route path="/auth/forgot" element={<ForgotPassword />} />
+      <Route path="/auth/reset" element={<ResetPassword />} />
+    </>
+  )
+
+  if (!profile.onboardingComplete) {
+    return (
+      <Routes>
+        {authRoutes}
+        <Route path="*" element={<Onboarding />} />
+      </Routes>
+    )
+  }
+
+  const fullScreen = /^\/subscriptions\/(new|\d+\/edit)$/.test(location.pathname) || location.pathname === '/premium' || location.pathname === '/check' || location.pathname.startsWith('/auth/')
+
+  return (
+    <AppShell nav={!fullScreen}>
+      <Routes>
+        {authRoutes}
+        <Route path="/" element={<Home />} />
+        <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/subscriptions/new" element={<SubscriptionForm />} />
+        <Route path="/subscriptions/:id" element={<SubscriptionDetail />} />
+        <Route path="/subscriptions/:id/edit" element={<SubscriptionForm />} />
+        <Route path="/check" element={<RenewalCheck />} />
+        <Route path="/timeline" element={<Timeline />} />
+        <Route path="/total" element={<MonthlyTotal />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/insights" element={<Insights />} />
+        <Route path="/history" element={<PriceHistory />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/premium" element={<Premium />} />
+        <Route path="/onboarding" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AppShell>
+  )
+}
+
+function Splash({ message = 'Opening your subscriptions…' }: { message?: string }) {
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center bg-navy-900 text-white" aria-busy="true">
+      <svg width="72" height="72" viewBox="0 0 128 128" aria-hidden="true">
+        <rect width="128" height="128" rx="28" fill="#12294B" />
+        <circle cx="64" cy="64" r="34" fill="none" stroke="#5EEAD4" strokeWidth="10" />
+        <path d="M64 38v26l16 10" fill="none" stroke="#FF7A6B" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <p className="mt-5 text-lg font-bold">Subscription Tracker</p>
+      <p className="mt-1 text-sm text-navy-100">{message}</p>
+      <Spinner className="mt-6 text-mint-400" />
+    </div>
+  )
+}

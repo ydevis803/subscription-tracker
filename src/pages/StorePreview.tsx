@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { Logo } from '@/components/ui/Logo'
 import { Icon, type IconName } from '@/components/ui/Icon'
@@ -48,6 +49,9 @@ export default function StorePreview() {
         <p className="ml-auto hidden text-[0.8125rem] text-navy-100 sm:block">
           Demo data only. Capture with <code className="rounded bg-white/10 px-1.5 py-0.5">npm run store:shots</code>
         </p>
+        <Link to="/__listing" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
+          Listing copy
+        </Link>
       </div>
 
       <div className="mx-auto mt-6 flex max-w-[1400px] snap-x snap-mandatory gap-6 overflow-x-auto pb-6 no-scrollbar">

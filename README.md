@@ -100,6 +100,10 @@ Screens other than Home and onboarding are code-split and lazy-loaded behind a p
 
 `npm run audit:a11y` (dev server running) runs axe-core (WCAG 2.1 A/AA and best practice) on every screen and sheet, tabs through each page to confirm a visible focus style, submits an empty form to confirm errors are linked to their fields and announced, and loads Home with reduced motion to confirm no animation runs. Conventions: every icon-only control has an `aria-label`; field messages are linked with `aria-describedby` and use `role="alert"`; status is always text or an icon as well as colour (badges, alerts, progress bars carry labels and values); the focus ring is a 3px mint outline; font sizes are in rem so browser text scaling applies; `text-faint` (#5F6F86) and `coral-700` (#B03A2B) meet 4.5:1 on white and the tinted surfaces; service marks pick white or navy initials by contrast.
 
+## Store listing
+
+`/__listing` (same owner-only gate as the screenshot preview) holds the listing copy from `src/lib/storeListing.ts`: five app-name options under 30 characters, the chosen subtitle, promotional text, short and full descriptions organised by outcomes then features, ten keywords and version 1.0 release notes. Every section has its own Copy button with a character count against the store limit, a banner fails loudly if the copy ever contains awards, ratings, user counts or unsupported push claims, and a claims check lists each statement with the screen that delivers it.
+
 ## Store screenshots
 
 `/__store` stages five phone frames (outcome-led Home, renewal timeline with category totals and cancellation notes, subscription list, visible progress, Premium value) with short headline overlays, a consistent status bar and the real bottom navigation. It renders only from `src/lib/demoData.ts`, never from the database, so no private data can appear. It is open in development builds and, in production, only with `?key=` matching `VITE_STORE_PREVIEW_KEY`; it is not linked from the app. `npm run store:shots` captures each frame at 3× (1170 × 2532) into `docs/store/` plus a thumbnail strip.

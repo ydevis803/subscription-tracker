@@ -33,7 +33,8 @@ export default function SignIn() {
     inFlight.current = true
     setBusy(true)
     try {
-      await signIn({ email: email.trim(), password })
+      const { merge } = await signIn({ email: email.trim(), password })
+      if (merge) return // the keep-or-drop sheet below must be answered first; it navigates afterwards
       toast.success('Welcome back')
       navigate(next, { replace: true })
     } catch (err) {

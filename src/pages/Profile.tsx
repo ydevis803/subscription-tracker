@@ -9,7 +9,7 @@ import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useScopeKey } from '@/auth/AuthContext'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
-import { countedForLimit, isPremium } from '@/lib/plan'
+import { countedForLimit, isPremium, price } from '@/lib/plan'
 import { formatDate } from '@/lib/dates'
 import { monthlyEquivalent, formatMoney } from '@/lib/money'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -183,7 +183,7 @@ export default function Profile() {
               <span className="block text-[13px] text-muted">
                 {premium
                   ? `${profile?.premiumInterval === 'yearly' ? 'Yearly' : 'Monthly'} plan · renews ${profile?.premiumRenewsOn ? formatDate(profile.premiumRenewsOn) : ''}`
-                  : `${used} of ${FREE_SUBSCRIPTION_LIMIT} free subscriptions used · unlimited from $3.99/mo`}
+                  : `${used} of ${FREE_SUBSCRIPTION_LIMIT} free subscriptions used · unlimited from ${price('monthly')}/mo`}
               </span>
             </span>
             <Icon name="chevronRight" size={18} className="text-faint" />

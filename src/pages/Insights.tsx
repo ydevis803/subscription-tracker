@@ -306,7 +306,7 @@ export default function Insights() {
                   </p>
                 </Card>
               ) : (
-                <LockedCard title="12-month projection" body="See which months hit hardest when annual plans land." />
+                <LockedCard title="12-month projection" body="See which months hit hardest when annual plans land." why="Premium because it projects every plan a year ahead from your renewal dates and cycles." />
               )}
             </section>
 
@@ -343,7 +343,7 @@ export default function Insights() {
                   )}
                 </Card>
               ) : (
-                <LockedCard title="Price-increase impact" body="Find out how much more you pay than when you signed up." />
+                <LockedCard title="Price-increase impact" body="Find out how much more you pay than when you signed up." why="Premium because it works through your whole price-change history, plan by plan." />
               )}
             </section>
 
@@ -374,7 +374,7 @@ export default function Insights() {
                   )}
                 </Card>
               ) : (
-                <LockedCard title="Unused subscription detector" body="Spots paused plans, trials and things you flagged as not worth it." />
+                <LockedCard title="Unused subscription detector" body="Spots paused plans, trials and things you flagged as not worth it." why="Premium because it cross-checks your notes, pauses and trials to find money you may not need to spend." />
               )}
             </section>
           </>

@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { downgradeToFree, upgradeToPremium } from '@/db/repo'
-import { FREE_SUBSCRIPTION_LIMIT, PREMIUM_PRICING, type PremiumInterval } from '@/db/schema'
-import { useBillingEvents, useProfile, useSubscriptions } from '@/hooks/useData'
-import { countedForLimit, isPremium, PREMIUM_FEATURES } from '@/lib/plan'
+import { FREE_SUBSCRIPTION_LIMIT, type PremiumInterval } from '@/db/schema'
+import { useBillingEvents, useNotes, usePriceChanges, useProfile, useSubscriptions } from '@/hooks/useData'
+import { countedForLimit, isPremium, premiumBenefits, price, YEARLY_PER_MONTH, YEARLY_SAVING_AMOUNT, YEARLY_SAVING_PCT } from '@/lib/plan'
 import { formatDate } from '@/lib/dates'
+import { formatMoney, monthlyEquivalent } from '@/lib/money'
+import { describeError } from '@/lib/errors'
+import { pullFromServer } from '@/sync/sync'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Page } from '@/components/layout/AppShell'
-import { Button } from '@/components/ui/Button'
+import { Button, TextLink } from '@/components/ui/Button'
 import { Badge, Card, Skeleton } from '@/components/ui/Primitives'
 import { Icon } from '@/components/ui/Icon'
 import { ConfirmSheet, Sheet } from '@/components/ui/Sheet'
@@ -15,30 +18,40 @@ import { useToast } from '@/components/ui/Toast'
 import { useAuth } from '@/auth/AuthContext'
 import { AccountExplainerSheet } from '@/components/app/Account'
 
-const yearlySaving = Math.round((1 - PREMIUM_PRICING.yearly / (PREMIUM_PRICING.monthly * 12)) * 100)
-
 export default function Premium() {
   const navigate = useNavigate()
   const toast = useToast()
   const profile = useProfile()
   const subs = useSubscriptions()
+  const changes = usePriceChanges()
+  const notes = useNotes()
   const events = useBillingEvents()
+  const { status } = useAuth()
   const [interval, setInterval] = useState<PremiumInterval>('yearly')
   const [confirm, setConfirm] = useState(false)
   const [cancel, setCancel] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [restoring, setRestoring] = useState(false)
   const [justActivated, setJustActivated] = useState(false)
-  const { status } = useAuth()
-  const [explainer, setExplainer] = useState(false)
-  const startCheckout = () => {
-    if (status === 'guest') setExplainer(true)
+  const [explainer, setExplainer] = useState<'buy' | 'restore' | null>(null)
+  const inFlight = useRef(false)
+
+  const currency = profile?.currency ?? 'USD'
+  const premium = isPremium(profile)
+  const used = subs ? countedForLimit(subs) : 0
+  const monthly = subs ? monthlyEquivalent(subs) : 0
+  const benefits = useMemo(() => (subs && changes && notes ? premiumBenefits(subs, changes, notes, currency) : []), [subs, changes, notes, currency])
+
+  /** Every upgrade button in the app lands here; this is the one purchase flow. */
+  const startCheckout = (chosen?: PremiumInterval) => {
+    if (chosen) setInterval(chosen)
+    if (status === 'guest') setExplainer('buy')
     else setConfirm(true)
   }
 
-  const premium = isPremium(profile)
-  const used = subs ? countedForLimit(subs) : 0
-
   const activate = async () => {
+    if (inFlight.current) return
+    inFlight.current = true
     setBusy(true)
     try {
       await upgradeToPremium(interval)
@@ -46,22 +59,46 @@ export default function Premium() {
       setJustActivated(true)
       toast.success('Premium activated')
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Could not activate')
+      toast.error(describeError(e, 'activate Premium'))
     } finally {
+      inFlight.current = false
       setBusy(false)
     }
   }
 
   const doCancel = async () => {
+    if (inFlight.current) return
+    inFlight.current = true
     setBusy(true)
     try {
       await downgradeToFree()
       setCancel(false)
-      toast.info('Premium ended. Your data is untouched.')
+      toast.info('Premium ended. Everything you entered stays.')
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Could not change plan')
+      toast.error(describeError(e, 'change your plan'))
     } finally {
+      inFlight.current = false
       setBusy(false)
+    }
+  }
+
+  /** Restore: a purchase lives on the account, so pull the account and read the plan back. */
+  const restore = async () => {
+    if (status === 'guest') {
+      setExplainer('restore')
+      return
+    }
+    setRestoring(true)
+    try {
+      await pullFromServer()
+      const { db } = await import('@/db/schema')
+      const p = await db.profile.get(1)
+      if (p?.plan === 'premium') toast.success('Premium restored to this device')
+      else toast.info('No Premium purchase found on this account. If you bought it elsewhere, sign in with that account.')
+    } catch (e) {
+      toast.error(describeError(e, 'check your purchases'))
+    } finally {
+      setRestoring(false)
     }
   }
 
@@ -81,7 +118,7 @@ export default function Premium() {
       <div>
         <PageHeader title="Premium" back backTo="/profile" />
         <Page className="flex min-h-[70dvh] flex-col items-center justify-center text-center">
-          <span className="flex h-20 w-20 items-center justify-center rounded-3xl bg-mint-500 text-navy-900">
+          <span className="pop flex h-20 w-20 items-center justify-center rounded-3xl bg-mint-500 text-navy-900 ring-8 ring-mint-100">
             <Icon name="check" size={36} />
           </span>
           <h2 className="mt-6 text-2xl font-bold text-navy-900">You are on Premium</h2>
@@ -103,29 +140,45 @@ export default function Premium() {
 
   return (
     <div>
-      <PageHeader title={premium ? 'Your plan' : 'Premium'} back backTo="/profile" />
-      <Page className="space-y-5">
+      <PageHeader title={premium ? 'Manage Premium' : 'Premium'} back backTo="/profile" />
+      <Page className="space-y-5 pb-8">
+        {/* Outcome first */}
         <div className="rounded-3xl bg-navy-900 p-6 text-white">
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-500 text-navy-900">
             <Icon name="crown" size={24} />
           </span>
-          <h2 className="mt-4 text-[26px] font-bold leading-tight">{premium ? 'Premium is active' : 'Track everything. Miss nothing.'}</h2>
-          <p className="mt-2 text-[15px] text-navy-100">
+          <h2 className="mt-4 text-[28px] font-bold leading-[1.1]">{premium ? 'Every charge, in view. Always.' : 'Know every charge before it lands. All of them.'}</h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-navy-100">
             {premium
-              ? `You are on the ${profile.premiumInterval} plan since ${profile.premiumSince ? formatDate(profile.premiumSince) : 'today'}.`
-              : `Free covers ${FREE_SUBSCRIPTION_LIMIT} subscriptions. Premium removes the cap and adds the reports that actually save money.`}
+              ? `Premium ${profile.premiumInterval} since ${profile.premiumSince ? formatDate(profile.premiumSince) : 'today'}. Unlimited tracking and every insight, on every device you sign in to.`
+              : `You track ${used} ${used === 1 ? 'subscription' : 'subscriptions'} worth ${formatMoney(monthly, currency)} a month. Free covers ${FREE_SUBSCRIPTION_LIMIT}. Premium removes the cap and adds the reports that find money to keep.`}
           </p>
-          <ul className="mt-5 space-y-2.5">
-            {PREMIUM_FEATURES.map((f) => (
-              <li key={f} className="flex items-center gap-3 text-[15px]">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint-500 text-navy-900">
-                  <Icon name="check" size={14} />
-                </span>
-                {f}
-              </li>
-            ))}
-          </ul>
+          {!premium && (
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[13px] font-semibold">
+              <Icon name="sparkle" size={14} className="text-mint-400" />
+              {price('monthly')}/month or {price('yearly')}/year
+            </p>
+          )}
         </div>
+
+        {/* Three concrete benefits from the user's data */}
+        <section>
+          <p className="mb-2 px-1 text-[15px] font-bold text-navy-900">{premium ? 'What Premium is doing for you' : 'What changes for you'}</p>
+          <Card className="divide-y divide-line overflow-hidden">
+            {benefits.map((b) => (
+              <div key={b.title} className="flex items-start gap-3 px-4 py-3.5">
+                <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint-100 text-mint-700">
+                  <Icon name={b.icon} size={20} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[15px] font-semibold leading-snug text-ink">{b.title}</span>
+                  <span className="mt-0.5 block text-[13px] leading-snug text-muted">{b.body}</span>
+                  <span className="mt-1 block text-[11px] font-semibold uppercase tracking-wide text-faint">From {b.from}</span>
+                </span>
+              </div>
+            ))}
+          </Card>
+        </section>
 
         {premium ? (
           <>
@@ -134,86 +187,99 @@ export default function Premium() {
                 <div>
                   <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Current plan</p>
                   <p className="text-[17px] font-bold text-navy-900">
-                    Premium {profile.premiumInterval} · ${profile.premiumInterval === 'yearly' ? PREMIUM_PRICING.yearly.toFixed(2) : PREMIUM_PRICING.monthly.toFixed(2)}
+                    Premium {profile.premiumInterval} · {price(profile.premiumInterval ?? 'monthly')}
                   </p>
                   <p className="text-[13px] text-muted">Renews {profile.premiumRenewsOn ? formatDate(profile.premiumRenewsOn) : ''}</p>
                 </div>
                 <Badge tone="mint">Active</Badge>
               </div>
-              {profile.premiumInterval === 'monthly' && (
-                <button
-                  onClick={() => {
-                    setInterval('yearly')
-                    setConfirm(true)
-                  }}
-                  className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-mint-100 text-[14px] font-semibold text-mint-700"
-                >
-                  <Icon name="sparkle" size={18} /> Switch to yearly and save {yearlySaving}%
-                </button>
+              {profile.premiumInterval === 'monthly' ? (
+                <Button full variant="mint" className="mt-4" onClick={() => startCheckout('yearly')} leading={<Icon name="sparkle" size={18} />}>
+                  Switch to yearly · save {formatMoney(YEARLY_SAVING_AMOUNT, 'USD')} a year
+                </Button>
+              ) : (
+                <p className="mt-3 rounded-xl bg-mint-50 px-3 py-2 text-[13px] text-mint-700">You are on the best value plan, {YEARLY_SAVING_PCT}% less than paying monthly.</p>
               )}
             </Card>
             {events && events.length > 0 && (
               <Card className="divide-y divide-line overflow-hidden">
+                <p className="px-4 pt-3 text-[12px] font-semibold uppercase tracking-wide text-faint">Billing history</p>
                 {events.map((ev) => (
                   <div key={ev.id} className="flex items-center justify-between px-4 py-3 text-[14px]">
                     <span className="text-ink">
                       {ev.kind === 'upgrade' ? 'Started Premium' : ev.kind === 'downgrade' ? 'Moved to Free' : 'Changed billing'}
                       {ev.interval ? ` (${ev.interval})` : ''}
+                      {ev.amount > 0 ? ` · $${ev.amount.toFixed(2)}` : ''}
                     </span>
                     <span className="text-muted">{formatDate(ev.occurredAt.slice(0, 10))}</span>
                   </div>
                 ))}
               </Card>
             )}
-            <Button full variant="ghost" className="text-coral-700" onClick={() => setCancel(true)}>
-              End Premium
-            </Button>
+            <div className="space-y-2">
+              <Button full variant="secondary" loading={restoring} onClick={restore} leading={<Icon name="refresh" size={18} />}>
+                Restore purchase on this device
+              </Button>
+              <Button full variant="ghost" className="text-coral-700" onClick={() => setCancel(true)}>
+                End Premium
+              </Button>
+            </div>
           </>
         ) : (
           <>
             <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Billing interval">
-              <PlanOption
-                selected={interval === 'yearly'}
-                onSelect={() => setInterval('yearly')}
-                title="Yearly"
-                price={`$${PREMIUM_PRICING.yearly.toFixed(2)}`}
-                per="per year"
-                note={`$${(PREMIUM_PRICING.yearly / 12).toFixed(2)}/mo · save ${yearlySaving}%`}
-                highlight
-              />
-              <PlanOption selected={interval === 'monthly'} onSelect={() => setInterval('monthly')} title="Monthly" price={`$${PREMIUM_PRICING.monthly.toFixed(2)}`} per="per month" note="Cancel any time" />
+              <PlanOption selected={interval === 'yearly'} onSelect={() => setInterval('yearly')} title="Yearly" price={price('yearly')} per="per year" note={`${formatMoney(YEARLY_PER_MONTH, 'USD')}/mo · save ${YEARLY_SAVING_PCT}%`} highlight />
+              <PlanOption selected={interval === 'monthly'} onSelect={() => setInterval('monthly')} title="Monthly" price={price('monthly')} per="per month" note="Cancel any time" />
             </div>
-            <Button full size="lg" variant="mint" onClick={startCheckout} leading={<Icon name="crown" size={20} />}>
-              Start Premium · ${interval === 'yearly' ? PREMIUM_PRICING.yearly.toFixed(2) : PREMIUM_PRICING.monthly.toFixed(2)}/{interval === 'yearly' ? 'yr' : 'mo'}
+            {interval === 'yearly' && (
+              <p className="rounded-xl bg-mint-50 px-3 py-2 text-center text-[13px] text-mint-700">
+                Yearly is {formatMoney(YEARLY_SAVING_AMOUNT, 'USD')} less than twelve months at {price('monthly')}, and every insight stays unlocked all year.
+              </p>
+            )}
+            <Button full size="lg" variant="mint" onClick={() => startCheckout()} leading={<Icon name="crown" size={20} />}>
+              Start Premium · {price(interval)}/{interval === 'yearly' ? 'year' : 'month'}
             </Button>
+            <div className="flex items-center justify-center gap-4">
+              <TextLink icon={null} onClick={restore}>
+                {restoring ? 'Checking…' : 'Restore purchase'}
+              </TextLink>
+              <TextLink icon={null} onClick={() => navigate(-1)}>
+                Keep the free plan
+              </TextLink>
+            </div>
             <p className="text-center text-[12px] leading-relaxed text-faint">
-              You are tracking {used} of {FREE_SUBSCRIPTION_LIMIT} free subscriptions. Premium renews automatically and can be ended from this screen.
+              Free keeps working with up to {FREE_SUBSCRIPTION_LIMIT} subscriptions, reminders, notes and the calendar. Premium renews automatically and can be ended from this screen.
             </p>
           </>
         )}
       </Page>
 
-      <Sheet open={confirm} onClose={() => setConfirm(false)} title="Confirm your plan">
+      <Sheet open={confirm} onClose={() => setConfirm(false)} title={premium ? 'Change your plan' : 'Confirm your plan'}>
         <div className="rounded-2xl bg-navy-50 p-4">
           <div className="flex items-center justify-between">
             <span className="text-[15px] font-semibold text-ink">Premium {interval}</span>
-            <span className="tabular text-[17px] font-bold text-navy-900">${interval === 'yearly' ? PREMIUM_PRICING.yearly.toFixed(2) : PREMIUM_PRICING.monthly.toFixed(2)}</span>
+            <span className="tabular text-[17px] font-bold text-navy-900">{price(interval)}</span>
           </div>
           <p className="mt-1 text-[13px] text-muted">Billed {interval === 'yearly' ? 'once a year' : 'every month'}. First renewal in {interval === 'yearly' ? 'one year' : 'one month'}.</p>
         </div>
-        <p className="mt-4 text-[13px] leading-relaxed text-muted">
-          This build activates Premium on your device and records the plan in your billing history. Payment collection is handled by the app store when published.
-        </p>
+        <p className="mt-4 text-[13px] leading-relaxed text-muted">This build activates Premium on your account and records the plan in your billing history. Payment collection is handled by the app store when published.</p>
         <Button full size="lg" variant="mint" className="mt-4" loading={busy} onClick={activate}>
-          {premium ? 'Switch plan' : 'Activate Premium'}
+          {premium ? 'Switch plan' : `Activate Premium · ${price(interval)}`}
+        </Button>
+        <Button full size="lg" variant="ghost" className="mt-1" onClick={() => setConfirm(false)}>
+          Not now
         </Button>
       </Sheet>
 
       <AccountExplainerSheet
-        open={explainer}
-        onClose={() => setExplainer(false)}
+        open={explainer !== null}
+        onClose={() => setExplainer(null)}
         next="/premium"
-        reason="Premium needs an owner. Create a free account first so your plan stays with you on every device, then come back here to activate it."
+        reason={
+          explainer === 'restore'
+            ? 'Purchases live on your account. Sign in with the account you bought Premium on and it comes back to this device.'
+            : 'Premium needs an owner. Create a free account first so your plan stays with you on every device, then come back here to activate it.'
+        }
       />
       <ConfirmSheet
         open={cancel}
@@ -222,7 +288,7 @@ export default function Premium() {
         body={
           used > FREE_SUBSCRIPTION_LIMIT
             ? `You are tracking ${used} subscriptions. On the free plan you keep all of them, but cannot add more until you are under ${FREE_SUBSCRIPTION_LIMIT}. Premium insights will lock.`
-            : 'You will go back to the free plan. Everything you have entered stays on this device.'
+            : 'You will go back to the free plan. Everything you have entered stays.'
         }
         confirmLabel="End Premium"
         loading={busy}
@@ -238,7 +304,7 @@ function PlanOption({ selected, onSelect, title, price, per, note, highlight }: 
       role="radio"
       aria-checked={selected}
       onClick={onSelect}
-      className={`relative rounded-2xl border-2 bg-white p-4 text-left transition-colors ${selected ? 'border-mint-500' : 'border-line'}`}
+      className={`relative min-h-[7.5rem] rounded-2xl border-2 bg-white p-4 text-left transition-colors ${selected ? 'border-mint-500' : 'border-line'}`}
     >
       {highlight && <span className="absolute -top-2.5 left-3 rounded-full bg-coral-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">Best value</span>}
       <span className="block text-[13px] font-semibold text-muted">{title}</span>

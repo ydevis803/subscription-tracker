@@ -73,7 +73,7 @@ export function UpgradeBanner({ used, compact }: { used: number; compact?: boole
   )
 }
 
-export function LockedCard({ title, body }: { title: string; body: string }) {
+export function LockedCard({ title, body, why }: { title: string; body: string; why?: string }) {
   const navigate = useNavigate()
   return (
     <Card className="relative overflow-hidden p-4">
@@ -91,8 +91,9 @@ export function LockedCard({ title, body }: { title: string; body: string }) {
         </span>
         <p className="text-[15px] font-bold text-navy-900">{title}</p>
         <p className="mt-0.5 text-[13px] text-muted">{body}</p>
+        <p className="mt-1.5 text-[12px] leading-snug text-faint">{why ?? 'Part of Premium because it is built from your full history, and keeping that running is what Premium pays for.'}</p>
         <button onClick={() => navigate('/premium')} className="mt-3 h-10 rounded-xl bg-navy-900 px-4 text-[13px] font-semibold text-white">
-          Unlock with Premium
+          Unlock with Premium · from ${PREMIUM_PRICING.monthly.toFixed(2)}/mo
         </button>
       </div>
     </Card>

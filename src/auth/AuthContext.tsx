@@ -22,7 +22,8 @@ interface AuthApi {
   sync: SyncState
   pendingMerge: PendingMerge | null
   signUp: (input: { email: string; password: string; name: string }) => Promise<void>
-  signIn: (input: { email: string; password: string }) => Promise<void>
+  /** Resolves with merge: true when the device had guest data and the user must choose to keep or drop it. */
+  signIn: (input: { email: string; password: string }) => Promise<{ merge: boolean }>
   resolveMerge: (keep: boolean) => Promise<void>
   signOut: () => Promise<void>
   updateName: (name: string) => Promise<void>
@@ -179,15 +180,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await pushToServer().catch(() => undefined)
           await clearGuestDatabase()
           await enterScope(account)
-        } else {
-          setPendingMerge({ guest, count: guest.subscriptions.length })
-          setUser(account)
-          cacheUser(account)
+          return { merge: false }
         }
-        return
+        setPendingMerge({ guest, count: guest.subscriptions.length })
+        setUser(account)
+        cacheUser(account)
+        return { merge: true }
       }
       await clearGuestDatabase()
       await enterScope(account)
+      return { merge: false }
     },
     [enterScope],
   )

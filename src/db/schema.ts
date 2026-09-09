@@ -145,6 +145,8 @@ export interface Settings {
   lastVisit?: string | null
   /** Longest streak of active days ever reached. Only ever raised, never lowered. */
   bestStreak?: number
+  /** Milestone id → ISO timestamp of when its card was shown. A milestone is celebrated once. */
+  milestonesSeen?: Record<string, string>
   /** Recent positions worth returning to, newest first. Clearing an entry never touches the data behind it. */
   recentActivity?: ActivityEntry[]
   /** Every change to the monthly limit, newest last. null means the limit was cleared. */

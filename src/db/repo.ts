@@ -99,6 +99,23 @@ export async function raiseBestStreak(value: number): Promise<void> {
   })
 }
 
+/** Record that milestone cards were shown, so they are never replayed. */
+export async function markMilestonesSeen(ids: string[]): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const current = await db.settings.get(1)
+    if (!current) return
+    const seen = { ...(current.milestonesSeen ?? {}) }
+    let changed = false
+    for (const id of ids) {
+      if (!seen[id]) {
+        seen[id] = nowISO()
+        changed = true
+      }
+    }
+    if (changed) await db.settings.update(1, { milestonesSeen: seen, updatedAt: nowISO() })
+  })
+}
+
 // ---------- Recent activity ----------
 
 const ACTIVITY_LIMIT = 12

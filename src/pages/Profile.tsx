@@ -3,7 +3,11 @@ import { describeError } from '@/lib/errors'
 import { categoryTotals } from '@/components/app/CategoryBreakdown'
 import { useNavigate } from 'react-router-dom'
 import { updateProfile } from '@/db/repo'
-import { useNotes, usePriceChanges, useProfile, useSubscriptions } from '@/hooks/useData'
+import { useNotes, usePriceChanges, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
+import { MILESTONES } from '@/lib/milestones'
+import { db } from '@/db/schema'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { useScopeKey } from '@/auth/AuthContext'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { countedForLimit, isPremium } from '@/lib/plan'
 import { formatDate } from '@/lib/dates'
@@ -39,6 +43,10 @@ export default function Profile() {
 
   const premium = isPremium(profile)
   const used = subs ? countedForLimit(subs) : 0
+  const settings = useSettings()
+  const scopeKey = useScopeKey()
+  const allChecks = useLiveQuery(() => db.renewalChecks.toArray(), [scopeKey]) ?? []
+  const milestoneCtx = useMemo(() => (subs && notes && settings && profile ? { subs, notes, changes: changes ?? [], checks: allChecks, settings, currency: profile.currency } : null), [subs, notes, changes, allChecks, settings, profile])
   const topCategory = useMemo(() => {
     const totals = categoryTotals(subs ?? [])
     return totals[0]?.name ?? null
@@ -195,6 +203,29 @@ export default function Profile() {
           <Link icon="note" label="Cancellation notes" hint={openNotes ? `${openNotes} open` : 'None open'} onClick={() => navigate('/notes')} />
 
         </Card>
+
+        {milestoneCtx && (
+          <Card className="p-4">
+            <p className="text-[15px] font-bold text-navy-900">Milestones</p>
+            <ul className="mt-2 divide-y divide-line">
+              {[...MILESTONES].reverse().map((m) => {
+                const seenAt = settings?.milestonesSeen?.[m.id]
+                const earned = !!seenAt || m.met(milestoneCtx)
+                return (
+                  <li key={m.id} className="flex items-start gap-3 py-2.5">
+                    <span className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${earned ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-faint'}`}>
+                      <Icon name={m.icon} size={18} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className={`block text-[14px] font-semibold ${earned ? 'text-ink' : 'text-muted'}`}>{m.title}</span>
+                      <span className="block text-[12px] leading-snug text-muted">{earned ? (seenAt ? `Earned ${formatDate(seenAt.slice(0, 10), 'd MMM yyyy')}` : 'Earned') : m.howTo}</span>
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </Card>
+        )}
 
         <Card className="p-4">
           <div className="flex items-start gap-3">

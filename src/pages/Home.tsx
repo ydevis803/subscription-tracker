@@ -15,6 +15,10 @@ import { UpgradeBanner } from '@/components/app/Paywall'
 import { CheckCard } from '@/components/app/CheckCard'
 import { ContinueCard } from '@/components/app/RecentActivity'
 import { TodayCard } from '@/components/app/TodayCard'
+import { MilestoneCard } from '@/components/app/MilestoneCard'
+import { db } from '@/db/schema'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { useScopeKey } from '@/auth/AuthContext'
 import { useActiveCheck, useLatestCompletedCheck } from '@/hooks/useData'
 import { nextAction } from '@/lib/daily'
 import { headlineInsights } from '@/lib/insights'
@@ -127,6 +131,8 @@ export default function Home() {
   const used = subs ? countedForLimit(subs) : 0
   const activeCheck = useActiveCheck()
   const latestCheck = useLatestCompletedCheck()
+  const scopeKey = useScopeKey()
+  const allChecks = useLiveQuery(() => db.renewalChecks.toArray(), [scopeKey])
   const todayAction = useMemo(
     () => (subs && notes && settings && activeCheck !== undefined && latestCheck !== undefined ? nextAction({ subs, notes, active: activeCheck, latest: latestCheck, lead: settings.defaultReminderDays }) : null),
     [subs, notes, settings, activeCheck, latestCheck],
@@ -208,6 +214,9 @@ export default function Home() {
           />
         </div>
 
+        {subs && notes && settings && priceChanges && allChecks && (
+          <MilestoneCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} currency={currency} />
+        )}
         {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined && (
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
         )}

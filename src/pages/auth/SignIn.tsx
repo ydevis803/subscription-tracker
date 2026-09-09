@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { describeError } from '@/lib/errors'
+import { LegalLinks } from '@/components/app/LegalLayout'
 import { useDraft } from '@/lib/drafts'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
@@ -66,12 +67,15 @@ export default function SignIn() {
       title="Sign in"
       subtitle="Pick up exactly where you left off, on any device."
       footer={
-        <p className="px-1 text-center text-[0.875rem] text-muted">
+        <>
+          <p className="px-1 text-center text-[0.875rem] text-muted">
           New here?{' '}
           <Link to={`/auth/sign-up?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Create a free account
           </Link>
         </p>
+          <LegalLinks className="mt-1" />
+        </>
       }
     >
       <form onSubmit={submit} className="space-y-4" noValidate>

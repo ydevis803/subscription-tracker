@@ -80,7 +80,7 @@ try {
   await click('Explore with sample data')
   await page.locator('nav[aria-label="Main"]').waitFor()
 
-  const routes = ['/', '/subscriptions', '/subscriptions/new', '/subscriptions/1', '/subscriptions/1/edit', '/timeline', '/total', '/week', '/reminders', '/calendar', '/insights', '/history', '/notes', '/profile', '/settings', '/premium', '/invite', '/auth/sign-up', '/auth/sign-in', '/auth/forgot', '/does-not-exist']
+  const routes = ['/', '/subscriptions', '/subscriptions/new', '/subscriptions/1', '/subscriptions/1/edit', '/timeline', '/total', '/week', '/reminders', '/calendar', '/insights', '/history', '/notes', '/profile', '/settings', '/premium', '/invite', '/auth/sign-up', '/auth/sign-in', '/auth/forgot', '/legal/privacy', '/legal/terms', '/support', '/account/delete', '/does-not-exist']
   for (const r of routes) {
     await go(r)
     await axe(r)

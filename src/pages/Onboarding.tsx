@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { completeOnboarding } from '@/db/repo'
+import { LegalLinks } from '@/components/app/LegalLayout'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { CURRENCIES, currencySymbol, formatMoney, toMonthly, validateBudget } from '@/lib/money'
 import { describeError } from '@/lib/errors'
@@ -429,6 +430,7 @@ function Welcome({ onNext }: { onNext: () => void }) {
         <Link to="/auth/sign-in" className="mt-2 flex h-12 items-center justify-center rounded-2xl text-[0.9375rem] font-semibold text-mint-400">
           Already have an account? Sign in
         </Link>
+        <LegalLinks tone="dark" className="mt-1" />
       </div>
     </section>
   )

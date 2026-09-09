@@ -27,6 +27,10 @@ const Timeline = lazy(() => import('@/pages/Timeline'))
 const MonthlyTotal = lazy(() => import('@/pages/MonthlyTotal'))
 const WeeklySummary = lazy(() => import('@/pages/WeeklySummary'))
 const Reminders = lazy(() => import('@/pages/Reminders'))
+const Privacy = lazy(() => import('@/pages/legal/Privacy'))
+const Terms = lazy(() => import('@/pages/legal/Terms'))
+const Support = lazy(() => import('@/pages/legal/Support'))
+const DeleteAccount = lazy(() => import('@/pages/legal/DeleteAccount'))
 import { useReminderScheduler } from '@/lib/useReminderScheduler'
 const SignUp = lazy(() => import('@/pages/auth/SignUp'))
 const SignIn = lazy(() => import('@/pages/auth/SignIn'))
@@ -119,6 +123,11 @@ function AppRoutes() {
 
   const authRoutes = (
     <>
+      {/* Legal, support and deletion pages are reachable before any account exists. */}
+      <Route path="/legal/privacy" element={<Privacy />} />
+      <Route path="/legal/terms" element={<Terms />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/account/delete" element={<DeleteAccount />} />
       <Route path="/auth/sign-up" element={<SignUp />} />
       <Route path="/auth/sign-in" element={<SignIn />} />
       <Route path="/auth/forgot" element={<ForgotPassword />} />

@@ -1,3 +1,4 @@
+import { LegalLinks } from '@/components/app/LegalLayout'
 import { useNavigate } from 'react-router-dom'
 import { Sheet } from '@/components/ui/Sheet'
 import { Button } from '@/components/ui/Button'
@@ -42,6 +43,7 @@ export function AccountExplainerSheet({ open, onClose, reason, next = '/' }: { o
       <Button full size="lg" variant="ghost" className="mt-2" onClick={() => go('/auth/sign-in')}>
         I already have one
       </Button>
+      <LegalLinks className="mt-1" />
       <button onClick={onClose} className="mt-1 h-12 w-full rounded-2xl text-[0.9375rem] font-semibold text-muted">
         Not now
       </button>

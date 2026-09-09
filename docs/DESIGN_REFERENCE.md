@@ -92,4 +92,9 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 59-notes-empty | notes-empty |
 | 60-price-history-empty | price-history-empty |
 | 61-settings-empty-with-load-samples | settings-empty-with-load-samples |
-| 62-not-found | not-found |
+| 62-legal-privacy | Privacy Policy: effective date, who we are (placeholder owner), short version, data types, purposes, storage, retention, deletion steps, rights, contact block |
+| 63-legal-terms | Terms of Use: ten numbered sections including not-financial-advice, accounts, Free vs Premium pricing, governing law placeholder, contact block |
+| 64-support | Support: expandable FAQ, self-service buttons (backup, reminders, private feedback), email a person with version line, legal links, contact block |
+| 65-delete-account | Delete account: coral warning card, what gets deleted with live counts, before-you-go steps, numbered steps, primary destructive action, cannot-sign-in route |
+| 66-sheet-delete-confirm | Delete confirmation sheet: explicit no-undo copy, password confirm for an account or Erase all data / Keep it for device data |
+| 67-not-found | not-found |

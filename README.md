@@ -13,6 +13,10 @@ npm run dev
 
 Open http://localhost:5173 on a phone-sized viewport. `npm run build` produces a production bundle in `dist/`.
 
+## Legal pages
+
+Privacy Policy (`/legal/privacy`), Terms of Use (`/legal/terms`), Support (`/support`) and Delete Account (`/account/delete`) are reachable before an account exists: from the onboarding welcome screen, the sign-up and sign-in screens, the account explainer sheet, and Settings → About & legal. Owner details are placeholders until `.env` sets `VITE_OWNER_NAME`, `VITE_OWNER_ADDRESS`, `VITE_SUPPORT_EMAIL` and `VITE_LEGAL_JURISDICTION` (see `.env.example`); the pages flag placeholders visibly. The effective date lives in `LEGAL_EFFECTIVE_DATE` in `src/lib/legal.ts`.
+
 ## Permissions
 
 Every personal record belongs to the signed-in account that wrote it; the owner comes from the session, never from the request. There is no admin role because nothing in the product needs one. [docs/PERMISSIONS.md](docs/PERMISSIONS.md) lists the intended permission for every entity and the public surface; `npm run test:permissions` checks the rules against the dev server.

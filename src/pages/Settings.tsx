@@ -19,6 +19,8 @@ import { Button, TextLink } from '@/components/ui/Button'
 import { useAuth } from '@/auth/AuthContext'
 import { PasswordField } from '@/pages/auth/AuthLayout'
 import { FeedbackSheet } from '@/components/app/FeedbackPrompt'
+import { LegalRow } from '@/components/app/LegalLayout'
+import { APP_VERSION, LEGAL_EFFECTIVE_DATE, LEGAL_ROUTES, formatEffectiveDate } from '@/lib/legal'
 import { leaveSheet } from '@/lib/navigation'
 
 export default function Settings() {
@@ -249,7 +251,7 @@ export default function Settings() {
                 <span className="block text-[0.8125rem] text-muted">Password and sign-out are on your Profile.</span>
               </div>
               <Divider />
-              <Row chevron={false} onClick={() => setDel({ open: true, password: '', show: false, error: '', busy: false })}>
+              <Row onClick={() => navigate(LEGAL_ROUTES.deleteAccount)}>
                 <IconBox name="trash" tone="coral" />
                 <span className="flex-1">
                   <span className="block text-[0.9375rem] font-semibold text-coral-700">Delete account</span>
@@ -298,7 +300,17 @@ export default function Settings() {
           </Card>
         </section>
 
-        <p className="px-1 text-center text-[0.75rem] text-faint">Subscription Tracker 1.0 · {auth.status === 'signed-in' ? 'Backed up to your account' : 'Data is stored locally in your browser'}</p>
+        <section>
+          <SectionTitle>About &amp; legal</SectionTitle>
+          <Card className="divide-y divide-line overflow-hidden">
+            <LegalRow icon="shield" label="Privacy Policy" hint={`What we store and why · effective ${formatEffectiveDate(LEGAL_EFFECTIVE_DATE)}`} to={LEGAL_ROUTES.privacy} />
+            <LegalRow icon="note" label="Terms of Use" hint="The agreement between you and us" to={LEGAL_ROUTES.terms} />
+            <LegalRow icon="mail" label="Support" hint="Answers, backups and a human to email" to={LEGAL_ROUTES.support} />
+            <LegalRow icon="trash" label="Delete account or erase data" hint="What is removed, and how to confirm" to={LEGAL_ROUTES.deleteAccount} />
+          </Card>
+        </section>
+
+        <p className="px-1 text-center text-[0.75rem] text-faint">Subscription Tracker {APP_VERSION} · {auth.status === 'signed-in' ? 'Backed up to your account' : 'Data is stored locally in your browser'}</p>
       </Page>
 
       <Sheet open={del.open} onClose={() => setDel((d) => ({ ...d, open: false }))} title="Delete your account?">

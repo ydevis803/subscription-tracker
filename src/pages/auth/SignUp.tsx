@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { describeError } from '@/lib/errors'
+import { LegalLinks } from '@/components/app/LegalLayout'
 import { useDraft } from '@/lib/drafts'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
@@ -52,12 +53,16 @@ export default function SignUp() {
       title="Create your account"
       subtitle="Free, and only takes a moment. Everything you have tracked on this device moves into the account."
       footer={
-        <p className="px-1 text-center text-[0.875rem] text-muted">
+        <>
+          <p className="px-1 text-center text-[0.75rem] leading-snug text-muted">By creating an account you agree to the Terms of Use and Privacy Policy below. You can delete the account at any time.</p>
+          <LegalLinks className="mt-1" />
+          <p className="mt-2 px-1 text-center text-[0.875rem] text-muted">
           Already have an account?{' '}
           <Link to={`/auth/sign-in?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Sign in
           </Link>
         </p>
+        </>
       }
     >
       <form onSubmit={submit} className="space-y-4" noValidate>

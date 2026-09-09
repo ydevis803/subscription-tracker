@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { updateProfile } from '@/db/repo'
 import { useNotes, usePriceChanges, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
 import { MILESTONES } from '@/lib/milestones'
+import { everHadPositiveMoment, inviteProgress } from '@/lib/referral'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useScopeKey } from '@/auth/AuthContext'
@@ -52,6 +53,8 @@ export default function Profile() {
     return totals[0]?.name ?? null
   }, [subs])
   const openNotes = (notes ?? []).filter((n) => n.status === 'open').length
+  const invites = inviteProgress(settings)
+  const canInvite = !!notes && !!settings && everHadPositiveMoment({ checks: allChecks, settings, notes })
 
   const openEdit = () => {
     setName(profile?.name ?? '')
@@ -109,6 +112,11 @@ export default function Profile() {
                 </div>
                 <p className="break-all text-[13px] text-muted">{auth.status === 'signed-in' ? auth.user?.email : profile.email || 'No email added'}</p>
                 <p className="text-[12px] text-faint">Tracking since {formatDate(profile.createdAt.slice(0, 10), 'MMM yyyy')}</p>
+                {invites.top && (
+                  <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-mint-100 px-2 py-0.5 text-[11px] font-semibold text-mint-700">
+                    <Icon name={invites.top.icon} size={12} /> {invites.top.title}
+                  </span>
+                )}
               </div>
               <IconButton icon="edit" size={20} label="Edit profile" onClick={openEdit} />
             </div>
@@ -201,7 +209,12 @@ export default function Profile() {
           <Link icon="trend" label="Price history" hint={changes ? `${changes.length} recorded` : ''} onClick={() => navigate('/history')} />
           <Divider />
           <Link icon="note" label="Cancellation notes" hint={openNotes ? `${openNotes} open` : 'None open'} onClick={() => navigate('/notes')} />
-
+          {canInvite && (
+            <>
+              <Divider />
+              <Link icon="gift" label="Invite a friend" hint={invites.count === 0 ? 'Share your link · earn a cosmetic badge' : `${invites.count} shared${invites.next ? ` · ${invites.next.at - invites.count} more for ${invites.next.title}` : ' · every badge earned'}`} onClick={() => navigate('/invite')} />
+            </>
+          )}
         </Card>
 
         {milestoneCtx && (

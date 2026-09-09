@@ -49,6 +49,7 @@ Guests can use everything without an account; data stays in the browser. A free 
 | `/profile` | Profile with plan badge, stats, links, edit name/email |
 | `/settings` | Currency, budget, reminders, display, export, load samples, erase data |
 | `/premium` | Premium plans ($3.99/month or $24.99/year), activation (asks for an account first), manage/end plan |
+| `/invite` | Invite a friend: personal invitation with the app link, share / copy link / copy text with copied feedback, cosmetic badges (no cash rewards). Offered only after a positive moment (completed check, settled decisions, a good week) and never while over budget or in an error state |
 | `/auth/sign-up` | Create account (name, email, password); guest data moves into the account |
 | `/auth/sign-in` | Sign in; offers to merge guest data if both sides have data |
 | `/auth/forgot` | Request a password reset link |

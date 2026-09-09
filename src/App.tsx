@@ -19,6 +19,7 @@ import Notes from '@/pages/Notes'
 import Profile from '@/pages/Profile'
 import Settings from '@/pages/Settings'
 import Premium from '@/pages/Premium'
+import Invite from '@/pages/Invite'
 import NotFound from '@/pages/NotFound'
 import RenewalCheck from '@/pages/RenewalCheck'
 import Timeline from '@/pages/Timeline'
@@ -145,6 +146,7 @@ function AppRoutes() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/premium" element={<Premium />} />
+        <Route path="/invite" element={<Invite />} />
         <Route path="/onboarding" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

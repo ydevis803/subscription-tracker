@@ -39,6 +39,9 @@ const paths: Record<string, string | string[]> = {
   moon: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
   mail: ['M4 4h16v16H4z', 'm4 6 8 7 8-7'],
   card: ['M2 5h20v14H2z', 'M2 10h20'],
+  gift: ['M20 12v10H4V12', 'M2 7h20v5H2z', 'M12 22V7', 'M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z', 'M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'],
+  users: ['M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 'M23 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
+  copy: ['M8 8h12v12H8z', 'M16 8V4H4v12h4'],
 }
 
 export type IconName = keyof typeof paths

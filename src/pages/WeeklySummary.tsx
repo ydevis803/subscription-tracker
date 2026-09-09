@@ -10,6 +10,7 @@ import { formatMoney } from '@/lib/money'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Page } from '@/components/layout/AppShell'
 import { Button, Chip } from '@/components/ui/Button'
+import { InviteLink } from '@/components/app/InviteCard'
 import { Icon } from '@/components/ui/Icon'
 import { Card, SectionTitle, Skeleton } from '@/components/ui/Primitives'
 import { SegmentedControl } from '@/components/ui/Field'
@@ -203,6 +204,7 @@ export default function WeeklySummary() {
                 <Button full variant={summary.recommendation.tone === 'coral' ? 'coral' : 'mint'} className="mt-3" loading={starting} onClick={go} leading={<Icon name="arrowRight" size={18} />}>
                   {summary.recommendation.cta}
                 </Button>
+                {summary.completed.total > 0 && summary.change.delta <= 0.005 && summary.recommendation.tone !== 'coral' && <InviteLink className="mt-1" label="Share the app with a friend" />}
               </Card>
             </section>
           </>

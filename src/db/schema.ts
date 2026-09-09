@@ -167,6 +167,10 @@ export interface Settings {
   recentActivity?: ActivityEntry[]
   /** Every change to the monthly limit, newest last. null means the limit was cleared. */
   monthlyBudgetHistory?: { amount: number | null; changedAt: string }[]
+  /** Invitations shared, newest last. Cosmetic badges only; the app never learns who received them. */
+  invites?: { at: string; via: 'share' | 'copy-link' | 'copy-message' }[]
+  /** Day (yyyy-MM-dd) the Home invite card was last dismissed; it stays away for a while after. */
+  inviteNudgeDismissed?: string
   createdAt?: string
   updatedAt?: string
 }

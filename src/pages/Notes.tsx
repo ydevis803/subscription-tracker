@@ -14,6 +14,7 @@ import { Page } from '@/components/layout/AppShell'
 import { Badge, Card, EmptyState, ListSkeleton, ServiceMark } from '@/components/ui/Primitives'
 import { Icon } from '@/components/ui/Icon'
 import { Button, IconButton, TextLink } from '@/components/ui/Button'
+import { InviteLink } from '@/components/app/InviteCard'
 import { Sheet } from '@/components/ui/Sheet'
 import { useToast } from '@/components/ui/Toast'
 import { NoteSheet } from './SubscriptionDetail'
@@ -206,6 +207,7 @@ export default function Notes() {
                     </Button>
                   )}
                 </div>
+                {progress.freedMonthly > 0 && progress.overdue === 0 && <InviteLink className="mt-1" label="Invite a friend to free up money too" />}
               </Card>
             )}
             <SearchField value={view.query} onChange={(q) => patch({ query: q })} placeholder="Search notes or services" label="Search notes" />

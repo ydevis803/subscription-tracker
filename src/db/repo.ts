@@ -74,6 +74,22 @@ export async function updateSettings(patch: Partial<Omit<Settings, 'id'>>): Prom
   await db.settings.update(1, { ...patch, updatedAt: nowISO() })
 }
 
+// ---------- Invitations ----------
+
+/** Log one shared invitation. Only the moment and the method are kept; never the recipient. */
+export async function recordInvite(via: 'share' | 'copy-link' | 'copy-message'): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s) return
+    const invites = [...(s.invites ?? []), { at: nowISO(), via }].slice(-200)
+    await db.settings.update(1, { invites, updatedAt: nowISO() })
+  })
+}
+
+export async function dismissInviteNudge(): Promise<void> {
+  await db.settings.update(1, { inviteNudgeDismissed: todayISO(), updatedAt: nowISO() })
+}
+
 // ---------- Daily check-in ----------
 
 /** Record today's visit. Returns the day of the previous visit (null on the first ever). */

@@ -12,6 +12,7 @@ import { useSmartBack } from '@/lib/navigation'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Page } from '@/components/layout/AppShell'
 import { Button, TextLink } from '@/components/ui/Button'
+import { InviteLink } from '@/components/app/InviteCard'
 import { Icon } from '@/components/ui/Icon'
 import { Badge, Card, EmptyState, ProgressBar, ServiceMark, Skeleton } from '@/components/ui/Primitives'
 import { useToast } from '@/components/ui/Toast'
@@ -172,6 +173,7 @@ export default function RenewalCheck() {
                 See your reminders
               </TextLink>
             )}
+            {(budget === null || done.monthlyTotal <= budget) && <InviteLink className="mt-1" label="Invite a friend to feel this too" />}
           </Page>
         </div>
       </div>

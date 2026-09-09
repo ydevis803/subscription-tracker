@@ -36,59 +36,60 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 03-onboarding-limit-and-headsup | Question 2: monthly limit pills or custom amount, heads-up window (1/3/7/14 days) |
 | 04-onboarding-first-win | Personalized first win: monthly total vs limit, next charge, picked services with estimated dates |
 | 05-onboarding-first-win-no-picks | First win when nothing was picked: limit and heads-up recap, add first subscription or explore samples |
-| 06-home-dashboard | Navy hero with monthly total and budget bar, upcoming-window stats, milestone card when newly earned, Today card (next action, week check-ins, wins, streak, fresh reward), check card, Your week entry, Continue card, decision alerts, upcoming renewals, category snapshot |
+| 06-home-dashboard | Navy hero with monthly total and budget bar, upcoming-window stats, milestone card when newly earned, Today card (next action, week check-ins, wins, streak, fresh reward), check card, Your week entry, Continue card, decision alerts, upcoming renewals, category snapshot (includes the seven-day starter card at Day 1) |
 | 07-check-review-item | Renewal check: progress "1 of N" with saved cue, one renewal card, mint Keep it plus Remind me and Cancel it |
 | 08-check-complete | Renewal check completion: animated mint check, "all clear for 30 days", monthly total now, kept/reminders/cancelled |
 | 09-home-all-clear | Home after a completed check: all-clear Today card, and the invite card offered only after this positive moment (hidden while over budget or with other problems) |
-| 10-home-rating-prompt | Home rating prompt after a repeat success: five large star targets, visible frequency cap, Not now; inline, never blocking |
-| 11-sheet-feedback-private | Low score: private feedback sheet with the note field, privacy line, Send privately and Not now |
-| 12-sheet-rating-store | High score: App Store rating placeholder sheet (coming soon) with Maybe later |
-| 13-invite | invite |
-| 14-monthly-total | monthly-total |
-| 15-weekly-summary | weekly-summary |
-| 16-subscriptions-list | subscriptions-list |
-| 17-subscription-add-form | subscription-add-form |
-| 18-subscription-detail | subscription-detail |
-| 19-subscription-edit-form-price-change | subscription-edit-form-price-change |
-| 20-sheet-cancellation-note | sheet-cancellation-note |
-| 21-sheet-log-price-change | sheet-log-price-change |
-| 22-sheet-confirm-cancel | sheet-confirm-cancel |
-| 23-renewal-calendar | renewal-calendar |
-| 24-calendar-day-sheet | calendar-day-sheet |
-| 25-calendar-month-settled | calendar-month-settled |
-| 26-timeline-first-visit | timeline-first-visit |
-| 27-timeline-category-highlight | timeline-category-highlight |
-| 28-timeline-row-actions | timeline-row-actions |
-| 29-insights-free | insights-free |
-| 30-price-history | price-history |
-| 31-cancellation-notes | cancellation-notes |
-| 32-profile | profile |
-| 33-sheet-edit-profile | sheet-edit-profile |
-| 34-settings | settings |
-| 35-reminders | reminders |
-| 36-premium-plans | premium-plans |
-| 37-sheet-premium-confirm | sheet-premium-confirm |
-| 38-home-trial-day | home-trial-day |
-| 39-premium-trial | premium-trial |
-| 40-home-trial-ended | home-trial-ended |
-| 41-sheet-account-explainer | sheet-account-explainer |
-| 42-auth-sign-up | auth-sign-up |
-| 43-auth-sign-in | auth-sign-in |
-| 44-auth-forgot-password | auth-forgot-password |
-| 45-auth-reset-link-missing | auth-reset-link-missing |
-| 46-profile-signed-in | profile-signed-in |
-| 47-subscriptions-list-limit-reached | subscriptions-list-limit-reached |
-| 48-sheet-paywall | sheet-paywall |
-| 49-premium-activated | premium-activated |
-| 50-insights-premium | insights-premium |
-| 51-premium-manage | premium-manage |
-| 52-profile-premium | profile-premium |
-| 53-sheet-confirm-erase | sheet-confirm-erase |
-| 54-home-empty | home-empty |
-| 55-subscriptions-empty | subscriptions-empty |
-| 56-calendar-empty | calendar-empty |
-| 57-insights-empty | insights-empty |
-| 58-notes-empty | notes-empty |
-| 59-price-history-empty | price-history-empty |
-| 60-settings-empty-with-load-samples | settings-empty-with-load-samples |
-| 61-not-found | not-found |
+| 10-home-challenge-days | Seven-day starter card expanded: seven progress dots, last win, current day task with minutes and CTA, the full day list (done / current / locked), never-expire note and Hide |
+| 11-home-rating-prompt | Home rating prompt after a repeat success: five large star targets, visible frequency cap, Not now; inline, never blocking |
+| 12-sheet-feedback-private | Low score: private feedback sheet with the note field, privacy line, Send privately and Not now |
+| 13-sheet-rating-store | High score: App Store rating placeholder sheet (coming soon) with Maybe later |
+| 14-invite | invite |
+| 15-monthly-total | monthly-total |
+| 16-weekly-summary | weekly-summary |
+| 17-subscriptions-list | subscriptions-list |
+| 18-subscription-add-form | subscription-add-form |
+| 19-subscription-detail | subscription-detail |
+| 20-subscription-edit-form-price-change | subscription-edit-form-price-change |
+| 21-sheet-cancellation-note | sheet-cancellation-note |
+| 22-sheet-log-price-change | sheet-log-price-change |
+| 23-sheet-confirm-cancel | sheet-confirm-cancel |
+| 24-renewal-calendar | renewal-calendar |
+| 25-calendar-day-sheet | calendar-day-sheet |
+| 26-calendar-month-settled | calendar-month-settled |
+| 27-timeline-first-visit | timeline-first-visit |
+| 28-timeline-category-highlight | timeline-category-highlight |
+| 29-timeline-row-actions | timeline-row-actions |
+| 30-insights-free | insights-free |
+| 31-price-history | price-history |
+| 32-cancellation-notes | cancellation-notes |
+| 33-profile | profile |
+| 34-sheet-edit-profile | sheet-edit-profile |
+| 35-settings | settings |
+| 36-reminders | reminders |
+| 37-premium-plans | premium-plans |
+| 38-sheet-premium-confirm | sheet-premium-confirm |
+| 39-home-trial-day | home-trial-day |
+| 40-premium-trial | premium-trial |
+| 41-home-trial-ended | home-trial-ended |
+| 42-sheet-account-explainer | sheet-account-explainer |
+| 43-auth-sign-up | auth-sign-up |
+| 44-auth-sign-in | auth-sign-in |
+| 45-auth-forgot-password | auth-forgot-password |
+| 46-auth-reset-link-missing | auth-reset-link-missing |
+| 47-profile-signed-in | profile-signed-in |
+| 48-subscriptions-list-limit-reached | subscriptions-list-limit-reached |
+| 49-sheet-paywall | sheet-paywall |
+| 50-premium-activated | premium-activated |
+| 51-insights-premium | insights-premium |
+| 52-premium-manage | premium-manage |
+| 53-profile-premium | profile-premium |
+| 54-sheet-confirm-erase | sheet-confirm-erase |
+| 55-home-empty | home-empty |
+| 56-subscriptions-empty | subscriptions-empty |
+| 57-calendar-empty | calendar-empty |
+| 58-insights-empty | insights-empty |
+| 59-notes-empty | notes-empty |
+| 60-price-history-empty | price-history-empty |
+| 61-settings-empty-with-load-samples | settings-empty-with-load-samples |
+| 62-not-found | not-found |

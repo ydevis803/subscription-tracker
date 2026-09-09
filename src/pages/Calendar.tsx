@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useChallengeVisit } from '@/lib/useChallengeVisit'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { markRenewed, recordActivity } from '@/db/repo'
 import type { Subscription } from '@/db/schema'
@@ -32,6 +33,7 @@ const DEFAULT_CAL_VIEW: CalendarView = { query: '', categories: [], cycle: 'any'
 
 export default function Calendar() {
   const navigate = useNavigate()
+  useChallengeVisit('calendar')
   const subs = useSubscriptions()
   const notes = useNotes()
   const profile = useProfile()

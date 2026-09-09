@@ -21,6 +21,7 @@ import { TrialCard, TrialEndedCard } from '@/components/app/TrialCards'
 import { InviteCard } from '@/components/app/InviteCard'
 import { inviteNudgeVisible, problemState } from '@/lib/referral'
 import { FeedbackPrompt } from '@/components/app/FeedbackPrompt'
+import { ChallengeCard } from '@/components/app/ChallengeCard'
 import { ratingPromptVisible } from '@/lib/feedback'
 import { weeklySummary } from '@/lib/weekly'
 import { db } from '@/db/schema'
@@ -233,6 +234,7 @@ export default function Home() {
         {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined && (
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
         )}
+        {subs && notes && priceChanges && settings && allChecks && <ChallengeCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} currency={currency} />}
         {profile && subs && priceChanges && notes && <TrialCard profile={profile} subs={subs} changes={priceChanges} notes={notes} currency={currency} />}
         {profile && subs && <TrialEndedCard profile={profile} subsCount={subs.length} />}
         {ratingVisible && <FeedbackPrompt />}

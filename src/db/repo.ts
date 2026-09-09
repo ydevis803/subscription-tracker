@@ -90,6 +90,44 @@ export async function dismissInviteNudge(): Promise<void> {
   await db.settings.update(1, { inviteNudgeDismissed: todayISO(), updatedAt: nowISO() })
 }
 
+// ---------- Seven-day challenge ----------
+
+/** Begin the challenge (idempotent). Day 1 is available the moment this returns. */
+export async function startChallenge(estimatedAtStart: number): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s || s.challenge) return
+    await db.settings.update(1, { challenge: { startedAt: nowISO(), completed: {}, visits: {}, estimatedAtStart, dismissedAt: null }, updatedAt: nowISO() })
+  })
+}
+
+/** A challenge-relevant screen was opened. The latest visit is kept, so a day counts only when the screen is opened while it is current. */
+export async function markChallengeVisit(key: string): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s?.challenge) return
+    await db.settings.update(1, { challenge: { ...s.challenge, visits: { ...s.challenge.visits, [key]: nowISO() } }, updatedAt: nowISO() })
+  })
+}
+
+/** Record a finished day. Returns false when it was already done, so a re-render cannot celebrate twice. */
+export async function completeChallengeDay(day: number): Promise<boolean> {
+  return db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s?.challenge || s.challenge.completed[String(day)]) return false
+    await db.settings.update(1, { challenge: { ...s.challenge, completed: { ...s.challenge.completed, [String(day)]: nowISO() } }, updatedAt: nowISO() })
+    return true
+  })
+}
+
+export async function setChallengeHidden(hidden: boolean): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s?.challenge) return
+    await db.settings.update(1, { challenge: { ...s.challenge, dismissedAt: hidden ? nowISO() : null }, updatedAt: nowISO() })
+  })
+}
+
 // ---------- Rating and private feedback ----------
 
 function promptOf(s: Settings) {

@@ -180,6 +180,17 @@ export interface Settings {
     score: number | null
     answeredAt: string | null
   }
+  /** The seven-day starter challenge. Days unlock in order and never expire; a missed day costs nothing. See src/lib/challenge.ts. */
+  challenge?: {
+    startedAt: string
+    /** Day number (1–7) → ISO timestamp it was completed. */
+    completed: Record<string, string>
+    /** Feature key → ISO timestamp of the first visit since the challenge started. */
+    visits: Record<string, string>
+    /** Subscriptions with an estimated renewal date when the challenge started, so Day 3 can measure progress. */
+    estimatedAtStart: number
+    dismissedAt: string | null
+  }
   /** Private feedback notes, newest last. Stored only with the user's own data; never posted anywhere. */
   feedback?: { at: string; score: number | null; message: string; source: 'prompt' | 'settings' }[]
   createdAt?: string

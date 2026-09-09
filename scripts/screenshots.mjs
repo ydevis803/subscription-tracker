@@ -96,6 +96,11 @@ await click('Back to Home')
 await page.waitForURL(BASE + '/')
 await page.waitForTimeout(600)
 await shot('home-all-clear')
+// ---------- Seven-day challenge: all days expanded ----------
+await click('All days')
+await page.waitForTimeout(300)
+await shot('home-challenge-days')
+await click('Less')
 // ---------- Rating prompt (second completed check on a later day, profile older than today) ----------
 await page.evaluate(async () => {
   const open = (name) => new Promise((res, rej) => { const r = indexedDB.open(name); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error) })

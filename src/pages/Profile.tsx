@@ -6,6 +6,9 @@ import { updateProfile } from '@/db/repo'
 import { useNotes, usePriceChanges, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
 import { MILESTONES } from '@/lib/milestones'
 import { everHadPositiveMoment, inviteProgress } from '@/lib/referral'
+import { CHALLENGE_DAYS_TOTAL, challengeState } from '@/lib/challenge'
+import { ChallengeDots } from '@/components/app/ChallengeCard'
+import { setChallengeHidden } from '@/db/repo'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useScopeKey } from '@/auth/AuthContext'
@@ -54,6 +57,7 @@ export default function Profile() {
   }, [subs])
   const openNotes = (notes ?? []).filter((n) => n.status === 'open').length
   const invites = inviteProgress(settings)
+  const challenge = challengeState(settings)
   const canInvite = !!notes && !!settings && everHadPositiveMoment({ checks: allChecks, settings, notes })
 
   const openEdit = () => {
@@ -216,6 +220,33 @@ export default function Profile() {
             </>
           )}
         </Card>
+
+        {settings && (
+          <Card className="p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[15px] font-bold text-navy-900">Seven-day starter</p>
+                <p className="text-[13px] text-muted">
+                  {challenge.complete ? 'All seven days done' : challenge.started ? `${challenge.completedCount} of ${CHALLENGE_DAYS_TOTAL} days done · next: ${challenge.current?.title}` : 'Starts on Home the next time you open it'}
+                </p>
+              </div>
+              <ChallengeDots settings={settings} size="sm" />
+            </div>
+            {challenge.started && !challenge.complete && (
+              <div className="mt-3 flex gap-2">
+                {challenge.hidden ? (
+                  <Button size="sm" variant="mint" onClick={async () => { await setChallengeHidden(false); toast.success('Challenge is back on Home'); navigate('/') }}>
+                    Show on Home again
+                  </Button>
+                ) : (
+                  <Button size="sm" variant="secondary" onClick={() => navigate(challenge.current!.path)}>
+                    Continue day {challenge.current!.day}
+                  </Button>
+                )}
+              </div>
+            )}
+          </Card>
+        )}
 
         {milestoneCtx && (
           <Card className="p-4">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useChallengeVisit } from '@/lib/useChallengeVisit'
 import { useNavigate } from 'react-router-dom'
 import { updateSettings } from '@/db/repo'
 import { useSettings } from '@/hooks/useData'
@@ -20,6 +21,7 @@ const readPermission = (): Permission => (typeof Notification === 'undefined' ? 
 
 export default function Reminders() {
   const navigate = useNavigate()
+  useChallengeVisit('reminders')
   const toast = useToast()
   const settings = useSettings()
   const schedule = useMemo(() => scheduleOf(settings), [settings])

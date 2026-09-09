@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { useChallengeVisit } from '@/lib/useChallengeVisit'
 import { describeError } from '@/lib/errors'
 import { useNavigate } from 'react-router-dom'
 import { setMonthlyBudget } from '@/db/repo'
@@ -23,6 +24,7 @@ const RULES: { cycle: string; rule: string }[] = [
 
 export default function MonthlyTotal() {
   const navigate = useNavigate()
+  useChallengeVisit('total')
   const toast = useToast()
   const subs = useSubscriptions()
   const settings = useSettings()

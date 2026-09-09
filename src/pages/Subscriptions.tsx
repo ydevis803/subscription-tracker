@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useChallengeVisit } from '@/lib/useChallengeVisit'
 import { useNavigate } from 'react-router-dom'
 import { useNotes, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
 import type { CategoryId, SubscriptionStatus } from '@/db/schema'
@@ -54,6 +55,7 @@ const DEFAULT_VIEW: View = { query: '', status: 'all', categories: [], cycle: 'a
 
 export default function Subscriptions() {
   const navigate = useNavigate()
+  useChallengeVisit('subscriptions')
   const subs = useSubscriptions()
   const profile = useProfile()
   const settings = useSettings()

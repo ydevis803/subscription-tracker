@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useChallengeVisit } from '@/lib/useChallengeVisit'
 import { useNavigate } from 'react-router-dom'
 import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns'
 import { useNotes, usePriceChanges, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
@@ -34,6 +35,7 @@ const STATUS_OPTIONS: { value: SubscriptionStatus; label: string }[] = [
 
 export default function Insights() {
   const navigate = useNavigate()
+  useChallengeVisit('insights')
   const subs = useSubscriptions()
   const profile = useProfile()
   const priceChanges = usePriceChanges()

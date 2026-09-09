@@ -51,6 +51,7 @@ Guests can use everything without an account; data stays in the browser. A free 
 | `/premium` | Premium plans ($3.99/month or $24.99/year), activation (asks for an account first), manage/end plan |
 | `/invite` | Invite a friend: personal invitation with the app link, share / copy link / copy text with copied feedback, cosmetic badges (no cash rewards). Offered only after a positive moment (completed check, settled decisions, a good week) and never while over budget or in an error state |
 | Home rating prompt | After renewal checks completed on two different days (never on the first day, never during a problem), one inline card asks for a score. Low scores open a private feedback note stored only with the user's data; high scores show an App Store rating placeholder. Not now works, at most three asks 60 days apart, never again once answered. Settings → Send feedback opens the same private form any time |
+| Home seven-day starter | Beginner challenge around the renewal check and monthly total: seven days that unlock in order, each under ten minutes, each completed from real data (no manual tick), each showing a win in the user's numbers and pointing to one existing feature (total, check, list, calendar, notes, insights, reminders). Seven progress dots on Home and Profile; days never expire; Hide / Show on Home again |
 | `/auth/sign-up` | Create account (name, email, password); guest data moves into the account |
 | `/auth/sign-in` | Sign in; offers to merge guest data if both sides have data |
 | `/auth/forgot` | Request a password reset link |

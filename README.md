@@ -100,6 +100,10 @@ Screens other than Home and onboarding are code-split and lazy-loaded behind a p
 
 `npm run audit:a11y` (dev server running) runs axe-core (WCAG 2.1 A/AA and best practice) on every screen and sheet, tabs through each page to confirm a visible focus style, submits an empty form to confirm errors are linked to their fields and announced, and loads Home with reduced motion to confirm no animation runs. Conventions: every icon-only control has an `aria-label`; field messages are linked with `aria-describedby` and use `role="alert"`; status is always text or an icon as well as colour (badges, alerts, progress bars carry labels and values); the focus ring is a 3px mint outline; font sizes are in rem so browser text scaling applies; `text-faint` (#5F6F86) and `coral-700` (#B03A2B) meet 4.5:1 on white and the tinted surfaces; service marks pick white or navy initials by contrast.
 
+## Launch checklist
+
+`/__launch` (owner-only) is the web / PWA launch list: app name and icon, public URL, visibility, first-time onboarding, sign-up and login, primary action persistence, Premium boundary, legal pages, support contact, mobile display, and install-to-home-screen. Items can be marked “Tested live” only while the page is open on the published origin (`VITE_APP_URL`); automated pre-checks run on that origin first, and each mark records where and when it was made. The install steps shown to users on /support come from `src/lib/install.ts` and put the reader's own platform first (Safari on iOS, Chrome on Android, Chrome or Edge on desktop).
+
 ## Release blockers
 
 Two things cannot be fixed inside the app and stay marked Fix on `/__readiness` until the owner does them: fill the four contact variables in `.env`, and, for a native store build, route Premium purchases through StoreKit / Google Play Billing (this build records Premium locally with no payment) or remove the purchase button from that build. Password reset emails are written to `server/outbox/` until an SMTP transport is configured (`/api/health` reports the mail mode). A render crash anywhere is caught by an error boundary that shows the app's error state with a reload, never a blank screen.

@@ -90,6 +90,9 @@ export default function Readiness() {
           <Link to="/__listing" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
             Listing
           </Link>
+          <Link to="/__launch" className="inline-flex min-h-11 items-center rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold">
+            Launch
+          </Link>
         </div>
       </div>
 

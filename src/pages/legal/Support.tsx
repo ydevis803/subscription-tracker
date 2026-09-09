@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Card } from '@/components/ui/Primitives'
 import { FeedbackSheet } from '@/components/app/FeedbackPrompt'
+import { ALL_GUIDES, detectPlatform, installGuide, isStandalone } from '@/lib/install'
 
 const FAQ: { q: string; a: string }[] = [
   { q: 'Where is my data?', a: 'On your device unless you create an account. With an account, a copy is backed up to our server so you can restore it on another device. Nobody else can read it.' },
@@ -40,6 +41,29 @@ export default function Support() {
           ))}
         </ul>
       </Card>
+
+      <LegalSection title="Add it to your home screen">
+        {isStandalone() ? (
+          <p>You are already using the installed app. It opens full screen from your home screen.</p>
+        ) : (
+          <>
+            {[detectPlatform(), ...ALL_GUIDES.filter((g) => g !== detectPlatform())].map((p, i) => {
+              const g = installGuide(p)
+              return (
+                <div key={p} className={i === 0 ? 'rounded-xl bg-mint-50 p-3' : 'pt-1'}>
+                  <p className="text-[0.875rem] font-semibold text-navy-900">{i === 0 ? `${g.title} · this device` : g.title}</p>
+                  <ol className="mt-1 list-decimal space-y-0.5 pl-5">
+                    {g.steps.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
+                  {g.note && <p className="mt-1 text-[0.8125rem] text-muted">{g.note}</p>}
+                </div>
+              )
+            })}
+          </>
+        )}
+      </LegalSection>
 
       <LegalSection title="Fix it yourself">
         <div className="grid grid-cols-1 gap-2 pt-1">

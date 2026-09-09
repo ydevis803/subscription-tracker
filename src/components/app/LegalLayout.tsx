@@ -27,7 +27,7 @@ export function LegalSection({ title, children }: { title: string; children: Rea
   return (
     <Card className="p-4">
       <h2 className="text-[1.0625rem] font-bold leading-tight text-navy-900">{title}</h2>
-      <div className="mt-2 space-y-2 text-[0.9375rem] leading-relaxed text-ink [&_li]:ml-4 [&_li]:list-disc [&_p]:text-ink">{children}</div>
+      <div className="mt-2 space-y-2 text-[0.9375rem] leading-relaxed text-ink [&_li]:ml-4 [&_ol>li]:list-decimal [&_ul>li]:list-disc [&_p]:text-ink">{children}</div>
     </Card>
   )
 }

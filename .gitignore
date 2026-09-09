@@ -4,3 +4,5 @@ dist
 *.local
 server/data
 server/outbox
+
+.claude/settings.local.json

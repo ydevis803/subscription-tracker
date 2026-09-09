@@ -5,6 +5,24 @@ import { api } from '@/auth/api'
 
 let lastSynced = ''
 
+/** The server validator for the copy we last pulled or pushed, per local database. */
+const tagKey = () => `subscription-tracker.pull-tag:${db.name}`
+function readTag(): string | null {
+  try {
+    return localStorage.getItem(tagKey())
+  } catch {
+    return null
+  }
+}
+function writeTag(tag: string | null) {
+  try {
+    if (tag) localStorage.setItem(tagKey(), tag)
+    else localStorage.removeItem(tagKey())
+  } catch {
+    // ignore
+  }
+}
+
 /** Newest change timestamp anywhere in a snapshot, used to decide which side is ahead. */
 function newestChange(snap: Snapshot): string {
   let max = ''
@@ -26,11 +44,18 @@ function newestChange(snap: Snapshot): string {
  * landed), the local copy wins and is pushed instead, so nothing the user just did is silently undone.
  */
 export async function pullFromServer(): Promise<boolean> {
-  const { snapshot } = await api.pull()
-  if (!snapshot) return false
-  const remote = snapshot as Snapshot
   const local = await readSnapshot()
   const localHasData = local.subscriptions.length > 0 || !!local.profile?.onboardingComplete
+  // Only ask for "unchanged?" when we actually hold a copy; an empty database must always download.
+  const result = await api.pull(localHasData ? readTag() : null)
+  if (result.unchanged) {
+    // Server and local agree, so the first auto-sync tick has nothing to push either.
+    lastSynced = JSON.stringify(local)
+    return true
+  }
+  const { snapshot } = result
+  if (!snapshot) return false
+  const remote = snapshot as Snapshot
   if (localHasData && newestChange(local) > newestChange(remote)) {
     lastSynced = ''
     await pushToServer().catch(() => undefined)
@@ -38,6 +63,7 @@ export async function pullFromServer(): Promise<boolean> {
   }
   await replaceWithSnapshot(remote)
   lastSynced = JSON.stringify(remote)
+  writeTag(result.etag)
   return true
 }
 
@@ -47,6 +73,7 @@ export async function pushToServer(): Promise<string> {
   if (serialized === lastSynced) return ''
   const { updatedAt } = await api.push(snap)
   lastSynced = serialized
+  writeTag(updatedAt ? `"${updatedAt}"` : null)
   return updatedAt
 }
 
@@ -104,4 +131,5 @@ export function startAutoSync(onState: (s: SyncState) => void): () => void {
 
 export function resetSyncMemory() {
   lastSynced = ''
+  writeTag(null)
 }

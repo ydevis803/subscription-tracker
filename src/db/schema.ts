@@ -1,3 +1,4 @@
+import { clearQueryCache } from '@/hooks/queryCache'
 import Dexie, { type EntityTable } from 'dexie'
 
 export type BillingCycle = 'weekly' | 'monthly' | 'quarterly' | 'yearly'
@@ -373,6 +374,7 @@ export let db = new SubscriptionTrackerDB()
 export function openScope(userId: number | null): SubscriptionTrackerDB {
   const name = dbNameFor(userId)
   if (db.name === name) return db
+  clearQueryCache()
   db.close()
   db = new SubscriptionTrackerDB(name)
   return db

@@ -201,7 +201,18 @@ const routes = {
     json(res, 200, { ok: true }, { 'Set-Cookie': cookieHeader('', 0) })
   },
 
-  'GET /api/data': async (req) => readSnapshot(requireUser(req).id),
+  'GET /api/data': async (req, res) => {
+    const body = readSnapshot(requireUser(req).id)
+    // The snapshot only changes on a push, so its timestamp is a complete validator: a client that already
+    // holds this version gets a 304 and skips the download.
+    const tag = body.updatedAt ? `"${body.updatedAt}"` : null
+    if (tag && req.headers['if-none-match'] === tag) {
+      res.writeHead(304, { ETag: tag, 'Cache-Control': 'no-store' })
+      res.end()
+      return
+    }
+    json(res, 200, body, tag ? { ETag: tag } : {})
+  },
 
   /** Row counts the signed-in account owns, plus any orphaned children (always 0 by construction). */
   'GET /api/data/integrity': async (req) => countOwnedRows(requireUser(req).id),

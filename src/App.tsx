@@ -1,36 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
 import { ensureInitialized, rolloverRenewals } from '@/db/repo'
 import { useProfile } from '@/hooks/useData'
 import { AuthProvider, useAuth } from '@/auth/AuthContext'
 import { ToastProvider } from '@/components/ui/Toast'
 import { AppShell } from '@/components/layout/AppShell'
-import { ErrorState } from '@/components/ui/Primitives'
+import { Card, ErrorState, Skeleton } from '@/components/ui/Primitives'
 import { Spinner } from '@/components/ui/Button'
 import Onboarding from '@/pages/Onboarding'
 import Home from '@/pages/Home'
-import Subscriptions from '@/pages/Subscriptions'
-import SubscriptionDetail from '@/pages/SubscriptionDetail'
-import SubscriptionForm from '@/pages/SubscriptionForm'
-import Calendar from '@/pages/Calendar'
-import Insights from '@/pages/Insights'
-import PriceHistory from '@/pages/PriceHistory'
-import Notes from '@/pages/Notes'
-import Profile from '@/pages/Profile'
-import Settings from '@/pages/Settings'
-import Premium from '@/pages/Premium'
-import Invite from '@/pages/Invite'
-import NotFound from '@/pages/NotFound'
-import RenewalCheck from '@/pages/RenewalCheck'
-import Timeline from '@/pages/Timeline'
-import MonthlyTotal from '@/pages/MonthlyTotal'
-import WeeklySummary from '@/pages/WeeklySummary'
-import Reminders from '@/pages/Reminders'
+const Subscriptions = lazy(() => import('@/pages/Subscriptions'))
+const SubscriptionDetail = lazy(() => import('@/pages/SubscriptionDetail'))
+const SubscriptionForm = lazy(() => import('@/pages/SubscriptionForm'))
+const Calendar = lazy(() => import('@/pages/Calendar'))
+const Insights = lazy(() => import('@/pages/Insights'))
+const PriceHistory = lazy(() => import('@/pages/PriceHistory'))
+const Notes = lazy(() => import('@/pages/Notes'))
+const Profile = lazy(() => import('@/pages/Profile'))
+const Settings = lazy(() => import('@/pages/Settings'))
+const Premium = lazy(() => import('@/pages/Premium'))
+const Invite = lazy(() => import('@/pages/Invite'))
+const NotFound = lazy(() => import('@/pages/NotFound'))
+const RenewalCheck = lazy(() => import('@/pages/RenewalCheck'))
+const Timeline = lazy(() => import('@/pages/Timeline'))
+const MonthlyTotal = lazy(() => import('@/pages/MonthlyTotal'))
+const WeeklySummary = lazy(() => import('@/pages/WeeklySummary'))
+const Reminders = lazy(() => import('@/pages/Reminders'))
 import { useReminderScheduler } from '@/lib/useReminderScheduler'
-import SignUp from '@/pages/auth/SignUp'
-import SignIn from '@/pages/auth/SignIn'
-import ForgotPassword from '@/pages/auth/ForgotPassword'
-import ResetPassword from '@/pages/auth/ResetPassword'
+const SignUp = lazy(() => import('@/pages/auth/SignUp'))
+const SignIn = lazy(() => import('@/pages/auth/SignIn'))
+const ForgotPassword = lazy(() => import('@/pages/auth/ForgotPassword'))
+const ResetPassword = lazy(() => import('@/pages/auth/ResetPassword'))
 
 type Boot = 'loading' | 'ready' | 'error'
 
@@ -76,6 +76,17 @@ function AppRoutes() {
     void start()
   }, [start])
 
+  // Once Home is up and the browser is idle, fetch the chunks behind the tabs so the first tap never waits.
+  useEffect(() => {
+    if (boot !== 'ready' || !profile?.onboardingComplete) return
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }
+    const run = () => {
+      void Promise.all([import('@/pages/Subscriptions'), import('@/pages/Calendar'), import('@/pages/Insights'), import('@/pages/Profile'), import('@/pages/RenewalCheck'), import('@/pages/SubscriptionDetail')]).catch(() => undefined)
+    }
+    if (w.requestIdleCallback) w.requestIdleCallback(run, { timeout: 2500 })
+    else window.setTimeout(run, 1200)
+  }, [boot, profile?.onboardingComplete])
+
   // Remember where each screen was scrolled to, restore it on Back, start at the top on forward navigation.
   useEffect(() => {
     const key = location.key
@@ -116,10 +127,12 @@ function AppRoutes() {
 
   if (!profile.onboardingComplete) {
     return (
-      <Routes>
-        {authRoutes}
-        <Route path="*" element={<Onboarding />} />
-      </Routes>
+      <Suspense fallback={<PageSkeleton />}>
+        <Routes>
+          {authRoutes}
+          <Route path="*" element={<Onboarding />} />
+        </Routes>
+      </Suspense>
     )
   }
 
@@ -127,7 +140,8 @@ function AppRoutes() {
 
   return (
     <AppShell nav={!fullScreen}>
-      <Routes>
+      <Suspense fallback={<PageSkeleton />}>
+        <Routes>
         {authRoutes}
         <Route path="/" element={<Home />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
@@ -149,8 +163,33 @@ function AppRoutes() {
         <Route path="/invite" element={<Invite />} />
         <Route path="/onboarding" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
+        </Routes>
+      </Suspense>
     </AppShell>
+  )
+}
+
+/** Route fallback while a screen's code downloads for the first time: a header line and card shapes, never a spinner. */
+function PageSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-[480px] px-4 pt-5" aria-busy="true" aria-label="Loading">
+      <Skeleton className="h-7 w-40" />
+      <div className="mt-5 space-y-3">
+        <Card className="p-4">
+          <Skeleton className="h-4 w-1/2" />
+          <Skeleton className="mt-3 h-3 w-3/4" />
+          <Skeleton className="mt-2 h-3 w-2/3" />
+        </Card>
+        <Card className="p-4">
+          <Skeleton className="h-4 w-1/3" />
+          <Skeleton className="mt-3 h-3 w-3/4" />
+        </Card>
+        <Card className="p-4">
+          <Skeleton className="h-4 w-2/5" />
+          <Skeleton className="mt-3 h-3 w-1/2" />
+        </Card>
+      </div>
+    </div>
   )
 }
 

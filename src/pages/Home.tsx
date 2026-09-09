@@ -8,6 +8,8 @@ import { countedForLimit, isPremium } from '@/lib/plan'
 import { FREE_SUBSCRIPTION_LIMIT } from '@/db/schema'
 import { Page } from '@/components/layout/AppShell'
 import { Card, EmptyState, ListSkeleton, ProgressBar, SectionTitle, ServiceMark, Skeleton } from '@/components/ui/Primitives'
+import { Deferred } from '@/components/app/Deferred'
+import type { CancellationNote, PriceChange, RenewalCheck, Settings, Subscription } from '@/db/schema'
 import { Icon, type IconName } from '@/components/ui/Icon'
 import { IconButton, TextLink } from '@/components/ui/Button'
 import { CategoryBars, categoryTotals } from '@/components/app/CategoryBreakdown'
@@ -24,10 +26,7 @@ import { FeedbackPrompt } from '@/components/app/FeedbackPrompt'
 import { ChallengeCard } from '@/components/app/ChallengeCard'
 import { ratingPromptVisible } from '@/lib/feedback'
 import { weeklySummary } from '@/lib/weekly'
-import { db } from '@/db/schema'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { useScopeKey } from '@/auth/AuthContext'
-import { useActiveCheck, useLatestCompletedCheck } from '@/hooks/useData'
+import { useActiveCheck, useAllChecks, useLatestCompletedCheck } from '@/hooks/useData'
 import { nextAction } from '@/lib/daily'
 import { headlineInsights } from '@/lib/insights'
 import { AccountExplainerSheet, SaveProgressCard } from '@/components/app/Account'
@@ -139,19 +138,13 @@ export default function Home() {
   const used = subs ? countedForLimit(subs) : 0
   const activeCheck = useActiveCheck()
   const latestCheck = useLatestCompletedCheck()
-  const scopeKey = useScopeKey()
-  const allChecks = useLiveQuery(() => db.renewalChecks.toArray(), [scopeKey])
+  const allChecks = useAllChecks()
   const ratingVisible = !!(subs && notes && priceChanges && settings && profile && allChecks) && ratingPromptVisible({ profile, settings, checks: allChecks, problem: problemState({ subs, notes, changes: priceChanges, checks: allChecks, settings, monthlyBudget: settings.monthlyBudget, syncStatus: sync.status }) })
   const todayAction = useMemo(
     () => (subs && notes && settings && activeCheck !== undefined && latestCheck !== undefined ? nextAction({ subs, notes, active: activeCheck, latest: latestCheck, lead: settings.defaultReminderDays }) : null),
     [subs, notes, settings, activeCheck, latestCheck],
   )
   const checkHandledByToday = todayAction?.kind === 'resume-check' || todayAction?.kind === 'start-check' || todayAction?.kind === 'confirm-renewal'
-  const week = useMemo(
-    () => (subs && notes && priceChanges && settings && allChecks && activeCheck !== undefined && latestCheck !== undefined ? weeklySummary({ subs, notes, changes: priceChanges, checks: allChecks, settings, active: activeCheck, latest: latestCheck, currency, offset: 0 }) : null),
-    [subs, notes, priceChanges, settings, allChecks, activeCheck, latestCheck, currency],
-  )
-  const headline = useMemo(() => (subs && priceChanges ? headlineInsights(subs, priceChanges, currency, budget)[0] ?? null : null), [subs, priceChanges, currency, budget])
 
   return (
     <div>
@@ -231,8 +224,10 @@ export default function Home() {
           <MilestoneCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} currency={currency} />
         )}
         {profile && settings && allChecks && !isPremium(profile) && <FirstWinOffer settings={settings} checks={allChecks} />}
-        {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined && (
+        {subs && notes && settings && priceChanges && activeCheck !== undefined && latestCheck !== undefined ? (
           <TodayCard subs={subs} notes={notes} changes={priceChanges} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
+        ) : (
+          <TodayCardSkeleton />
         )}
         {subs && notes && priceChanges && settings && allChecks && <ChallengeCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} currency={currency} />}
         {profile && subs && priceChanges && notes && <TrialCard profile={profile} subs={subs} changes={priceChanges} notes={notes} currency={currency} />}
@@ -242,23 +237,10 @@ export default function Home() {
           <InviteCard settings={settings} reason={latestCheck?.completedAt && latestCheck.completedAt.slice(0, 10) >= todayISO() ? 'All clear today' : 'Nice work today'} />
         )}
         {subs && !checkHandledByToday && <CheckCard subs={subs} currency={currency} />}
-        {week && (
-          <Card className="overflow-hidden">
-            <button type="button" onClick={() => navigate('/week')} className="flex w-full items-center gap-3 p-4 text-left active:bg-navy-50">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
-                <Icon name="chart" size={22} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[0.9375rem] font-semibold text-ink">Your week · {week.range.label}</span>
-                <span className="block text-[0.8125rem] text-muted">
-                  {week.completed.total === 0 ? 'Nothing logged yet' : `${week.completed.total} ${week.completed.total === 1 ? 'action' : 'actions'} on ${week.completed.activeDays} ${week.completed.activeDays === 1 ? 'day' : 'days'}`}
-                  {' · '}
-                  {Math.abs(week.change.delta) < 0.005 ? 'total unchanged' : `total ${week.change.delta < 0 ? 'down' : 'up'} ${formatMoney(Math.abs(week.change.delta), currency)}`}
-                </span>
-              </span>
-              <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />
-            </button>
-          </Card>
+        {subs && notes && priceChanges && settings && allChecks && activeCheck !== undefined && latestCheck !== undefined && (
+          <Deferred placeholder={<RowCardSkeleton />}>
+            <WeekCard subs={subs} notes={notes} changes={priceChanges} checks={allChecks} settings={settings} active={activeCheck} latest={latestCheck} currency={currency} />
+          </Deferred>
         )}
         <ContinueCard />
 
@@ -353,26 +335,10 @@ export default function Home() {
           </Card>
         )}
 
-        {model && model.totals.length > 0 && settings?.insightsEnabled !== false && (
-          <section>
-            <SectionTitle
-              action={
-                <TextLink onClick={() => navigate('/insights')}>Insights</TextLink>
-              }
-            >
-              Where it goes
-            </SectionTitle>
-            <Card className="p-4">
-              <CategoryBars totals={model.totals} currency={currency} limit={3} />
-              {headline && (
-                <button type="button" onClick={() => navigate(headline.to ?? '/insights')} className="mt-4 flex w-full items-center gap-3 rounded-xl bg-navy-50 px-3 py-2.5 text-left">
-                  <Icon name={headline.icon} size={18} className={`shrink-0 ${headline.tone === 'coral' ? 'text-coral-700' : 'text-mint-700'}`} />
-                  <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-navy-800">{headline.text}</span>
-                  <Icon name="chevronRight" size={16} className="shrink-0 text-faint" />
-                </button>
-              )}
-            </Card>
-          </section>
+        {model && model.totals.length > 0 && settings?.insightsEnabled !== false && subs && priceChanges && (
+          <Deferred placeholder={<WhereItGoesSkeleton />}>
+            <WhereItGoes totals={model.totals} subs={subs} changes={priceChanges} currency={currency} budget={budget} />
+          </Deferred>
         )}
 
         {status === 'guest' && subs && subs.length > 0 && !nudgeDismissed && (
@@ -423,5 +389,106 @@ function QuickAction({ icon, label, onClick }: { icon: IconName; label: string; 
       <Icon name={icon} size={18} className="text-mint-700" />
       {label}
     </button>
+  )
+}
+
+function TodayCardSkeleton() {
+  return (
+    <Card className="p-4" aria-busy="true" aria-label="Loading today">
+      <Skeleton className="h-3 w-28" />
+      <div className="mt-3 flex gap-1.5">
+        {Array.from({ length: 7 }).map((_, i) => (
+          <Skeleton key={i} className="h-7 w-7 rounded-full" />
+        ))}
+      </div>
+      <div className="mt-4 flex items-start gap-3">
+        <Skeleton className="h-11 w-11 rounded-xl" />
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-5 w-3/4" />
+          <Skeleton className="h-3 w-full" />
+        </div>
+      </div>
+      <Skeleton className="mt-4 h-14 w-full rounded-2xl" />
+    </Card>
+  )
+}
+
+/** Same footprint as a one-row link card (icon, two lines, chevron). */
+function RowCardSkeleton() {
+  return (
+    <Card className="flex items-center gap-3 p-4" aria-busy="true" aria-label="Loading">
+      <Skeleton className="h-11 w-11 rounded-xl" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-3 w-3/4" />
+      </div>
+    </Card>
+  )
+}
+
+function WhereItGoesSkeleton() {
+  return (
+    <section>
+      <SectionTitle>Where it goes</SectionTitle>
+      <Card className="p-4" aria-busy="true" aria-label="Loading spending by category">
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i}>
+              <div className="flex justify-between">
+                <Skeleton className="h-3.5 w-24" />
+                <Skeleton className="h-3.5 w-14" />
+              </div>
+              <Skeleton className="mt-1.5 h-2 w-full rounded-full" />
+            </div>
+          ))}
+        </div>
+        <Skeleton className="mt-4 h-11 w-full rounded-xl" />
+      </Card>
+    </section>
+  )
+}
+
+/** The weekly summary line is the heaviest thing on Home; it is computed only once this card mounts. */
+function WeekCard({ subs, notes, changes, checks, settings, active, latest, currency }: { subs: Subscription[]; notes: CancellationNote[]; changes: PriceChange[]; checks: RenewalCheck[]; settings: Settings; active: RenewalCheck | null; latest: RenewalCheck | null; currency: string }) {
+  const navigate = useNavigate()
+  const week = useMemo(() => weeklySummary({ subs, notes, changes, checks, settings, active, latest, currency, offset: 0 }), [subs, notes, changes, checks, settings, active, latest, currency])
+  return (
+    <Card className="overflow-hidden">
+      <button type="button" onClick={() => navigate('/week')} className="flex w-full items-center gap-3 p-4 text-left active:bg-navy-50">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+          <Icon name="chart" size={22} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[0.9375rem] font-semibold text-ink">Your week · {week.range.label}</span>
+          <span className="block text-[0.8125rem] text-muted">
+            {week.completed.total === 0 ? 'Nothing logged yet' : `${week.completed.total} ${week.completed.total === 1 ? 'action' : 'actions'} on ${week.completed.activeDays} ${week.completed.activeDays === 1 ? 'day' : 'days'}`}
+            {' · '}
+            {Math.abs(week.change.delta) < 0.005 ? 'total unchanged' : `total ${week.change.delta < 0 ? 'down' : 'up'} ${formatMoney(Math.abs(week.change.delta), currency)}`}
+          </span>
+        </span>
+        <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />
+      </button>
+    </Card>
+  )
+}
+
+function WhereItGoes({ totals, subs, changes, currency, budget }: { totals: ReturnType<typeof categoryTotals>; subs: Subscription[]; changes: PriceChange[]; currency: string; budget: number | null }) {
+  const navigate = useNavigate()
+  const headline = useMemo(() => headlineInsights(subs, changes, currency, budget)[0] ?? null, [subs, changes, currency, budget])
+  return (
+    <section>
+      <SectionTitle action={<TextLink onClick={() => navigate('/insights')}>Insights</TextLink>}>Where it goes</SectionTitle>
+      <Card className="p-4">
+        <CategoryBars totals={totals} currency={currency} limit={3} />
+        {headline && (
+          <button type="button" onClick={() => navigate(headline.to ?? '/insights')} className="mt-4 flex w-full items-center gap-3 rounded-xl bg-navy-50 px-3 py-2.5 text-left">
+            <Icon name={headline.icon} size={18} className={`shrink-0 ${headline.tone === 'coral' ? 'text-coral-700' : 'text-mint-700'}`} />
+            <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-navy-800">{headline.text}</span>
+            <Icon name="chevronRight" size={16} className="shrink-0 text-faint" />
+          </button>
+        )}
+      </Card>
+    </section>
   )
 }

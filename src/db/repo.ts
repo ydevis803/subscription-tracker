@@ -1,3 +1,4 @@
+import { clearQueryCache } from '@/hooks/queryCache'
 import {
   CATEGORIES,
   DEFAULT_PROFILE,
@@ -732,6 +733,7 @@ export async function discardCheck(checkId: number): Promise<void> {
 }
 
 export async function resetAllData(): Promise<void> {
+  clearQueryCache()
   await db.transaction(
     'rw',
     [db.subscriptions, db.priceChanges, db.cancellationNotes, db.profile, db.settings, db.billingEvents, db.renewalChecks],

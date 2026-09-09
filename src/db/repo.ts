@@ -90,6 +90,55 @@ export async function dismissInviteNudge(): Promise<void> {
   await db.settings.update(1, { inviteNudgeDismissed: todayISO(), updatedAt: nowISO() })
 }
 
+// ---------- Rating and private feedback ----------
+
+function promptOf(s: Settings) {
+  return s.ratingPrompt ?? { askedAt: [], dismissedAt: null, outcome: null, score: null, answeredAt: null }
+}
+
+/** The prompt was shown (or "Not now" was tapped). Each ask is dated so the frequency cap can be enforced. */
+export async function recordRatingAsk(): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s) return
+    const p = promptOf(s)
+    const last = p.askedAt[p.askedAt.length - 1]
+    if (last && toISO(new Date(last)) === todayISO()) return // one ask per day, however often Home re-renders
+    await db.settings.update(1, { ratingPrompt: { ...p, askedAt: [...p.askedAt, nowISO()].slice(-20) }, updatedAt: nowISO() })
+  })
+}
+
+/** "Not now": hide the prompt immediately; the cooldown counts from this ask. */
+export async function recordRatingDismiss(): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s) return
+    await db.settings.update(1, { ratingPrompt: { ...promptOf(s), dismissedAt: nowISO() }, updatedAt: nowISO() })
+  })
+}
+
+/** A score was given. 'rated' means the store CTA was taken, 'feedback' that a private note was written. Ends the prompt for good. */
+export async function recordRatingOutcome(outcome: 'rated' | 'feedback', score: number): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s) return
+    const p = promptOf(s)
+    await db.settings.update(1, { ratingPrompt: { ...p, outcome, score, answeredAt: nowISO() }, updatedAt: nowISO() })
+  })
+}
+
+/** Keep a private feedback note with the user's own data. Nothing is sent anywhere. */
+export async function saveFeedback(entry: { score: number | null; message: string; source: 'prompt' | 'settings' }): Promise<void> {
+  const message = entry.message.trim()
+  if (!message) throw new Error('Write a line or two first so the note has something in it.')
+  await db.transaction('rw', db.settings, async () => {
+    const s = await db.settings.get(1)
+    if (!s) return
+    const feedback = [...(s.feedback ?? []), { at: nowISO(), score: entry.score, message, source: entry.source }].slice(-100)
+    await db.settings.update(1, { feedback, updatedAt: nowISO() })
+  })
+}
+
 // ---------- Daily check-in ----------
 
 /** Record today's visit. Returns the day of the previous visit (null on the first ever). */

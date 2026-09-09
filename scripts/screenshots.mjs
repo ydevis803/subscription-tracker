@@ -96,6 +96,39 @@ await click('Back to Home')
 await page.waitForURL(BASE + '/')
 await page.waitForTimeout(600)
 await shot('home-all-clear')
+// ---------- Rating prompt (second completed check on a later day, profile older than today) ----------
+await page.evaluate(async () => {
+  const open = (name) => new Promise((res, rej) => { const r = indexedDB.open(name); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error) })
+  const d = await open('subscription-tracker')
+  const checks = await new Promise((res) => { const r = d.transaction('renewalChecks').objectStore('renewalChecks').getAll(); r.onsuccess = () => res(r.result) })
+  const done = checks.find((c) => c.completedAt)
+  const yday = new Date(); yday.setDate(yday.getDate() - 1)
+  const created = new Date(); created.setDate(created.getDate() - 3)
+  await new Promise((res) => {
+    const tx = d.transaction(['renewalChecks', 'profile', 'settings'], 'readwrite')
+    if (done) tx.objectStore('renewalChecks').put({ ...done, id: 999, startedAt: yday.toISOString(), completedAt: yday.toISOString() })
+    const p = tx.objectStore('profile'); p.get(1).onsuccess = (e) => { const v = e.target.result; v.createdAt = created.toISOString(); p.put(v) }
+    // The sample data costs more than the $100 limit picked in onboarding; that is a problem state, which rightly hides the prompt. Lift it for the capture.
+    const st = tx.objectStore('settings'); st.get(1).onsuccess = (e) => { const v = e.target.result; v.monthlyBudget = 1000; st.put(v) }
+    tx.oncomplete = res
+  })
+  d.close()
+})
+await go('/')
+await page.getByText('How is Subscription Tracker working').waitFor()
+await shot('home-rating-prompt')
+await page.getByRole('radio', { name: '2 of 5: Needs work' }).click()
+await page.waitForTimeout(500)
+await shot('sheet-feedback-private', { fullPage: false })
+await page.keyboard.press('Escape')
+await page.waitForTimeout(400)
+await page.getByRole('radio', { name: '5 of 5: Love it' }).click()
+await page.waitForTimeout(500)
+await shot('sheet-rating-store', { fullPage: false })
+await page.keyboard.press('Escape')
+await page.waitForTimeout(400)
+await click('Not now')
+await page.waitForTimeout(400)
 // ---------- Invite a friend (offered after the completed check) ----------
 await go('/invite')
 await page.getByText('Try it here', { exact: false }).waitFor()

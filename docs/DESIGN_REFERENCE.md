@@ -40,52 +40,55 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 07-check-review-item | Renewal check: progress "1 of N" with saved cue, one renewal card, mint Keep it plus Remind me and Cancel it |
 | 08-check-complete | Renewal check completion: animated mint check, "all clear for 30 days", monthly total now, kept/reminders/cancelled |
 | 09-home-all-clear | Home after a completed check: all-clear Today card, and the invite card offered only after this positive moment (hidden while over budget or with other problems) |
-| 10-invite | Invite a friend: navy hero, generated personal invitation with the app link, Include my numbers toggle, Share / Copy link / Copy text with copied feedback, cosmetic badge progress |
-| 11-monthly-total | Monthly total screen: navy hero with a-year/a-day figures and change vs last month, "How this number is made" rules and per-subscription shares, limit field with specific validation, suggested limit and limit history, six-month trend |
-| 12-weekly-summary | Weekly summary: labeled week range with This/Last week toggle, three numbered insights (actions by day strip, monthly total start vs now, recommended next action with why) |
-| 13-subscriptions-list | Search, status chips, Filters panel toggle and Sort select, results bar, rows, floating add button |
-| 14-subscription-add-form | Grouped form cards, name suggestions from the service catalogue, segmented controls, sticky submit |
-| 15-subscription-detail | Amount hero, renewal banner (shows "Estimated date" for setup picks), stats, pause/mark paid, notes, price history, details, cancel/delete |
-| 16-subscription-edit-form-price-change | Edit form with the coral price-change notice and reason field |
-| 17-sheet-cancellation-note | Bottom sheet: reason, note, remind-on date |
-| 18-sheet-log-price-change | Bottom sheet: new price, effective date, reason |
-| 19-sheet-confirm-cancel | Confirmation sheet, coral confirm |
-| 20-renewal-calendar | Search and filters, month grid (tap a day for its sheet, swipe to change month) with dots and day totals, settled card when nothing remains, category totals bar, timeline with inline notes |
-| 21-calendar-day-sheet | Calendar day sheet: that day's charges and total, Mark as paid / Open for charges due today, "Add a subscription renewing this day" |
-| 22-calendar-month-settled | Calendar completion state: "<Month> is settled" with what went out and what is next, See next month / Open timeline; past days shown paid |
-| 23-timeline-first-visit | Renewal timeline on first visit: navy explanation card, horizon slider (7 to 90 days) with animated total, category totals, running-total rows, Add to calendar / Copy summary bar |
-| 24-timeline-category-highlight | Timeline with one category highlighted: total switches to that category, other charges dim, Show all link |
-| 25-timeline-row-actions | Timeline row expanded: Add note and Open actions |
-| 26-insights-free | Highlights (plain-language observations), filters for the monthly total, donut, category bars, billing mix, "Price changes" entry card, biggest items, locked Premium cards; an off state with "Turn on insights" when the Settings toggle is off |
-| 27-price-history | Header + to log a change (subscription picker then price sheet), search, direction chips and sort, price drift summary, change rows with percentage badges; empty state offers to log a change |
-| 28-cancellation-notes | Progress card (decisions made of total, freed per month, next milestone), Next up card with Keep / Cancel / Snooze, all-decided state, search and reason chips, open notes with Done / cancel / snooze / delete |
-| 29-profile | Avatar, plan badge, stats, save-progress or account card, upgrade card, links |
-| 30-sheet-edit-profile | Name and email sheet |
-| 31-settings | Money, reminders, display, data sections (Account section when signed in) |
-| 32-reminders | Reminder preferences: next-reminder/paused card with time zone, day chips and presets, time field, pause with resume-by date, honest delivery methods (in-app always on, browser notification while open, push and email not available) |
-| 33-premium-plans | Plan page for a free user: outcome hero with prices, three data-driven benefits, yearly/monthly with yearly value, Try Premium free for 7 days, Start Premium, Restore purchase, Keep the free plan |
-| 34-sheet-premium-confirm | Plan confirmation sheet |
-| 35-home-trial-day | Home during the seven-day trial: trial card with day N of 7, start and end dates, progress bar, Manage, and today's personalised Premium win |
-| 36-premium-trial | Plan page during the trial: hero with day count, Your trial card (started, ends with last day included, included benefits, End trial now), benefits, Keep Premium plans |
-| 37-home-trial-ended | Home after the trial ends: one-time card saying nothing was removed, Keep Premium / Stay on free |
-| 38-sheet-account-explainer | Friendly explanation shown before creating an account |
-| 39-auth-sign-up | Create account: name, email, password with show toggle |
-| 40-auth-sign-in | Sign in with forgot-password link |
-| 41-auth-forgot-password | Request a reset link |
-| 42-auth-reset-link-missing | Reset page opened without a valid link |
-| 43-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
-| 44-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
-| 45-sheet-paywall | Paywall sheet shown when adding past the free limit |
-| 46-premium-activated | Success state after activation |
-| 47-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
-| 48-premium-manage | Active plan card, billing history, end Premium |
-| 49-profile-premium | Profile with Premium badge |
-| 50-sheet-confirm-erase | Erase-all confirmation |
-| 51-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
-| 52-subscriptions-empty | List empty state |
-| 53-calendar-empty | Calendar empty state |
-| 54-insights-empty | Insights empty state |
-| 55-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
-| 56-price-history-empty | Price history empty state |
-| 57-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
-| 58-not-found | Unknown route |
+| 10-home-rating-prompt | Home rating prompt after a repeat success: five large star targets, visible frequency cap, Not now; inline, never blocking |
+| 11-sheet-feedback-private | Low score: private feedback sheet with the note field, privacy line, Send privately and Not now |
+| 12-sheet-rating-store | High score: App Store rating placeholder sheet (coming soon) with Maybe later |
+| 13-invite | invite |
+| 14-monthly-total | monthly-total |
+| 15-weekly-summary | weekly-summary |
+| 16-subscriptions-list | subscriptions-list |
+| 17-subscription-add-form | subscription-add-form |
+| 18-subscription-detail | subscription-detail |
+| 19-subscription-edit-form-price-change | subscription-edit-form-price-change |
+| 20-sheet-cancellation-note | sheet-cancellation-note |
+| 21-sheet-log-price-change | sheet-log-price-change |
+| 22-sheet-confirm-cancel | sheet-confirm-cancel |
+| 23-renewal-calendar | renewal-calendar |
+| 24-calendar-day-sheet | calendar-day-sheet |
+| 25-calendar-month-settled | calendar-month-settled |
+| 26-timeline-first-visit | timeline-first-visit |
+| 27-timeline-category-highlight | timeline-category-highlight |
+| 28-timeline-row-actions | timeline-row-actions |
+| 29-insights-free | insights-free |
+| 30-price-history | price-history |
+| 31-cancellation-notes | cancellation-notes |
+| 32-profile | profile |
+| 33-sheet-edit-profile | sheet-edit-profile |
+| 34-settings | settings |
+| 35-reminders | reminders |
+| 36-premium-plans | premium-plans |
+| 37-sheet-premium-confirm | sheet-premium-confirm |
+| 38-home-trial-day | home-trial-day |
+| 39-premium-trial | premium-trial |
+| 40-home-trial-ended | home-trial-ended |
+| 41-sheet-account-explainer | sheet-account-explainer |
+| 42-auth-sign-up | auth-sign-up |
+| 43-auth-sign-in | auth-sign-in |
+| 44-auth-forgot-password | auth-forgot-password |
+| 45-auth-reset-link-missing | auth-reset-link-missing |
+| 46-profile-signed-in | profile-signed-in |
+| 47-subscriptions-list-limit-reached | subscriptions-list-limit-reached |
+| 48-sheet-paywall | sheet-paywall |
+| 49-premium-activated | premium-activated |
+| 50-insights-premium | insights-premium |
+| 51-premium-manage | premium-manage |
+| 52-profile-premium | profile-premium |
+| 53-sheet-confirm-erase | sheet-confirm-erase |
+| 54-home-empty | home-empty |
+| 55-subscriptions-empty | subscriptions-empty |
+| 56-calendar-empty | calendar-empty |
+| 57-insights-empty | insights-empty |
+| 58-notes-empty | notes-empty |
+| 59-price-history-empty | price-history-empty |
+| 60-settings-empty-with-load-samples | settings-empty-with-load-samples |
+| 61-not-found | not-found |

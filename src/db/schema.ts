@@ -171,6 +171,17 @@ export interface Settings {
   invites?: { at: string; via: 'share' | 'copy-link' | 'copy-message' }[]
   /** Day (yyyy-MM-dd) the Home invite card was last dismissed; it stays away for a while after. */
   inviteNudgeDismissed?: string
+  /** The rating prompt: every time it was shown, and the final outcome. Once rated or answered it never returns. See src/lib/feedback.ts. */
+  ratingPrompt?: {
+    askedAt: string[]
+    /** When "Not now" was last tapped. The card stays for the rest of the day it appeared unless dismissed. */
+    dismissedAt: string | null
+    outcome: 'rated' | 'feedback' | null
+    score: number | null
+    answeredAt: string | null
+  }
+  /** Private feedback notes, newest last. Stored only with the user's own data; never posted anywhere. */
+  feedback?: { at: string; score: number | null; message: string; source: 'prompt' | 'settings' }[]
   createdAt?: string
   updatedAt?: string
 }

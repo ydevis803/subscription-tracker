@@ -19,7 +19,9 @@ import { MilestoneCard } from '@/components/app/MilestoneCard'
 import { FirstWinOffer } from '@/components/app/Paywall'
 import { TrialCard, TrialEndedCard } from '@/components/app/TrialCards'
 import { InviteCard } from '@/components/app/InviteCard'
-import { inviteNudgeVisible } from '@/lib/referral'
+import { inviteNudgeVisible, problemState } from '@/lib/referral'
+import { FeedbackPrompt } from '@/components/app/FeedbackPrompt'
+import { ratingPromptVisible } from '@/lib/feedback'
 import { weeklySummary } from '@/lib/weekly'
 import { db } from '@/db/schema'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -138,6 +140,7 @@ export default function Home() {
   const latestCheck = useLatestCompletedCheck()
   const scopeKey = useScopeKey()
   const allChecks = useLiveQuery(() => db.renewalChecks.toArray(), [scopeKey])
+  const ratingVisible = !!(subs && notes && priceChanges && settings && profile && allChecks) && ratingPromptVisible({ profile, settings, checks: allChecks, problem: problemState({ subs, notes, changes: priceChanges, checks: allChecks, settings, monthlyBudget: settings.monthlyBudget, syncStatus: sync.status }) })
   const todayAction = useMemo(
     () => (subs && notes && settings && activeCheck !== undefined && latestCheck !== undefined ? nextAction({ subs, notes, active: activeCheck, latest: latestCheck, lead: settings.defaultReminderDays }) : null),
     [subs, notes, settings, activeCheck, latestCheck],
@@ -232,7 +235,8 @@ export default function Home() {
         )}
         {profile && subs && priceChanges && notes && <TrialCard profile={profile} subs={subs} changes={priceChanges} notes={notes} currency={currency} />}
         {profile && subs && <TrialEndedCard profile={profile} subsCount={subs.length} />}
-        {subs && notes && priceChanges && settings && allChecks && inviteNudgeVisible({ subs, notes, changes: priceChanges, checks: allChecks, settings, monthlyBudget: settings.monthlyBudget, syncStatus: sync.status }) && (
+        {ratingVisible && <FeedbackPrompt />}
+        {!ratingVisible && subs && notes && priceChanges && settings && allChecks && inviteNudgeVisible({ subs, notes, changes: priceChanges, checks: allChecks, settings, monthlyBudget: settings.monthlyBudget, syncStatus: sync.status }) && (
           <InviteCard settings={settings} reason={latestCheck?.completedAt && latestCheck.completedAt.slice(0, 10) >= todayISO() ? 'All clear today' : 'Nice work today'} />
         )}
         {subs && !checkHandledByToday && <CheckCard subs={subs} currency={currency} />}

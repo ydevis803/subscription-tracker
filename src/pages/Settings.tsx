@@ -18,6 +18,7 @@ import { useToast } from '@/components/ui/Toast'
 import { Button, TextLink } from '@/components/ui/Button'
 import { useAuth } from '@/auth/AuthContext'
 import { PasswordField } from '@/pages/auth/AuthLayout'
+import { FeedbackSheet } from '@/components/app/FeedbackPrompt'
 import { leaveSheet } from '@/lib/navigation'
 
 export default function Settings() {
@@ -34,6 +35,7 @@ export default function Settings() {
   const [budgetError, setBudgetError] = useState<string | null>(null)
   const [reminderDraft, setReminderDraft] = useState<string | null>(null)
   const [confirmReset, setConfirmReset] = useState(false)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const auth = useAuth()
   const [del, setDel] = useState<{ open: boolean; password: string; show: boolean; error: string; busy: boolean }>({ open: false, password: '', show: false, error: '', busy: false })
@@ -259,6 +261,21 @@ export default function Settings() {
         )}
 
         <section>
+          <SectionTitle>Feedback</SectionTitle>
+          <Card className="overflow-hidden">
+            <Row onClick={() => setFeedbackOpen(true)} chevron={false}>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+                <Icon name="mail" size={20} />
+              </span>
+              <span className="flex-1">
+                <span className="block text-[15px] font-semibold text-ink">Send feedback</span>
+                <span className="block text-[13px] text-muted">{settings.feedback?.length ? `${settings.feedback.length} private ${settings.feedback.length === 1 ? 'note' : 'notes'} kept with your data` : 'A private note. Never posted publicly.'}</span>
+              </span>
+            </Row>
+          </Card>
+        </section>
+
+        <section>
           <SectionTitle>Plan</SectionTitle>
           <Card className="overflow-hidden">
             <Row onClick={() => navigate('/premium')}>
@@ -315,6 +332,7 @@ export default function Settings() {
         </form>
       </Sheet>
 
+      <FeedbackSheet open={feedbackOpen} score={null} source="settings" onClose={() => setFeedbackOpen(false)} onSaved={() => setFeedbackOpen(false)} />
       <ConfirmSheet
         open={confirmReset}
         onClose={() => setConfirmReset(false)}

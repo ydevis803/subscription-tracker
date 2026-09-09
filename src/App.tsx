@@ -24,6 +24,8 @@ import RenewalCheck from '@/pages/RenewalCheck'
 import Timeline from '@/pages/Timeline'
 import MonthlyTotal from '@/pages/MonthlyTotal'
 import WeeklySummary from '@/pages/WeeklySummary'
+import Reminders from '@/pages/Reminders'
+import { useReminderScheduler } from '@/lib/useReminderScheduler'
 import SignUp from '@/pages/auth/SignUp'
 import SignIn from '@/pages/auth/SignIn'
 import ForgotPassword from '@/pages/auth/ForgotPassword'
@@ -54,6 +56,7 @@ function AppRoutes() {
   const profile = useProfile()
   const location = useLocation()
   const navigationType = useNavigationType()
+  useReminderScheduler()
   const scrollPositions = useRef(new Map<string, number>())
 
   const start = useCallback(async () => {
@@ -134,6 +137,7 @@ function AppRoutes() {
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/total" element={<MonthlyTotal />} />
         <Route path="/week" element={<WeeklySummary />} />
+        <Route path="/reminders" element={<Reminders />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/history" element={<PriceHistory />} />

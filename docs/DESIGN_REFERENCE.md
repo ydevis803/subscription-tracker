@@ -61,26 +61,27 @@ The script (`scripts/screenshots.mjs`) drives the installed Google Chrome throug
 | 28-profile | Avatar, plan badge, stats, save-progress or account card, upgrade card, links |
 | 29-sheet-edit-profile | Name and email sheet |
 | 30-settings | Money, reminders, display, data sections (Account section when signed in) |
-| 31-premium-plans | Navy feature hero, yearly/monthly options, mint CTA |
-| 32-sheet-premium-confirm | Plan confirmation sheet |
-| 33-sheet-account-explainer | Friendly explanation shown before creating an account |
-| 34-auth-sign-up | Create account: name, email, password with show toggle |
-| 35-auth-sign-in | Sign in with forgot-password link |
-| 36-auth-forgot-password | Request a reset link |
-| 37-auth-reset-link-missing | Reset page opened without a valid link |
-| 38-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
-| 39-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
-| 40-sheet-paywall | Paywall sheet shown when adding past the free limit |
-| 41-premium-activated | Success state after activation |
-| 42-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
-| 43-premium-manage | Active plan card, billing history, end Premium |
-| 44-profile-premium | Profile with Premium badge |
-| 45-sheet-confirm-erase | Erase-all confirmation |
-| 46-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
-| 47-subscriptions-empty | List empty state |
-| 48-calendar-empty | Calendar empty state |
-| 49-insights-empty | Insights empty state |
-| 50-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
-| 51-price-history-empty | Price history empty state |
-| 52-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
-| 53-not-found | Unknown route |
+| 31-reminders | Reminder preferences: next-reminder/paused card with time zone, day chips and presets, time field, pause with resume-by date, honest delivery methods (in-app always on, browser notification while open, push and email not available) |
+| 32-premium-plans | Navy feature hero, yearly/monthly options, mint CTA |
+| 33-sheet-premium-confirm | Plan confirmation sheet |
+| 34-sheet-account-explainer | Friendly explanation shown before creating an account |
+| 35-auth-sign-up | Create account: name, email, password with show toggle |
+| 36-auth-sign-in | Sign in with forgot-password link |
+| 37-auth-forgot-password | Request a reset link |
+| 38-auth-reset-link-missing | Reset page opened without a valid link |
+| 39-profile-signed-in | Profile with account card: email, sync status, change password, sign out |
+| 40-subscriptions-list-limit-reached | Ten tracked, "Free limit reached" banner |
+| 41-sheet-paywall | Paywall sheet shown when adding past the free limit |
+| 42-premium-activated | Success state after activation |
+| 43-insights-premium | Unlocked 12-month projection, price-increase impact, possible savings |
+| 44-premium-manage | Active plan card, billing history, end Premium |
+| 45-profile-premium | Profile with Premium badge |
+| 46-sheet-confirm-erase | Erase-all confirmation |
+| 47-home-empty | Dashboard with no subscriptions ("Nothing renews in the next 30 days") |
+| 48-subscriptions-empty | List empty state |
+| 49-calendar-empty | Calendar empty state |
+| 50-insights-empty | Insights empty state |
+| 51-notes-empty | Notes zero state: "Decide before it renews" explanation plus "Start with what renews soonest" suggestions with Add note |
+| 52-price-history-empty | Price history empty state |
+| 53-settings-empty-with-load-samples | Settings showing the "Load sample subscriptions" row |
+| 54-not-found | Unknown route |

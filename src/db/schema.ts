@@ -147,6 +147,14 @@ export interface Settings {
   bestStreak?: number
   /** Milestone id → ISO timestamp of when its card was shown. A milestone is celebrated once. */
   milestonesSeen?: Record<string, string>
+  /** When to nudge the user to check renewals and the monthly total. See src/lib/reminders.ts. */
+  reminderSchedule?: {
+    days: number[]
+    time: string
+    paused: boolean
+    pausedUntil: string | null
+    browserNotifications: boolean
+  }
   /** Recent positions worth returning to, newest first. Clearing an entry never touches the data behind it. */
   recentActivity?: ActivityEntry[]
   /** Every change to the monthly limit, newest last. null means the limit was cleared. */

@@ -15,7 +15,7 @@ export function activeTabFor(pathname: string): string {
   if (pathname.startsWith('/total') || pathname.startsWith('/week')) return '/'
   if (pathname.startsWith('/calendar') || pathname.startsWith('/timeline')) return '/calendar'
   if (pathname.startsWith('/insights') || pathname.startsWith('/history')) return '/insights'
-  if (pathname.startsWith('/profile') || pathname.startsWith('/settings') || pathname.startsWith('/premium')) return '/profile'
+  if (pathname.startsWith('/profile') || pathname.startsWith('/settings') || pathname.startsWith('/premium') || pathname.startsWith('/reminders')) return '/profile'
   return '/'
 }
 

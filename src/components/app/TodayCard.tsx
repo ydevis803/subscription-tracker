@@ -12,6 +12,9 @@ import { Icon } from '@/components/ui/Icon'
 import { Card } from '@/components/ui/Primitives'
 import { useToast } from '@/components/ui/Toast'
 import { StreakRow } from './StreakRow'
+import { describeDays, scheduleOf, todayReminder } from '@/lib/reminders'
+import { updateSettings } from '@/db/repo'
+import { format } from 'date-fns'
 
 const toneBox = { coral: 'bg-coral-100 text-coral-700', mint: 'bg-mint-100 text-mint-700', navy: 'bg-navy-50 text-navy-700' } as const
 
@@ -61,6 +64,16 @@ export function TodayCard({
     [subs, notes, changes, settings.checkIns, currency, settings.monthlyBudget, lead],
   )
   const weekCount = dots.filter((d) => d.checked).length
+  const schedule = useMemo(() => scheduleOf(settings), [settings])
+  const reminder = useMemo(() => todayReminder(schedule), [schedule])
+  const resume = async () => {
+    try {
+      await updateSettings({ reminderSchedule: { ...schedule, paused: false, pausedUntil: null } })
+      toast.success('Reminders resumed')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Could not resume')
+    }
+  }
 
   const go = async () => {
     if (action.kind === 'start-check' || action.kind === 'confirm-renewal') {
@@ -124,6 +137,34 @@ export function TodayCard({
           <Icon name="check" size={14} className={wins > 0 ? 'text-mint-700' : 'text-faint'} />
           {wins === 0 ? 'First win of the day is one tap away' : `${wins} ${wins === 1 ? 'win' : 'wins'} today`}
         </span>
+      </div>
+
+      <div className={`flex items-center gap-2 border-t border-line px-4 py-2.5 text-[13px] ${reminder.kind === 'due' && wins === 0 ? 'bg-coral-50' : ''}`}>
+        <Icon name="bell" size={14} className={`shrink-0 ${reminder.kind === 'paused' ? 'text-faint' : reminder.kind === 'due' && wins === 0 ? 'text-coral-700' : 'text-mint-700'}`} />
+        <span className={`min-w-0 flex-1 ${reminder.kind === 'due' && wins === 0 ? 'font-medium text-coral-700' : 'text-muted'}`}>
+          {reminder.kind === 'paused'
+            ? `Reminders paused${reminder.resumesOn ? ` · back ${formatDate(reminder.resumesOn, 'EEE d MMM')}` : ''}`
+            : reminder.kind === 'none'
+              ? 'No reminder days chosen'
+              : reminder.kind === 'due'
+                ? wins > 0
+                  ? `Today's ${schedule.time} reminder handled`
+                  : `Today's reminder (${schedule.time}) is waiting on the action above`
+                : reminder.kind === 'upcoming'
+                  ? `Reminder today at ${schedule.time}`
+                  : reminder.at
+                    ? `Next reminder ${format(reminder.at, 'EEE d MMM')} at ${schedule.time} · ${describeDays(schedule.days)}`
+                    : 'Reminders'}
+        </span>
+        {reminder.kind === 'paused' ? (
+          <button type="button" onClick={resume} className="h-8 shrink-0 rounded-full bg-navy-50 px-3 text-[12px] font-semibold text-navy-800">
+            Resume
+          </button>
+        ) : (
+          <button type="button" onClick={() => navigate('/reminders')} className="h-8 shrink-0 rounded-full px-2 text-[12px] font-semibold text-navy-700">
+            Change
+          </button>
+        )}
       </div>
 
       <StreakRow subs={subs} notes={notes} changes={changes} checks={checks} settings={settings} />

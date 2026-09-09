@@ -1,4 +1,6 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { describeDays, isPaused, scheduleOf } from '@/lib/reminders'
+import { formatDate } from '@/lib/dates'
 import { describeError } from '@/lib/errors'
 import { useNavigate } from 'react-router-dom'
 import { exportAllData, loadSamples, resetAllData, setMonthlyBudget, updateProfile, updateSettings } from '@/db/repo'
@@ -23,6 +25,10 @@ export default function Settings() {
   const profile = useProfile()
   const subs = useSubscriptions()
   const [budgetDraft, setBudgetDraft] = useState<string | null>(null)
+  const scheduleSummary = useMemo(() => {
+    const s = scheduleOf(settings)
+    return isPaused(s) ? `Paused${s.pausedUntil ? ` until ${formatDate(s.pausedUntil, 'd MMM')}` : ''}` : `${describeDays(s.days)} at ${s.time}`
+  }, [settings])
   const [budgetError, setBudgetError] = useState<string | null>(null)
   const [reminderDraft, setReminderDraft] = useState<string | null>(null)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -166,6 +172,13 @@ export default function Settings() {
               onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
               hint="Each subscription can override this."
             />
+            <Row onClick={() => navigate('/reminders')} className="-mx-4 mt-2 border-t border-line">
+              <IconBox name="bell" />
+              <span className="flex-1">
+                <span className="block text-[15px] font-semibold text-ink">Reminder schedule</span>
+                <span className="block text-[13px] text-muted">{scheduleSummary}</span>
+              </span>
+            </Row>
             <div className="mt-2 divide-y divide-line">
               <Toggle label="Upcoming renewals" description="Show renewals due soon on the dashboard" checked={settings.notifyRenewals} onChange={(v) => act('Saved', () => updateSettings({ notifyRenewals: v }), { quiet: true })} />
               <Toggle label="Price changes" description="Flag recent increases" checked={settings.notifyPriceChanges} onChange={(v) => act('Saved', () => updateSettings({ notifyPriceChanges: v }), { quiet: true })} />
@@ -296,7 +309,7 @@ export default function Settings() {
   )
 }
 
-function IconBox({ name, tone = 'navy' }: { name: 'download' | 'sparkle' | 'trash'; tone?: 'navy' | 'coral' }) {
+function IconBox({ name, tone = 'navy' }: { name: 'download' | 'sparkle' | 'trash' | 'bell'; tone?: 'navy' | 'coral' }) {
   return (
     <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tone === 'coral' ? 'bg-coral-50 text-coral-700' : 'bg-navy-50 text-navy-700'}`}>
       <Icon name={name} size={20} />

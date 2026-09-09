@@ -17,7 +17,8 @@
     "test:permissions": "node scripts/permissions-test.mjs",
     "test:journeys": "node scripts/journeys-test.mjs",
     "qa:visual": "node scripts/visual-qa.mjs",
-    "logo:export": "node scripts/logo-export.mjs"
+    "logo:export": "node scripts/logo-export.mjs",
+    "store:shots": "node scripts/store-shots.mjs"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

@@ -19,16 +19,21 @@ export function activeTabFor(pathname: string): string {
   return '/'
 }
 
-export function BottomNav() {
+/**
+ * `activePath` and `static` let the store preview stage the nav inside a phone frame: the lit tab is chosen
+ * by the caller and the items render as inert spans instead of router links.
+ */
+export function BottomNav({ activePath, static: isStatic = false }: { activePath?: string; static?: boolean } = {}) {
   const { pathname } = useLocation()
-  const active = activeTabFor(pathname)
+  const active = activeTabFor(activePath ?? pathname)
+  const Item = isStatic ? ('span' as const) : Link
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur safe-bottom" aria-label="Main">
-      <div className="mx-auto flex max-w-[480px] sm:border-x sm:border-line">
+    <nav className={`${isStatic ? 'absolute' : 'fixed'} inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur safe-bottom`} aria-label="Main">
+      <div className={`mx-auto flex max-w-[480px] ${isStatic ? '' : 'sm:border-x sm:border-line'}`}>
         {items.map((it) => {
           const isActive = active === it.to
           return (
-            <Link
+            <Item
               key={it.to}
               to={it.to}
               aria-current={isActive ? 'page' : undefined}
@@ -40,7 +45,7 @@ export function BottomNav() {
                 <Icon name={it.icon} size={22} />
               </span>
               {it.label}
-            </Link>
+            </Item>
           )
         })}
       </div>

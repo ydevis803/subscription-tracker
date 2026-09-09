@@ -33,8 +33,19 @@ export function SubscriptionRow({ sub, hasOpenNote }: { sub: Subscription; hasOp
       <span className="min-w-0 flex-1">
         <span className="flex items-start justify-between gap-3">
           <span className={`min-w-0 break-words text-[0.9375rem] font-semibold leading-snug ${sub.status === 'cancelled' ? 'text-muted line-through' : 'text-ink'}`}>
-            {sub.name}
-            {hasOpenNote && <Icon name="note" size={14} className="ml-1.5 inline-block align-[-2px] text-coral-600" />}
+            {hasOpenNote ? (
+              // Keep the note marker glued to the last word so it never wraps onto a line of its own.
+              <>
+                {sub.name.split(' ').slice(0, -1).join(' ')}
+                {sub.name.includes(' ') ? ' ' : ''}
+                <span className="whitespace-nowrap">
+                  {sub.name.split(' ').slice(-1)[0]}
+                  <Icon name="note" size={14} className="ml-1.5 inline-block align-[-2px] text-coral-600" />
+                </span>
+              </>
+            ) : (
+              sub.name
+            )}
           </span>
           <span className="tabular shrink-0 text-[0.9375rem] font-bold leading-snug text-navy-900">{formatMoney(sub.amount, sub.currency)}</span>
         </span>

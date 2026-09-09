@@ -2,7 +2,7 @@
  * Renders public/icon.svg to the PNG sizes the manifest and iOS need, and a brand sheet that shows the mark
  * at 512, 128, 64, 32 and 16 px on light and dark backgrounds:
  *   node scripts/logo-export.mjs
- * Outputs: public/icon-180.png, icon-192.png, icon-512.png, icon-maskable-512.png, icon-1024.png (opaque square for App Store Connect), docs/brand/logo-sheet.png
+ * Outputs: public/icon-180.png, icon-192.png, icon-512.png, icon-maskable-512.png, icon-1024.png (opaque square for App Store Connect), play-feature-1024x500.png, docs/brand/logo-sheet.png
  */
 import { mkdirSync, readFileSync } from 'node:fs'
 import { chromium } from 'playwright-core'
@@ -32,6 +32,11 @@ await png(maskableUrl, 512, 'public/icon-maskable-512.png')
 // App Store Connect: 1024 px, square corners, no alpha (Apple applies its own mask).
 const squareUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" fill="#0B1F3A"/>${shapes}</svg>`)
 await png(squareUrl, 1024, 'public/icon-1024.png', true)
+// Google Play feature graphic: 1024 x 500, navy ground, mark centred (no text).
+await page.setViewportSize({ width: 1024, height: 500 })
+await page.setContent(`<body style="margin:0;background:#0B1F3A;width:1024px;height:500px;display:flex;align-items:center;justify-content:center"><div style="width:340px;height:340px;border-radius:78px;background:#12294B;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 128 128" width="260" height="260">${shapes}</svg></div></body>`)
+await page.waitForTimeout(80)
+await page.screenshot({ path: 'public/play-feature-1024x500.png', clip: { x: 0, y: 0, width: 1024, height: 500 } })
 
 // Brand sheet
 const sizes = [512, 128, 64, 32, 16]

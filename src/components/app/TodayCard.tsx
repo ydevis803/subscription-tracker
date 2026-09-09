@@ -157,11 +157,11 @@ export function TodayCard({
                     : 'Reminders'}
         </span>
         {reminder.kind === 'paused' ? (
-          <button type="button" onClick={resume} className="h-8 shrink-0 rounded-full bg-navy-50 px-3 text-[12px] font-semibold text-navy-800">
+          <button type="button" onClick={resume} className="-my-1.5 h-11 shrink-0 rounded-full bg-navy-50 px-3 text-[12px] font-semibold text-navy-800">
             Resume
           </button>
         ) : (
-          <button type="button" onClick={() => navigate('/reminders')} className="h-8 shrink-0 rounded-full px-2 text-[12px] font-semibold text-navy-700">
+          <button type="button" onClick={() => navigate('/reminders')} className="-my-1.5 h-11 shrink-0 rounded-full px-3 text-[12px] font-semibold text-navy-700">
             Change
           </button>
         )}

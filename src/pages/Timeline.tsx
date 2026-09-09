@@ -239,7 +239,7 @@ export default function Timeline() {
                 type="button"
                 onClick={() => patch({ horizon: h })}
                 aria-pressed={view.horizon === h}
-                className={`h-9 min-w-11 rounded-full px-2 text-[13px] font-semibold ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted'}`}
+                className={`h-11 min-w-11 rounded-full px-2 text-[13px] font-semibold ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted'}`}
               >
                 {h}d
               </button>
@@ -252,11 +252,10 @@ export default function Timeline() {
             <p className="text-[15px] font-bold text-navy-900">Category totals</p>
             <div className="mt-3 flex h-3 w-full overflow-hidden rounded-full bg-navy-50">
               {model.categories.map((c) => (
-                <button
+                <div
                   key={c.id}
-                  type="button"
-                  aria-label={`${c.name} ${formatMoney(c.total, currency)}`}
-                  onClick={() => patch({ category: view.category === c.id ? null : c.id })}
+                  aria-hidden="true"
+                  title={`${c.name} ${formatMoney(c.total, currency)}`}
                   className="transition-opacity"
                   style={{ width: `${(c.total / model.total) * 100}%`, background: c.color, opacity: view.category && view.category !== c.id ? 0.25 : 1 }}
                 />

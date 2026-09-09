@@ -126,7 +126,7 @@ export function SegmentedControl<T extends string>({
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`h-10 flex-1 rounded-xl text-sm font-semibold transition-colors ${
+          className={`h-11 flex-1 rounded-xl text-sm font-semibold transition-colors ${
             value === o.value ? 'bg-white text-navy-900 shadow-sm' : 'text-muted'
           }`}
         >

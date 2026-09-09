@@ -74,13 +74,13 @@ export function Sheet({
   return (
     <div className="fixed inset-0 z-[90] flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
       <button className="fade absolute inset-0 bg-navy-950/50" onClick={onClose} aria-label="Close" />
-      <div className="sheet-up relative w-full max-w-[480px] rounded-t-3xl bg-surface shadow-float safe-bottom">
+      <div className="sheet-up relative flex max-h-[94dvh] w-full max-w-[480px] flex-col rounded-t-3xl bg-surface shadow-float safe-bottom">
         <div className="mx-auto mt-2.5 h-1.5 w-10 rounded-full bg-navy-200" />
-        <div className="flex items-center justify-between px-5 pt-3 pb-1">
+        <div className="flex shrink-0 items-center justify-between px-5 pt-3 pb-1">
           {title ? <h2 className="text-lg font-bold text-navy-900">{title}</h2> : <span />}
           <IconButton icon="x" size={20} label="Close" variant="muted" className="-mr-2" onClick={onClose} />
         </div>
-        <div className="max-h-[80dvh] overflow-y-auto px-5 pb-6">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-6">{children}</div>
       </div>
     </div>
   )

@@ -41,7 +41,7 @@ export function StreakRow({ subs, notes, changes, checks, settings }: { subs: Su
             <span className="ml-2 text-[12px] font-semibold text-muted">best {best}</span>
           </span>
         </div>
-        <IconButton icon="info" size={16} label="What counts toward the streak" variant="muted" className="h-9 w-9 shrink-0" onClick={() => setInfo(true)} />
+        <IconButton icon="info" size={16} label="What counts toward the streak" variant="muted" className="-m-1 shrink-0" onClick={() => setInfo(true)} />
       </div>
       <div className="mt-2 flex items-start gap-3">
         <span className="mt-1.5 flex shrink-0 gap-1" aria-label="Last seven days">

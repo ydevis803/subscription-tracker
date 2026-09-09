@@ -130,7 +130,7 @@ export default function SubscriptionDetail() {
                 <p className="text-[13px] text-muted">
                   {formatDate(sub.nextRenewalDate, 'EEEE d MMMM yyyy')} · reminder {reminderDays} {reminderDays === 1 ? 'day' : 'days'} before
                 </p>
-                <button onClick={() => navigate(`/calendar?date=${sub.nextRenewalDate}`)} className="mt-1 flex h-9 items-center gap-1 text-[13px] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
+                <button onClick={() => navigate(`/calendar?date=${sub.nextRenewalDate}`)} className="flex min-h-11 items-center gap-1 text-[13px] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
                   <Icon name="calendar" size={14} /> View in calendar
                 </button>
                 {sub.renewalEstimated && (
@@ -271,7 +271,7 @@ export default function SubscriptionDetail() {
               label="Account page"
               value={
                 sub.website ? (
-                  <a href={sub.website} target="_blank" rel="noreferrer" className="flex items-center gap-1 font-semibold text-navy-700">
+                  <a href={sub.website} target="_blank" rel="noreferrer" className="flex min-h-11 items-center gap-1 font-semibold text-navy-700">
                     {sub.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} <Icon name="external" size={14} />
                   </a>
                 ) : (

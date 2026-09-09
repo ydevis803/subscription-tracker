@@ -246,7 +246,7 @@ export default function Calendar() {
               }}
             />
           </div>
-          <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-faint">
+          <div className="-mx-3 grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-faint">
             {weekdayLabels.map((d, i) => (
               <span key={i} className="py-1">
                 {d}
@@ -256,7 +256,7 @@ export default function Calendar() {
           {!model ? (
             <Skeleton className="mt-2 h-56" />
           ) : (
-            <div className="mt-1 grid grid-cols-7 gap-y-1" role="grid" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div className="-mx-3 mt-1 grid grid-cols-7 gap-y-1" role="grid" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
               {days.map((d) => {
                 const iso = toISO(d)
                 const inMonth = isSameMonth(d, month)
@@ -560,7 +560,7 @@ function DaySheet({
                     <li key={`${sub.id}-${done}`} className="py-3">
                       <div className="flex items-center gap-3">
                         <ServiceMark name={sub.name} color={done ? '#A0AEC0' : cat.color} size={40} />
-                        <button type="button" onClick={() => onOpen(sub)} className="min-w-0 flex-1 text-left">
+                        <button type="button" onClick={() => onOpen(sub)} className="min-h-11 min-w-0 flex-1 text-left">
                           <span className="block text-[15px] font-semibold text-ink">{sub.name}</span>
                           <span className="block text-[12px] text-muted">
                             {cat.name}

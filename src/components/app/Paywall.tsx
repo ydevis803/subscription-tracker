@@ -126,8 +126,8 @@ export function FirstWinOffer({ settings, checks }: { settings: Settings; checks
 export function LockedCard({ title, body, why }: { title: string; body: string; why?: string }) {
   const navigate = useNavigate()
   return (
-    <Card className="relative overflow-hidden p-4">
-      <div className="pointer-events-none select-none blur-[3px]" aria-hidden="true">
+    <Card className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 select-none p-4 blur-[3px]" aria-hidden="true">
         <div className="mb-2 h-4 w-1/2 rounded bg-navy-100" />
         <div className="flex h-24 items-end gap-2">
           {[40, 65, 50, 80, 60, 90, 70].map((h, i) => (
@@ -135,14 +135,14 @@ export function LockedCard({ title, body, why }: { title: string; body: string; 
           ))}
         </div>
       </div>
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/70 px-6 text-center">
+      <div className="relative flex min-h-36 flex-col items-center justify-center bg-white/70 px-6 py-5 text-center">
         <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-navy-900 text-mint-400">
           <Icon name="crown" size={20} />
         </span>
         <p className="text-[15px] font-bold text-navy-900">{title}</p>
         <p className="mt-0.5 text-[13px] text-muted">{body}</p>
         <p className="mt-1.5 text-[12px] leading-snug text-faint">{why ?? 'Part of Premium because it is built from your full history, and keeping that running is what Premium pays for.'}</p>
-        <button onClick={() => navigate('/premium')} className="mt-3 h-10 rounded-xl bg-navy-900 px-4 text-[13px] font-semibold text-white">
+        <button onClick={() => navigate('/premium')} className="mt-3 h-11 rounded-xl bg-navy-900 px-4 text-[13px] font-semibold text-white">
           Unlock with Premium · from ${PREMIUM_PRICING.monthly.toFixed(2)}/mo
         </button>
       </div>

@@ -50,7 +50,7 @@ export default function SignUp() {
       footer={
         <p className="px-1 text-center text-[14px] text-muted">
           Already have an account?{' '}
-          <Link to={`/auth/sign-in?next=${encodeURIComponent(next)}`} className="font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
+          <Link to={`/auth/sign-in?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Sign in
           </Link>
         </p>

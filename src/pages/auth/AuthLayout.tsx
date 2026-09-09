@@ -49,7 +49,7 @@ export function PasswordField({
           aria-invalid={!!error}
           className={`h-13 w-full rounded-2xl border bg-white pl-4 pr-20 text-[16px] outline-none focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 ${error ? 'border-coral-500' : 'border-line'}`}
         />
-        <button type="button" onClick={onToggle} className="absolute inset-y-0 right-2 my-auto h-9 rounded-xl px-3 text-[13px] font-semibold text-navy-700 hover:bg-navy-50">
+        <button type="button" onClick={onToggle} className="absolute inset-y-0 right-1 my-auto h-11 rounded-xl px-3 text-[13px] font-semibold text-navy-700 hover:bg-navy-50">
           {show ? 'Hide' : 'Show'}
         </button>
       </span>

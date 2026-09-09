@@ -64,7 +64,7 @@ export default function SignIn() {
       footer={
         <p className="px-1 text-center text-[14px] text-muted">
           New here?{' '}
-          <Link to={`/auth/sign-up?next=${encodeURIComponent(next)}`} className="font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
+          <Link to={`/auth/sign-up?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Create a free account
           </Link>
         </p>
@@ -82,7 +82,7 @@ export default function SignIn() {
         <Button type="submit" full size="lg" loading={busy}>
           Sign in
         </Button>
-        <Link to="/auth/forgot" className="block py-1 text-center text-[14px] font-semibold text-navy-700">
+        <Link to="/auth/forgot" className="flex min-h-11 items-center justify-center text-center text-[14px] font-semibold text-navy-700">
           Forgot your password?
         </Link>
       </form>

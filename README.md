@@ -68,6 +68,10 @@ Guests can use everything without an account; data stays in the browser. A free 
 - `billingEvents`: upgrade / downgrade / interval changes for the user's own Premium plan
 - `renewalChecks`: guided checks over the next 30 days with per-renewal decisions and a completion summary
 
+## Mobile audit
+
+`npm run audit:mobile` (dev server running) opens every screen and sheet at 320 and 360 px in a fresh browser context and reports horizontal overflow, clipped text, controls under 44 px, content hidden behind fixed bars, sheets that do not fit, and inputs a keyboard-height viewport would hide. Shared controls (buttons, chips, text links, segmented tabs, icon buttons) are at least 44 px tall; calendar day cells are 40 px wide at 320 px because seven columns must fit, and 56 px tall.
+
 ## Visual reference
 
 The data model, indexes and migration rules are described in `docs/DATA_MODEL.md`. Reference screenshots of every screen live in `docs/screenshots/` and are indexed in `docs/DESIGN_REFERENCE.md`. Regenerate them with `npm run screenshots` while the dev server is running.

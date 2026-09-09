@@ -172,7 +172,7 @@ export default function Onboarding() {
                   <select
                     value={currency}
                     onChange={(e) => patch({ currency: e.target.value })}
-                    className="h-10 appearance-none rounded-xl bg-navy-50 pl-3 pr-9 text-[14px] font-semibold text-navy-900 outline-none"
+                    className="h-11 appearance-none rounded-xl bg-navy-50 pl-3 pr-9 text-[14px] font-semibold text-navy-900 outline-none"
                     aria-label="Currency"
                   >
                     {CURRENCIES.map((c) => (

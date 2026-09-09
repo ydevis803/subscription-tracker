@@ -11,7 +11,8 @@
     "screenshots": "node scripts/screenshots.mjs",
     "dev:web": "vite",
     "api": "node server/index.mjs",
-    "start": "SERVE_STATIC=1 node server/index.mjs"
+    "start": "SERVE_STATIC=1 node server/index.mjs",
+    "audit:mobile": "node scripts/mobile-audit.mjs"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

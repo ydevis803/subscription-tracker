@@ -68,7 +68,7 @@ export default function ResetPassword() {
               <Icon name="alert" size={18} className="mt-0.5 shrink-0" />
               {errors.form}
             </p>
-            <Link to="/auth/forgot" className="mt-1 block pl-6 font-semibold underline decoration-2 underline-offset-2">
+            <Link to="/auth/forgot" className="mt-1 inline-flex min-h-11 items-center pl-6 font-semibold underline decoration-2 underline-offset-2">
               Request a new link
             </Link>
           </div>

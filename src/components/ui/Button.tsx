@@ -21,7 +21,7 @@ const variantClass: Record<Variant, string> = {
   danger: 'bg-coral-50 text-coral-700 hover:bg-coral-100 active:bg-coral-100 disabled:text-faint',
 }
 const sizeClass: Record<Size, string> = {
-  sm: 'h-10 px-4 text-sm rounded-xl',
+  sm: 'h-11 px-4 text-sm rounded-xl',
   md: 'h-12 px-5 text-[15px] rounded-2xl',
   lg: 'h-14 px-6 text-base rounded-2xl',
 }
@@ -87,7 +87,7 @@ export function TextLink({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement> & { icon?: IconName | null }) {
   return (
-    <button type="button" className={`flex h-10 items-center gap-1 text-[13px] font-semibold text-navy-700 hover:text-navy-900 ${className}`} {...rest}>
+    <button type="button" className={`flex min-h-11 items-center gap-1 text-[13px] font-semibold text-navy-700 hover:text-navy-900 ${className}`} {...rest}>
       {icon === 'plus' && <Icon name="plus" size={16} />}
       {children}
       {icon === 'chevronRight' && <Icon name="chevronRight" size={16} />}
@@ -101,7 +101,7 @@ export function Chip({ selected, children, className = '', ...rest }: ButtonHTML
     <button
       type="button"
       aria-pressed={selected}
-      className={`h-10 rounded-full px-3.5 text-[13px] font-semibold transition-colors ${
+      className={`h-11 rounded-full px-3.5 text-[13px] font-semibold transition-colors ${
         selected ? 'bg-navy-900 text-white' : 'border border-line bg-white text-muted hover:bg-navy-50'
       } ${className}`}
       {...rest}

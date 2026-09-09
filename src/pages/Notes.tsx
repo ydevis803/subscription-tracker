@@ -158,7 +158,7 @@ export default function Notes() {
             {progress.nextUp && (
               <Card className={`p-4 ${progress.nextUp.note.remindOn && progress.nextUp.note.remindOn < todayISO() ? 'border-coral-100' : 'border-mint-100'}`}>
                 <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Next up</p>
-                <button onClick={() => navigate(`/subscriptions/${progress.nextUp!.sub.id}`)} className="mt-2 flex w-full items-center gap-3 text-left">
+                <button onClick={() => navigate(`/subscriptions/${progress.nextUp!.sub.id}`)} className="mt-2 flex min-h-11 w-full items-center gap-3 text-left">
                   <ServiceMark name={progress.nextUp.sub.name} color={categoryOf(progress.nextUp.sub.categoryId).color} size={40} />
                   <span className="min-w-0 flex-1">
                     <span className="block text-[15px] font-semibold text-ink">{progress.nextUp.sub.name}</span>
@@ -223,7 +223,7 @@ export default function Notes() {
                   const d = note.remindOn ? daysUntil(note.remindOn) : null
                   return (
                     <Card key={note.id} className="p-4">
-                      <button onClick={() => navigate(`/subscriptions/${sub!.id}`)} className="flex w-full items-center gap-3 text-left">
+                      <button onClick={() => navigate(`/subscriptions/${sub!.id}`)} className="flex min-h-11 w-full items-center gap-3 text-left">
                         <ServiceMark name={sub!.name} color={categoryOf(sub!.categoryId).color} size={36} />
                         <span className="min-w-0 flex-1">
                           <span className="block break-words text-[15px] font-semibold text-ink">{sub!.name}</span>

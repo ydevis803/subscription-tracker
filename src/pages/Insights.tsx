@@ -127,17 +127,18 @@ export default function Insights() {
             <SectionTitle>Highlights</SectionTitle>
             <Card className="divide-y divide-line overflow-hidden">
               {headlines.map((h, i) => {
+                const to = h.to && h.to !== '/insights' ? h.to : null
                 const inner = (
                   <>
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${h.tone === 'coral' ? 'bg-coral-100 text-coral-700' : h.tone === 'mint' ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-navy-700'}`}>
                       <Icon name={h.icon} size={18} />
                     </span>
                     <span className="min-w-0 flex-1 text-[0.875rem] leading-snug text-ink">{h.text}</span>
-                    {h.to && <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />}
+                    {to && <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />}
                   </>
                 )
-                return h.to ? (
-                  <button key={i} type="button" onClick={() => navigate(h.to!)} className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-navy-50">
+                return to ? (
+                  <button key={i} type="button" onClick={() => navigate(to)} className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-navy-50">
                     {inner}
                   </button>
                 ) : (

@@ -186,11 +186,9 @@ export default function Timeline() {
         backTo="/"
         subtitle={model ? `${model.occurrences.length} ${model.occurrences.length === 1 ? 'charge' : 'charges'} in the next ${view.horizon} days` : undefined}
         right={
-          <IconButton
-            icon="info"
-            label="How to read the timeline"
-            onClick={() => updateSettings({ timelineIntroSeen: false })}
-          />
+          introSeen ? (
+            <IconButton icon="info" label="How to read the timeline" onClick={() => updateSettings({ timelineIntroSeen: false })} />
+          ) : undefined
         }
       />
       <Page className="space-y-4 pb-24">

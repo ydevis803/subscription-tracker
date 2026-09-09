@@ -14,7 +14,8 @@
     "start": "SERVE_STATIC=1 node server/index.mjs",
     "audit:mobile": "node scripts/mobile-audit.mjs",
     "audit:a11y": "node scripts/a11y-audit.mjs",
-    "test:permissions": "node scripts/permissions-test.mjs"
+    "test:permissions": "node scripts/permissions-test.mjs",
+    "test:journeys": "node scripts/journeys-test.mjs"
   },
   "dependencies": {
     "date-fns": "^4.1.0",

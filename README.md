@@ -76,6 +76,10 @@ Guests can use everything without an account; data stays in the browser. A free 
 - `billingEvents`: upgrade / downgrade / interval changes for the user's own Premium plan
 - `renewalChecks`: guided checks over the next 30 days with per-renewal decisions and a completion summary
 
+## End-to-end journeys
+
+`npm run test:journeys` (dev server running) drives seven journeys in a fresh browser context and reports each step: new visitor to first win; returning user checking renewals and the monthly total; create, edit and delete a subscription; a free user reaching the Premium boundary; a Premium (trial) user using the timeline with category totals and cancellation notes; logout and login; and a temporary backup outage with Retry. Every visited screen is scanned for raw error text and console errors, and the main screens are probed for dead buttons (a tap that changes nothing). Records it creates are prefixed TEST and the account it creates is deleted at the end.
+
 ## Mobile audit
 
 `npm run audit:mobile` (dev server running) opens every screen and sheet at 320 and 360 px in a fresh browser context and reports horizontal overflow, clipped text, controls under 44 px, content hidden behind fixed bars, sheets that do not fit, and inputs a keyboard-height viewport would hide. Shared controls (buttons, chips, text links, segmented tabs, icon buttons) are at least 44 px tall; calendar day cells are 40 px wide at 320 px because seven columns must fit, and 56 px tall.

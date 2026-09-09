@@ -9,7 +9,7 @@ import { weeklySummary } from '@/lib/weekly'
 import { formatMoney } from '@/lib/money'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Page } from '@/components/layout/AppShell'
-import { Button, Chip } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 import { InviteLink } from '@/components/app/InviteCard'
 import { Icon } from '@/components/ui/Icon'
 import { Card, SectionTitle, Skeleton } from '@/components/ui/Primitives'
@@ -125,9 +125,9 @@ export default function WeeklySummary() {
                     <ul className="mt-3 flex flex-wrap gap-2">
                       {items.map(([n, one, many]) => (
                         <li key={many as string}>
-                          <Chip selected={false} className="pointer-events-none">
+                          <span className="inline-flex h-11 items-center rounded-full border border-line bg-white px-3.5 text-[0.8125rem] font-semibold text-muted">
                             {n as number} {(n as number) === 1 ? (one as string) : (many as string)}
-                          </Chip>
+                          </span>
                         </li>
                       ))}
                     </ul>

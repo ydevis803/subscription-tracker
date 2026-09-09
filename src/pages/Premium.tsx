@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
+import { useSmartBack } from '@/lib/navigation'
 import { useNavigate } from 'react-router-dom'
 import { downgradeToFree, endTrialNow, startTrial, upgradeToPremium } from '@/db/repo'
 import { FREE_SUBSCRIPTION_LIMIT, type PremiumInterval } from '@/db/schema'
@@ -21,6 +22,7 @@ import { AccountExplainerSheet } from '@/components/app/Account'
 
 export default function Premium() {
   const navigate = useNavigate()
+  const goBack = useSmartBack()
   const toast = useToast()
   const profile = useProfile()
   const subs = useSubscriptions()
@@ -311,7 +313,7 @@ export default function Premium() {
               <TextLink icon={null} onClick={restore}>
                 {restoring ? 'Checking…' : 'Restore purchase'}
               </TextLink>
-              <TextLink icon={null} onClick={() => navigate(-1)}>
+              <TextLink icon={null} onClick={() => goBack('/')}>
                 Keep the free plan
               </TextLink>
             </div>

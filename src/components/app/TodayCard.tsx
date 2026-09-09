@@ -93,14 +93,14 @@ export function TodayCard({
   return (
     <Card className="overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 pt-4">
-        <p className="whitespace-nowrap text-[12px] font-semibold uppercase tracking-wide text-faint">Today · {formatDate(todayISO(), 'EEE d MMM')}</p>
+        <p className="whitespace-nowrap text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Today · {formatDate(todayISO(), 'EEE d MMM')}</p>
         <div className="flex shrink-0 items-center gap-2" aria-label={`Checked in ${weekCount} of 7 days this week`}>
           <span className="flex gap-1">
             {dots.map((d) => (
               <span
                 key={d.day}
                 title={formatDate(d.day, 'EEE d')}
-                className={`flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold ${
+                className={`flex h-5 w-5 items-center justify-center rounded-full text-[0.5625rem] font-bold ${
                   d.checked ? 'bg-mint-500 text-navy-900' : d.isToday ? 'border-2 border-mint-500 text-mint-700' : d.future ? 'bg-navy-50 text-faint' : 'border border-navy-100 text-faint'
                 }`}
               >
@@ -108,12 +108,12 @@ export function TodayCard({
               </span>
             ))}
           </span>
-          <span className="text-[12px] font-semibold text-muted">{weekCount}/7</span>
+          <span className="text-[0.75rem] font-semibold text-muted">{weekCount}/7</span>
         </div>
       </div>
 
       {away.text && (
-        <p className={`mx-4 mt-3 rounded-xl px-3 py-2 text-[13px] leading-snug ${away.tone === 'coral' ? 'bg-coral-50 text-coral-700' : 'bg-mint-50 text-mint-700'}`}>{away.text}</p>
+        <p className={`mx-4 mt-3 rounded-xl px-3 py-2 text-[0.8125rem] leading-snug ${away.tone === 'coral' ? 'bg-coral-50 text-coral-700' : 'bg-mint-50 text-mint-700'}`}>{away.text}</p>
       )}
 
       <div className="mt-3 flex items-start gap-3 px-4">
@@ -121,9 +121,9 @@ export function TodayCard({
           <Icon name={action.icon} size={22} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Next up</p>
-          <p className="text-[16px] font-bold leading-tight text-navy-900">{action.title}</p>
-          <p className="mt-0.5 text-[13px] leading-snug text-muted">{action.body}</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Next up</p>
+          <p className="text-[1rem] font-bold leading-tight text-navy-900">{action.title}</p>
+          <p className="mt-0.5 text-[0.8125rem] leading-snug text-muted">{action.body}</p>
         </div>
       </div>
       <div className="px-4 pt-3">
@@ -132,14 +132,14 @@ export function TodayCard({
         </Button>
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-line px-4 py-2.5 text-[13px]">
+      <div className="mt-3 flex items-center justify-between border-t border-line px-4 py-2.5 text-[0.8125rem]">
         <span className="flex items-center gap-1.5 text-muted">
           <Icon name="check" size={14} className={wins > 0 ? 'text-mint-700' : 'text-faint'} />
           {wins === 0 ? 'First win of the day is one tap away' : `${wins} ${wins === 1 ? 'win' : 'wins'} today`}
         </span>
       </div>
 
-      <div className={`flex items-center gap-2 border-t border-line px-4 py-2.5 text-[13px] ${reminder.kind === 'due' && wins === 0 ? 'bg-coral-50' : ''}`}>
+      <div className={`flex items-center gap-2 border-t border-line px-4 py-2.5 text-[0.8125rem] ${reminder.kind === 'due' && wins === 0 ? 'bg-coral-50' : ''}`}>
         <Icon name="bell" size={14} className={`shrink-0 ${reminder.kind === 'paused' ? 'text-faint' : reminder.kind === 'due' && wins === 0 ? 'text-coral-700' : 'text-mint-700'}`} />
         <span className={`min-w-0 flex-1 ${reminder.kind === 'due' && wins === 0 ? 'font-medium text-coral-700' : 'text-muted'}`}>
           {reminder.kind === 'paused'
@@ -157,11 +157,11 @@ export function TodayCard({
                     : 'Reminders'}
         </span>
         {reminder.kind === 'paused' ? (
-          <button type="button" onClick={resume} className="-my-1.5 h-11 shrink-0 rounded-full bg-navy-50 px-3 text-[12px] font-semibold text-navy-800">
+          <button type="button" onClick={resume} className="-my-1.5 h-11 shrink-0 rounded-full bg-navy-50 px-3 text-[0.75rem] font-semibold text-navy-800">
             Resume
           </button>
         ) : (
-          <button type="button" onClick={() => navigate('/reminders')} className="-my-1.5 h-11 shrink-0 rounded-full px-3 text-[12px] font-semibold text-navy-700">
+          <button type="button" onClick={() => navigate('/reminders')} className="-my-1.5 h-11 shrink-0 rounded-full px-3 text-[0.75rem] font-semibold text-navy-700">
             Change
           </button>
         )}
@@ -175,8 +175,8 @@ export function TodayCard({
             <Icon name={reward.icon} size={16} />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[11px] font-semibold uppercase tracking-wide text-faint">Fresh today · {reward.label}</span>
-            <span className="block text-[13px] leading-snug text-ink">{reward.text}</span>
+            <span className="block text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">Fresh today · {reward.label}</span>
+            <span className="block text-[0.8125rem] leading-snug text-ink">{reward.text}</span>
           </span>
           {reward.path && <Icon name="chevronRight" size={16} className="mt-2 shrink-0 text-faint" />}
         </button>

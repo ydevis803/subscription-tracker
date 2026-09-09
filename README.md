@@ -72,6 +72,10 @@ Guests can use everything without an account; data stays in the browser. A free 
 
 `npm run audit:mobile` (dev server running) opens every screen and sheet at 320 and 360 px in a fresh browser context and reports horizontal overflow, clipped text, controls under 44 px, content hidden behind fixed bars, sheets that do not fit, and inputs a keyboard-height viewport would hide. Shared controls (buttons, chips, text links, segmented tabs, icon buttons) are at least 44 px tall; calendar day cells are 40 px wide at 320 px because seven columns must fit, and 56 px tall.
 
+## Accessibility
+
+`npm run audit:a11y` (dev server running) runs axe-core (WCAG 2.1 A/AA and best practice) on every screen and sheet, tabs through each page to confirm a visible focus style, submits an empty form to confirm errors are linked to their fields and announced, and loads Home with reduced motion to confirm no animation runs. Conventions: every icon-only control has an `aria-label`; field messages are linked with `aria-describedby` and use `role="alert"`; status is always text or an icon as well as colour (badges, alerts, progress bars carry labels and values); the focus ring is a 3px mint outline; font sizes are in rem so browser text scaling applies; `text-faint` (#5F6F86) and `coral-700` (#B03A2B) meet 4.5:1 on white and the tinted surfaces; service marks pick white or navy initials by contrast.
+
 ## Visual reference
 
 The data model, indexes and migration rules are described in `docs/DATA_MODEL.md`. Reference screenshots of every screen live in `docs/screenshots/` and are indexed in `docs/DESIGN_REFERENCE.md`. Regenerate them with `npm run screenshots` while the dev server is running.

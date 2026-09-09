@@ -142,21 +142,21 @@ export default function RenewalCheck() {
             <span className="pop flex h-24 w-24 items-center justify-center rounded-full bg-mint-500 text-navy-900 ring-8 ring-mint-100">
               <Icon name="check" size={44} />
             </span>
-            <h1 className="mt-6 text-[28px] font-bold leading-tight text-navy-900">
+            <h1 className="mt-6 text-[1.75rem] font-bold leading-tight text-navy-900">
               {viewed?.completedAt ? `Checked ${formatDate(toISO(new Date(viewed.completedAt)), 'd MMM')}: all clear for ${viewed.windowDays} days` : `You are all clear for the next ${check?.windowDays ?? 30} days`}
             </h1>
-            <p className="mt-2 text-[15px] text-muted">
+            <p className="mt-2 text-[0.9375rem] text-muted">
               {done.reviewed === 0 ? 'Nothing renews in this window, so there was nothing to decide.' : `${done.reviewed} ${done.reviewed === 1 ? 'renewal' : 'renewals'} worth ${formatMoney(done.amountReviewed, currency)} reviewed. Nothing will surprise you.`}
             </p>
             <div className="mt-6 w-full rounded-3xl bg-navy-900 p-5 text-left text-white">
-              <p className="text-[13px] font-semibold uppercase tracking-wide text-mint-400">Monthly total now</p>
-              <p className="tabular mt-1 text-[36px] font-bold leading-none">{formatMoney(done.monthlyTotal, currency)}</p>
+              <p className="text-[0.8125rem] font-semibold uppercase tracking-wide text-mint-400">Monthly total now</p>
+              <p className="tabular mt-1 text-[2.25rem] font-bold leading-none">{formatMoney(done.monthlyTotal, currency)}</p>
               {budget !== null && (
-                <p className={`mt-2 text-[14px] font-semibold ${done.monthlyTotal > budget ? 'text-coral-300' : 'text-mint-300'}`}>
+                <p className={`mt-2 text-[0.875rem] font-semibold ${done.monthlyTotal > budget ? 'text-coral-300' : 'text-mint-300'}`}>
                   {done.monthlyTotal > budget ? `${formatMoney(done.monthlyTotal - budget, currency)} over your ${formatMoney(budget, currency, { compact: true })} limit` : `${formatMoney(budget - done.monthlyTotal, currency)} under your ${formatMoney(budget, currency, { compact: true })} limit`}
                 </p>
               )}
-              {done.savedMonthly > 0 && <p className="mt-2 text-[14px] text-navy-100">You freed up {formatMoney(done.savedMonthly, currency)} a month by cancelling.</p>}
+              {done.savedMonthly > 0 && <p className="mt-2 text-[0.875rem] text-navy-100">You freed up {formatMoney(done.savedMonthly, currency)} a month by cancelling.</p>}
             </div>
             {done.reviewed > 0 && (
               <div className="mt-3 grid w-full grid-cols-3 gap-2">
@@ -191,7 +191,7 @@ export default function RenewalCheck() {
           backTo="/"
           subtitle={check ? `Next ${check.windowDays} days · ${formatDate(check.periodStart, 'd MMM')} to ${formatDate(check.periodEnd, 'd MMM')}` : undefined}
           right={
-            <span className={`flex items-center gap-1 text-[12px] font-semibold text-mint-700 transition-opacity ${savedFlash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
+            <span className={`flex items-center gap-1 text-[0.75rem] font-semibold text-mint-700 transition-opacity ${savedFlash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
               <Icon name="check" size={14} /> Saved
             </span>
           }
@@ -214,13 +214,13 @@ export default function RenewalCheck() {
               />
             </Card>
           ) : !current ? (
-            <Card className="flex items-center justify-center gap-3 p-6 text-[15px] text-muted">
+            <Card className="flex items-center justify-center gap-3 p-6 text-[0.9375rem] text-muted">
               <Skeleton className="h-5 w-5 rounded-full" /> Wrapping up your check…
             </Card>
           ) : (
             <>
               <div>
-                <div className="mb-1.5 flex items-center justify-between text-[13px]">
+                <div className="mb-1.5 flex items-center justify-between text-[0.8125rem]">
                   <span className="font-semibold text-navy-900">
                     {revisit ? 'Reviewing again' : `${reviewed + 1} of ${items.length}`}
                   </span>
@@ -243,7 +243,7 @@ export default function RenewalCheck() {
                     {currentDecision?.decision === 'cancel' ? 'Cancelled' : 'Cancel it'}
                   </Button>
                 </div>
-                <p className="text-center text-[12px] text-faint">Keep moves on. Remind me adds a note before the charge. Cancel marks it cancelled here; you still cancel with the provider.</p>
+                <p className="text-center text-[0.75rem] text-faint">Keep moves on. Remind me adds a note before the charge. Cancel marks it cancelled here; you still cancel with the provider.</p>
               </div>
 
               <div className="flex items-center justify-between">
@@ -293,32 +293,32 @@ function ItemCard({
         <ServiceMark name={sub.name} color={cat.color} size={56} />
         <div className="min-w-0 flex-1">
           <h2 className="text-xl font-bold leading-tight text-navy-900">{sub.name}</h2>
-          <p className="text-[13px] text-muted">
+          <p className="text-[0.8125rem] text-muted">
             {cat.name} · per {CYCLE_LABEL[sub.billingCycle]}
             {sub.status === 'trial' ? ' · trial' : ''}
           </p>
         </div>
       </div>
       <div className="mt-4 flex items-baseline justify-between">
-        <span className="tabular text-[34px] font-bold leading-none text-navy-900">{formatMoney(item.amount, currency)}</span>
-        <span className={`rounded-full px-3 py-1 text-[13px] font-semibold ${soon ? 'bg-coral-100 text-coral-700' : 'bg-mint-100 text-mint-700'}`}>
+        <span className="tabular text-[2.125rem] font-bold leading-none text-navy-900">{formatMoney(item.amount, currency)}</span>
+        <span className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold ${soon ? 'bg-coral-100 text-coral-700' : 'bg-mint-100 text-mint-700'}`}>
           {sub.status === 'trial' ? 'Trial converts ' : 'Renews '}
           {relativeLower(item.date)}
         </span>
       </div>
-      <p className="mt-1 text-[13px] text-muted">{formatDate(item.date, 'EEEE d MMMM')}</p>
+      <p className="mt-1 text-[0.8125rem] text-muted">{formatDate(item.date, 'EEEE d MMMM')}</p>
       <div className="mt-4 space-y-2">
         {sub.renewalEstimated && (
           <button onClick={onFixDate} className="flex w-full items-center gap-3 rounded-xl bg-navy-50 px-3 py-2.5 text-left">
             <Icon name="calendar" size={18} className="shrink-0 text-navy-700" />
-            <span className="flex-1 text-[13px] text-navy-800">
+            <span className="flex-1 text-[0.8125rem] text-navy-800">
               <span className="font-semibold">Estimated date.</span> Set the real billing date.
             </span>
             <Icon name="chevronRight" size={16} className="text-faint" />
           </button>
         )}
         {recentIncrease && (
-          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[13px] text-coral-700">
+          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[0.8125rem] text-coral-700">
             <Icon name="trend" size={16} className="mt-0.5 shrink-0" />
             <span>
               Went up {formatMoney(recentIncrease.newAmount - recentIncrease.previousAmount, currency)} on {formatDate(recentIncrease.effectiveDate, 'd MMM')}.
@@ -326,7 +326,7 @@ function ItemCard({
           </p>
         )}
         {openNote && (
-          <p className="flex items-start gap-2 rounded-xl bg-mint-50 px-3 py-2.5 text-[13px] text-navy-800">
+          <p className="flex items-start gap-2 rounded-xl bg-mint-50 px-3 py-2.5 text-[0.8125rem] text-navy-800">
             <Icon name="note" size={16} className="mt-0.5 shrink-0 text-mint-700" />
             <span>
               <Badge tone="mint" className="mr-1.5">
@@ -344,8 +344,8 @@ function ItemCard({
 function Stat({ label, value, tone = 'navy' }: { label: string; value: string; tone?: 'navy' | 'coral' }) {
   return (
     <Card className="p-3 text-center">
-      <span className={`tabular block text-[22px] font-bold ${tone === 'coral' ? 'text-coral-700' : 'text-navy-900'}`}>{value}</span>
-      <span className="block text-[11px] font-semibold uppercase tracking-wide text-faint">{label}</span>
+      <span className={`tabular block text-[1.375rem] font-bold ${tone === 'coral' ? 'text-coral-700' : 'text-navy-900'}`}>{value}</span>
+      <span className="block text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">{label}</span>
     </Card>
   )
 }

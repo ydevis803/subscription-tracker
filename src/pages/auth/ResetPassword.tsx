@@ -48,7 +48,7 @@ export default function ResetPassword() {
             <Icon name="alert" size={28} />
           </span>
           <h2 className="text-lg font-bold text-navy-900">This link is incomplete</h2>
-          <p className="mt-1.5 max-w-[300px] text-[14px] text-muted">Open the link from your email, or request a new one.</p>
+          <p className="mt-1.5 max-w-[300px] text-[0.875rem] text-muted">Open the link from your email, or request a new one.</p>
           <Link to="/auth/forgot" className="mt-5 w-full">
             <Button full size="lg">
               Request a new link
@@ -63,7 +63,7 @@ export default function ResetPassword() {
     <AuthLayout title="Choose a new password" backTo="/auth/sign-in" subtitle="This signs you out everywhere else, then signs you in here.">
       <form onSubmit={submit} className="space-y-4" noValidate>
         {errors.form && (
-          <div className="rounded-xl bg-coral-50 px-3 py-2.5 text-[14px] font-medium text-coral-700" role="alert">
+          <div className="rounded-xl bg-coral-50 px-3 py-2.5 text-[0.875rem] font-medium text-coral-700" role="alert">
             <p className="flex items-start gap-2">
               <Icon name="alert" size={18} className="mt-0.5 shrink-0" />
               {errors.form}

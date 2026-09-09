@@ -13,12 +13,12 @@ export function PaywallSheet({ open, onClose, reason }: { open: boolean; onClose
   const navigate = useNavigate()
   return (
     <Sheet open={open} onClose={onClose} title="Go Premium">
-      <p className="text-[15px] leading-relaxed text-muted">
+      <p className="text-[0.9375rem] leading-relaxed text-muted">
         {reason ?? `The free plan includes up to ${FREE_SUBSCRIPTION_LIMIT} subscriptions. Premium removes the limit and unlocks deeper insights.`}
       </p>
       <ul className="mt-4 space-y-2.5">
         {PREMIUM_FEATURES.map((f) => (
-          <li key={f} className="flex items-center gap-3 text-[15px] text-ink">
+          <li key={f} className="flex items-center gap-3 text-[0.9375rem] text-ink">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint-100 text-mint-700">
               <Icon name="check" size={14} />
             </span>
@@ -43,7 +43,7 @@ export function PaywallSheet({ open, onClose, reason }: { open: boolean; onClose
       >
         See Premium plans
       </Button>
-      <button onClick={onClose} className="mt-2 h-12 w-full rounded-2xl text-[15px] font-semibold text-muted">
+      <button onClick={onClose} className="mt-2 h-12 w-full rounded-2xl text-[0.9375rem] font-semibold text-muted">
         Not now
       </button>
     </Sheet>
@@ -59,16 +59,16 @@ export function UpgradeBanner({ used, compact }: { used: number; compact?: boole
         <Icon name="crown" size={20} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[14px] font-semibold">
+        <span className="block text-[0.875rem] font-semibold">
           {remaining === 0 ? 'Free limit reached' : `${used} of ${FREE_SUBSCRIPTION_LIMIT} free subscriptions used`}
         </span>
         {!compact && (
-          <span className="block text-[13px] text-navy-100">
+          <span className="block text-[0.8125rem] text-navy-100">
             {remaining === 0 ? 'Upgrade to keep adding and unlock insights.' : `${remaining} slot${remaining === 1 ? '' : 's'} left on the free plan.`}
           </span>
         )}
       </span>
-      <button onClick={() => navigate('/premium')} className="h-10 shrink-0 rounded-xl bg-white/10 px-3 text-[13px] font-semibold hover:bg-white/15">
+      <button onClick={() => navigate('/premium')} className="h-10 shrink-0 rounded-xl bg-white/10 px-3 text-[0.8125rem] font-semibold hover:bg-white/15">
         Upgrade
       </button>
     </Card>
@@ -98,8 +98,8 @@ export function FirstWinOffer({ settings, checks }: { settings: Settings; checks
           <Icon name="crown" size={20} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-ink">Nice work on your first check</p>
-          <p className="text-[13px] leading-snug text-muted">
+          <p className="text-[0.9375rem] font-semibold text-ink">Nice work on your first check</p>
+          <p className="text-[0.8125rem] leading-snug text-muted">
             You reviewed {reviewed} {reviewed === 1 ? 'renewal' : 'renewals'}. Premium keeps the whole year in view: a 12-month projection, price-increase impact and an unused-plan detector, for ${PREMIUM_PRICING.monthly.toFixed(2)}/mo or ${PREMIUM_PRICING.yearly.toFixed(2)}/yr.
           </p>
           <div className="mt-3 flex gap-2">
@@ -139,10 +139,10 @@ export function LockedCard({ title, body, why }: { title: string; body: string; 
         <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-navy-900 text-mint-400">
           <Icon name="crown" size={20} />
         </span>
-        <p className="text-[15px] font-bold text-navy-900">{title}</p>
-        <p className="mt-0.5 text-[13px] text-muted">{body}</p>
-        <p className="mt-1.5 text-[12px] leading-snug text-faint">{why ?? 'Part of Premium because it is built from your full history, and keeping that running is what Premium pays for.'}</p>
-        <button onClick={() => navigate('/premium')} className="mt-3 h-11 rounded-xl bg-navy-900 px-4 text-[13px] font-semibold text-white">
+        <p className="text-[0.9375rem] font-bold text-navy-900">{title}</p>
+        <p className="mt-0.5 text-[0.8125rem] text-muted">{body}</p>
+        <p className="mt-1.5 text-[0.75rem] leading-snug text-faint">{why ?? 'Part of Premium because it is built from your full history, and keeping that running is what Premium pays for.'}</p>
+        <button onClick={() => navigate('/premium')} className="mt-3 h-11 rounded-xl bg-navy-900 px-4 text-[0.8125rem] font-semibold text-white">
           Unlock with Premium · from ${PREMIUM_PRICING.monthly.toFixed(2)}/mo
         </button>
       </div>

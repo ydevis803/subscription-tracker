@@ -32,20 +32,20 @@ export function SubscriptionRow({ sub, hasOpenNote }: { sub: Subscription; hasOp
       <ServiceMark name={sub.name} color={sub.status === 'cancelled' ? '#A0AEC0' : cat.color} />
       <span className="min-w-0 flex-1">
         <span className="flex items-start justify-between gap-3">
-          <span className={`min-w-0 break-words text-[15px] font-semibold leading-snug ${sub.status === 'cancelled' ? 'text-muted line-through' : 'text-ink'}`}>
+          <span className={`min-w-0 break-words text-[0.9375rem] font-semibold leading-snug ${sub.status === 'cancelled' ? 'text-muted line-through' : 'text-ink'}`}>
             {sub.name}
             {hasOpenNote && <Icon name="note" size={14} className="ml-1.5 inline-block align-[-2px] text-coral-600" />}
           </span>
-          <span className="tabular shrink-0 text-[15px] font-bold leading-snug text-navy-900">{formatMoney(sub.amount, sub.currency)}</span>
+          <span className="tabular shrink-0 text-[0.9375rem] font-bold leading-snug text-navy-900">{formatMoney(sub.amount, sub.currency)}</span>
         </span>
-        <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-muted">
+        <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.8125rem] text-muted">
           {sub.status !== 'active' && <StatusBadge status={sub.status} />}
           <span>
             {cat.name} · per {CYCLE_LABEL[sub.billingCycle]}
           </span>
         </span>
         {(sub.status === 'active' || sub.status === 'trial') && (
-          <span className={`mt-0.5 block text-[13px] ${soon ? 'font-semibold text-coral-700' : 'text-muted'}`}>
+          <span className={`mt-0.5 block text-[0.8125rem] ${soon ? 'font-semibold text-coral-700' : 'text-muted'}`}>
             {sub.status === 'trial' ? 'Trial ends' : 'Renews'} {relativeLower(sub.nextRenewalDate)}
           </span>
         )}

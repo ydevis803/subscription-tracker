@@ -419,7 +419,7 @@ export const CATEGORIES: Category[] = [
   { id: 'fitness', name: 'Health & fitness', color: '#34C38F', sortOrder: 5 },
   { id: 'news', name: 'News & reading', color: '#F2A93B', sortOrder: 6 },
   { id: 'gaming', name: 'Gaming', color: '#9B7BEF', sortOrder: 7 },
-  { id: 'utilities', name: 'Utilities & phone', color: '#6C8096', sortOrder: 8 },
+  { id: 'utilities', name: 'Utilities & phone', color: '#55687F', sortOrder: 8 },
   { id: 'finance', name: 'Finance & insurance', color: '#0F766E', sortOrder: 9 },
   { id: 'other', name: 'Other', color: '#A0AEC0', sortOrder: 10 },
 ]

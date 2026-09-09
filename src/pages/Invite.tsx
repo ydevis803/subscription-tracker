@@ -125,8 +125,8 @@ export default function Invite() {
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-500 text-navy-900">
             <Icon name="gift" size={24} />
           </span>
-          <h1 className="mt-4 text-[24px] font-bold leading-tight">Know someone paying for things they forgot?</h1>
-          <p className="mt-2 text-[15px] leading-relaxed text-navy-100">Send them a personal invitation. They get the same free start you did: ten subscriptions, every renewal in view, no card needed.</p>
+          <h1 className="mt-4 text-[1.5rem] font-bold leading-tight">Know someone paying for things they forgot?</h1>
+          <p className="mt-2 text-[0.9375rem] leading-relaxed text-navy-100">Send them a personal invitation. They get the same free start you did: ten subscriptions, every renewal in view, no card needed.</p>
         </Card>
 
         <section>
@@ -139,11 +139,11 @@ export default function Invite() {
                 <Skeleton className="h-4 w-2/3" />
               </div>
             ) : (
-              <p className="whitespace-pre-line text-[15px] leading-relaxed text-ink" data-testid="invite-message">
+              <p className="whitespace-pre-line text-[0.9375rem] leading-relaxed text-ink" data-testid="invite-message">
                 {message}
               </p>
             )}
-            <div className="mt-3 flex items-center gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[12px] text-navy-800">
+            <div className="mt-3 flex items-center gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[0.75rem] text-navy-800">
               <Icon name="external" size={14} className="shrink-0 text-mint-700" />
               <span className="min-w-0 break-all">{link}</span>
             </div>
@@ -169,22 +169,22 @@ export default function Invite() {
           <Card className="p-4">
             <div className="flex items-end justify-between gap-3">
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Invitations shared</p>
-                <p className="tabular text-[28px] font-bold leading-none text-navy-900">{progress.count}</p>
+                <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Invitations shared</p>
+                <p className="tabular text-[1.75rem] font-bold leading-none text-navy-900">{progress.count}</p>
               </div>
-              {progress.lastAt && <p className="text-right text-[12px] text-muted">Last shared {formatDate(toISO(new Date(progress.lastAt)), 'd MMM')}</p>}
+              {progress.lastAt && <p className="text-right text-[0.75rem] text-muted">Last shared {formatDate(toISO(new Date(progress.lastAt)), 'd MMM')}</p>}
             </div>
             {progress.next ? (
               <>
                 <div className="mt-3">
                   <ProgressBar value={progress.count} max={progress.next.at} />
                 </div>
-                <p className="mt-2 text-[13px] text-muted">
+                <p className="mt-2 text-[0.8125rem] text-muted">
                   {progress.next.at - progress.count} more {progress.next.at - progress.count === 1 ? 'invitation' : 'invitations'} to earn {progress.next.title}.
                 </p>
               </>
             ) : (
-              <p className="mt-2 text-[13px] text-muted">Every badge earned. Thank you for passing it on.</p>
+              <p className="mt-2 text-[0.8125rem] text-muted">Every badge earned. Thank you for passing it on.</p>
             )}
             <ul className="mt-3 divide-y divide-line">
               {INVITE_BADGES.map((b) => {
@@ -195,14 +195,14 @@ export default function Invite() {
                       <Icon name={b.icon} size={18} />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className={`block text-[14px] font-semibold ${earned ? 'text-ink' : 'text-muted'}`}>{b.title}</span>
-                      <span className="block text-[12px] leading-snug text-muted">{earned ? 'Earned · shows on your profile' : b.howTo}</span>
+                      <span className={`block text-[0.875rem] font-semibold ${earned ? 'text-ink' : 'text-muted'}`}>{b.title}</span>
+                      <span className="block text-[0.75rem] leading-snug text-muted">{earned ? 'Earned · shows on your profile' : b.howTo}</span>
                     </span>
                   </li>
                 )
               })}
             </ul>
-            <p className="mt-3 flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[12px] leading-snug text-navy-800">
+            <p className="mt-3 flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[0.75rem] leading-snug text-navy-800">
               <Icon name="shield" size={14} className="mt-0.5 shrink-0 text-mint-700" />
               <span>Badges are cosmetic. There is no cash reward, and the app never learns who you invited. Only the moment you shared is saved.</span>
             </p>
@@ -215,8 +215,8 @@ export default function Invite() {
       </Page>
 
       <Sheet open={fallback !== null} onClose={() => setFallback(null)} title="Copy by hand">
-        <p className="text-[13px] text-muted">Clipboard access is blocked here. Select the text below and copy it.</p>
-        <textarea readOnly value={fallback ?? ''} onFocus={(e) => e.target.select()} className="mt-2 h-36 w-full rounded-2xl border border-line bg-canvas p-3 text-[14px] text-ink" />
+        <p className="text-[0.8125rem] text-muted">Clipboard access is blocked here. Select the text below and copy it.</p>
+        <textarea readOnly value={fallback ?? ''} onFocus={(e) => e.target.select()} className="mt-2 h-36 w-full rounded-2xl border border-line bg-canvas p-3 text-[0.875rem] text-ink" />
         <Button full size="lg" variant="secondary" className="mt-3" onClick={() => setFallback(null)}>
           Done
         </Button>

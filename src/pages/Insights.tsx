@@ -117,7 +117,7 @@ export default function Insights() {
               actionLabel="Turn on insights"
               onAction={() => updateSettings({ insightsEnabled: true })}
             />
-            <p className="px-6 pb-6 text-center text-[13px] text-muted">You can also change this under Settings → Display.</p>
+            <p className="px-6 pb-6 text-center text-[0.8125rem] text-muted">You can also change this under Settings → Display.</p>
           </Card>
         </Page>
       ) : (
@@ -132,7 +132,7 @@ export default function Insights() {
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${h.tone === 'coral' ? 'bg-coral-100 text-coral-700' : h.tone === 'mint' ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-navy-700'}`}>
                       <Icon name={h.icon} size={18} />
                     </span>
-                    <span className="min-w-0 flex-1 text-[14px] leading-snug text-ink">{h.text}</span>
+                    <span className="min-w-0 flex-1 text-[0.875rem] leading-snug text-ink">{h.text}</span>
                     {h.to && <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />}
                   </>
                 )
@@ -152,7 +152,7 @@ export default function Insights() {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <FilterToggle open={view.panelOpen} count={activeCount} onClick={() => patch({ panelOpen: !view.panelOpen })} />
-            <span className="text-[13px] text-muted">Narrow the monthly total by category, cycle or status.</span>
+            <span className="text-[0.8125rem] text-muted">Narrow the monthly total by category, cycle or status.</span>
           </div>
           {view.panelOpen && (
             <Card className="fade space-y-4 p-4">
@@ -183,16 +183,16 @@ export default function Insights() {
                 <Donut totals={model.totals} currency={currency} size={140} />
                 <div className="flex-1 space-y-2">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">Per month</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">Per month</p>
                     <p className="tabular text-xl font-bold text-navy-900">{formatMoney(model.monthly, currency)}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">Per year</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">Per year</p>
                     <p className="tabular text-xl font-bold text-navy-900">{formatMoney(model.monthly * 12, currency)}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">Per day</p>
-                    <p className="tabular text-[15px] font-semibold text-muted">{formatMoney((model.monthly * 12) / 365, currency)}</p>
+                    <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">Per day</p>
+                    <p className="tabular text-[0.9375rem] font-semibold text-muted">{formatMoney((model.monthly * 12) / 365, currency)}</p>
                   </div>
                 </div>
               </div>
@@ -208,21 +208,21 @@ export default function Insights() {
                   <span style={{ width: `${(model.byCycle.monthlyLike / (model.monthly || 1)) * 100}%` }} className="bg-mint-500" />
                   <span style={{ width: `${(model.byCycle.annualLike / (model.monthly || 1)) * 100}%` }} className="bg-navy-600" />
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-[13px]">
+                <div className="mt-3 grid grid-cols-2 gap-3 text-[0.8125rem]">
                   <div>
                     <span className="flex items-center gap-2 text-muted">
                       <span className="h-2.5 w-2.5 rounded-full bg-mint-500" /> Monthly and weekly
                     </span>
-                    <span className="tabular block text-[15px] font-bold text-navy-900">{formatMoney(model.byCycle.monthlyLike, currency)}/mo</span>
+                    <span className="tabular block text-[0.9375rem] font-bold text-navy-900">{formatMoney(model.byCycle.monthlyLike, currency)}/mo</span>
                   </div>
                   <div>
                     <span className="flex items-center gap-2 text-muted">
                       <span className="h-2.5 w-2.5 rounded-full bg-navy-600" /> Annual and quarterly
                     </span>
-                    <span className="tabular block text-[15px] font-bold text-navy-900">{formatMoney(model.byCycle.annualLike, currency)}/mo</span>
+                    <span className="tabular block text-[0.9375rem] font-bold text-navy-900">{formatMoney(model.byCycle.annualLike, currency)}/mo</span>
                   </div>
                 </div>
-                <p className="mt-3 text-[13px] text-muted">Annual plans are easy to forget. They are spread evenly here, but land as one charge on the calendar.</p>
+                <p className="mt-3 text-[0.8125rem] text-muted">Annual plans are easy to forget. They are spread evenly here, but land as one charge on the calendar.</p>
               </Card>
             </section>
 
@@ -237,10 +237,10 @@ export default function Insights() {
                     <Icon name={model.increaseMonthly > 0 ? 'trend' : 'trendDown'} size={22} />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[15px] font-semibold text-ink">
+                    <span className="block text-[0.9375rem] font-semibold text-ink">
                       {changeCount === 0 ? 'No price changes recorded yet' : `${changeCount} ${changeCount === 1 ? 'price change' : 'price changes'} recorded`}
                     </span>
-                    <span className="block text-[13px] text-muted">
+                    <span className="block text-[0.8125rem] text-muted">
                       {changeCount === 0
                         ? 'Log one when a plan gets dearer, and every edit to an amount is kept automatically.'
                         : model.increaseMonthly > 0
@@ -264,10 +264,10 @@ export default function Insights() {
                     <button key={s.id} onClick={() => navigate(`/subscriptions/${s.id}`)} className="flex min-h-14 w-full items-center gap-3 px-4 py-2.5 text-left active:bg-navy-50">
                       <ServiceMark name={s.name} color={categoryOf(s.categoryId).color} size={36} />
                       <span className="min-w-0 flex-1">
-                        <span className="block break-words text-[14px] font-semibold text-ink">{s.name}</span>
-                        <span className="block text-[12px] text-muted">{Math.round((m / model.monthly) * 100)}% of monthly total</span>
+                        <span className="block break-words text-[0.875rem] font-semibold text-ink">{s.name}</span>
+                        <span className="block text-[0.75rem] text-muted">{Math.round((m / model.monthly) * 100)}% of monthly total</span>
                       </span>
-                      <span className="tabular text-[14px] font-bold text-navy-900">{formatMoney(m, currency)}/mo</span>
+                      <span className="tabular text-[0.875rem] font-bold text-navy-900">{formatMoney(m, currency)}/mo</span>
                     </button>
                   )
                 })}
@@ -278,7 +278,7 @@ export default function Insights() {
               <SectionTitle
                 action={
                   !premium ? (
-                    <span className="flex items-center gap-1 text-[12px] font-semibold text-navy-700">
+                    <span className="flex items-center gap-1 text-[0.75rem] font-semibold text-navy-700">
                       <Icon name="crown" size={14} /> Premium
                     </span>
                   ) : undefined
@@ -291,15 +291,15 @@ export default function Insights() {
                   <div className="flex items-end gap-1.5">
                     {model.projection.map((p, i) => (
                       <div key={p.label} className="flex flex-1 flex-col items-center gap-1" title={`${p.label}: ${formatMoney(p.total, currency)}`}>
-                        <span className="tabular text-[9px] font-semibold text-muted">{p.total >= 1000 ? formatMoney(p.total, currency, { compact: true }) : Math.round(p.total)}</span>
+                        <span className="tabular text-[0.5625rem] font-semibold text-muted">{p.total >= 1000 ? formatMoney(p.total, currency, { compact: true }) : Math.round(p.total)}</span>
                         <div className="flex h-24 w-full items-end">
                           <div className={`w-full rounded-t-md ${i === 0 ? 'bg-coral-500' : 'bg-navy-600'}`} style={{ height: `${Math.max(4, (p.total / maxProj) * 100)}%` }} />
                         </div>
-                        <span className="text-[10px] font-medium text-faint">{p.label}</span>
+                        <span className="text-[0.625rem] font-medium text-faint">{p.label}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-3 text-[13px] text-muted">
+                  <p className="mt-3 text-[0.8125rem] text-muted">
                     Actual charges by month. Your most expensive month is{' '}
                     <span className="font-semibold text-navy-900">
                       {model.projection.reduce((a, b) => (b.total > a.total ? b : a)).label} ({formatMoney(Math.max(...model.projection.map((p) => p.total)), currency)})
@@ -317,16 +317,16 @@ export default function Insights() {
               {premium ? (
                 <Card className="p-4">
                   {model.increaseRows.length === 0 ? (
-                    <p className="text-[14px] text-muted">No price changes recorded in the last 12 months. Log one from any subscription's page.</p>
+                    <p className="text-[0.875rem] text-muted">No price changes recorded in the last 12 months. Log one from any subscription's page.</p>
                   ) : (
                     <>
-                      <p className="text-[14px] text-ink">
+                      <p className="text-[0.875rem] text-ink">
                         Increases in the last year cost you <span className="font-bold text-coral-700">{formatMoney(model.increaseMonthly, currency)}/mo</span> more, or{' '}
                         <span className="font-bold text-coral-700">{formatMoney(model.increaseMonthly * 12, currency)}</span> a year.
                       </p>
                       <ul className="mt-3 space-y-2">
                         {model.increaseRows.map((r) => (
-                          <li key={r.id} className="flex items-center justify-between text-[14px]">
+                          <li key={r.id} className="flex items-center justify-between text-[0.875rem]">
                             <span className="flex items-center gap-2">
                               <span className="h-2.5 w-2.5 rounded-full" style={{ background: r.color }} />
                               {r.name}
@@ -354,10 +354,10 @@ export default function Insights() {
               {premium ? (
                 <Card className="p-4">
                   {model.unused.length === 0 ? (
-                    <p className="text-[14px] text-muted">Nothing flagged. Paused plans, trials and notes marked “not using” or “too expensive” show up here.</p>
+                    <p className="text-[0.875rem] text-muted">Nothing flagged. Paused plans, trials and notes marked “not using” or “too expensive” show up here.</p>
                   ) : (
                     <>
-                      <p className="text-[14px] text-ink">
+                      <p className="text-[0.875rem] text-ink">
                         Up to <span className="font-bold text-mint-700">{formatMoney(model.unusedMonthly, currency)}/mo</span> could be saved by acting on these:
                       </p>
                       <ul className="mt-3 divide-y divide-line">
@@ -365,9 +365,9 @@ export default function Insights() {
                           <li key={u.sub.id}>
                             <button onClick={() => navigate(`/subscriptions/${u.sub.id}`)} className="flex min-h-12 w-full items-center gap-3 py-2 text-left">
                               <ServiceMark name={u.sub.name} color={categoryOf(u.sub.categoryId).color} size={32} />
-                              <span className="flex-1 text-[14px] font-semibold text-ink">{u.sub.name}</span>
-                              <span className="text-[12px] text-muted">{u.sub.status === 'paused' ? 'Paused' : u.sub.status === 'trial' ? 'Trial' : 'Flagged'}</span>
-                              <span className="tabular text-[14px] font-semibold text-navy-900">{formatMoney(u.monthly, currency)}</span>
+                              <span className="flex-1 text-[0.875rem] font-semibold text-ink">{u.sub.name}</span>
+                              <span className="text-[0.75rem] text-muted">{u.sub.status === 'paused' ? 'Paused' : u.sub.status === 'trial' ? 'Trial' : 'Flagged'}</span>
+                              <span className="tabular text-[0.875rem] font-semibold text-navy-900">{formatMoney(u.monthly, currency)}</span>
                             </button>
                           </li>
                         ))}

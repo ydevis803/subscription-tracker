@@ -113,12 +113,12 @@ export default function PriceHistory() {
               <FilteredEmpty query={view.query} filters={view.direction === 'up' ? ['Increases'] : view.direction === 'down' ? ['Decreases'] : []} noun="price changes" onClear={reset} />
             ) : null}
             <Card className={`p-4 ${model.driftMonthly > 0 ? 'border-coral-100 bg-coral-50' : 'border-mint-100 bg-mint-50'}`}>
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-muted">Price drift on active plans</p>
-              <p className={`tabular mt-1 text-[28px] font-bold ${model.driftMonthly > 0 ? 'text-coral-700' : 'text-mint-700'}`}>
+              <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-muted">Price drift on active plans</p>
+              <p className={`tabular mt-1 text-[1.75rem] font-bold ${model.driftMonthly > 0 ? 'text-coral-700' : 'text-mint-700'}`}>
                 {model.driftMonthly > 0 ? '+' : ''}
                 {formatMoney(model.driftMonthly, currency)}/mo
               </p>
-              <p className="text-[13px] text-muted">
+              <p className="text-[0.8125rem] text-muted">
                 {model.driftMonthly > 0
                   ? `You pay ${formatMoney(model.driftMonthly * 12, currency)} more per year than at the original prices.`
                   : 'Your active plans cost the same or less than when you started.'}
@@ -133,13 +133,13 @@ export default function PriceHistory() {
                   <button key={change.id} onClick={() => navigate(`/subscriptions/${sub.id}`)} className="flex min-h-[72px] w-full items-center gap-3 px-4 py-3 text-left active:bg-navy-50">
                     <ServiceMark name={sub.name} color={categoryOf(sub.categoryId).color} size={40} />
                     <span className="min-w-0 flex-1">
-                      <span className="block break-words text-[15px] font-semibold text-ink">{sub.name}</span>
-                      <span className="block text-[13px] text-muted">
+                      <span className="block break-words text-[0.9375rem] font-semibold text-ink">{sub.name}</span>
+                      <span className="block text-[0.8125rem] text-muted">
                         {formatMoney(change.previousAmount, sub.currency)} → {formatMoney(change.newAmount, sub.currency)} · {formatDate(change.effectiveDate, 'MMM yyyy')}
                       </span>
-                      {change.note && <span className="block text-[12px] text-faint">{change.note}</span>}
+                      {change.note && <span className="block text-[0.75rem] text-faint">{change.note}</span>}
                     </span>
-                    <span className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-bold ${up ? 'bg-coral-100 text-coral-700' : 'bg-mint-100 text-mint-700'}`}>
+                    <span className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.75rem] font-bold ${up ? 'bg-coral-100 text-coral-700' : 'bg-mint-100 text-mint-700'}`}>
                       <Icon name={up ? 'trend' : 'trendDown'} size={12} />
                       {up ? '+' : ''}
                       {pct}%
@@ -168,8 +168,8 @@ export default function PriceHistory() {
                   className="flex min-h-14 w-full items-center gap-3 py-2 text-left"
                 >
                   <ServiceMark name={s.name} color={categoryOf(s.categoryId).color} size={36} />
-                  <span className="flex-1 text-[15px] font-semibold text-ink">{s.name}</span>
-                  <span className="tabular text-[13px] text-muted">{formatMoney(s.amount, s.currency)}</span>
+                  <span className="flex-1 text-[0.9375rem] font-semibold text-ink">{s.name}</span>
+                  <span className="tabular text-[0.8125rem] text-muted">{formatMoney(s.amount, s.currency)}</span>
                 </button>
               </li>
             ))}

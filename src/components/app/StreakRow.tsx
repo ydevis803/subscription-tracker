@@ -36,9 +36,9 @@ export function StreakRow({ subs, notes, changes, checks, settings }: { subs: Su
           <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${streak.current > 0 ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-navy-700'}`}>
             <Icon name="sparkle" size={16} />
           </span>
-          <span className="whitespace-nowrap text-[14px] font-semibold text-navy-900">
+          <span className="whitespace-nowrap text-[0.875rem] font-semibold text-navy-900">
             {streak.current} day{streak.current === 1 ? '' : 's'} in a row
-            <span className="ml-2 text-[12px] font-semibold text-muted">best {best}</span>
+            <span className="ml-2 text-[0.75rem] font-semibold text-muted">best {best}</span>
           </span>
         </div>
         <IconButton icon="info" size={16} label="What counts toward the streak" variant="muted" className="-m-1 shrink-0" onClick={() => setInfo(true)} />
@@ -53,14 +53,14 @@ export function StreakRow({ subs, notes, changes, checks, settings }: { subs: Su
             />
           ))}
         </span>
-        <p className={`min-w-0 text-[13px] leading-snug ${streak.recovery ? 'font-medium text-coral-700' : 'text-muted'}`}>{status}</p>
+        <p className={`min-w-0 text-[0.8125rem] leading-snug ${streak.recovery ? 'font-medium text-coral-700' : 'text-muted'}`}>{status}</p>
       </div>
 
       <Sheet open={info} onClose={() => setInfo(false)} title="What counts">
-        <p className="text-[14px] leading-relaxed text-muted">A day counts once when you do at least one of these. Doing more on the same day does not add extra days.</p>
+        <p className="text-[0.875rem] leading-relaxed text-muted">A day counts once when you do at least one of these. Doing more on the same day does not add extra days.</p>
         <ul className="mt-3 space-y-2">
           {COUNTS_AS_ACTIVE.map((t) => (
-            <li key={t} className="flex items-start gap-2 text-[14px] text-ink">
+            <li key={t} className="flex items-start gap-2 text-[0.875rem] text-ink">
               <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-mint-100 text-mint-700">
                 <Icon name="check" size={12} />
               </span>
@@ -68,10 +68,10 @@ export function StreakRow({ subs, notes, changes, checks, settings }: { subs: Su
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-[13px] font-semibold uppercase tracking-wide text-faint">Does not count</p>
+        <p className="mt-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-faint">Does not count</p>
         <ul className="mt-1.5 space-y-1.5">
           {DOES_NOT_COUNT.map((t) => (
-            <li key={t} className="flex items-start gap-2 text-[14px] text-muted">
+            <li key={t} className="flex items-start gap-2 text-[0.875rem] text-muted">
               <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-50 text-faint">
                 <Icon name="x" size={12} />
               </span>
@@ -79,10 +79,10 @@ export function StreakRow({ subs, notes, changes, checks, settings }: { subs: Su
             </li>
           ))}
         </ul>
-        <div className="mt-4 rounded-2xl bg-coral-50 p-3 text-[13px] leading-relaxed text-coral-700">
+        <div className="mt-4 rounded-2xl bg-coral-50 p-3 text-[0.8125rem] leading-relaxed text-coral-700">
           <span className="font-semibold">One free miss.</span> Each streak can skip a single day and carry on, as long as you do something the day after. Two missed days in a row start a fresh streak. Your best streak is kept for good.
         </div>
-        <p className="mt-3 text-[12px] text-faint">Days are counted in your local time zone.</p>
+        <p className="mt-3 text-[0.75rem] text-faint">Days are counted in your local time zone.</p>
       </Sheet>
     </div>
   )

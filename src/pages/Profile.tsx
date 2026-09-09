@@ -114,10 +114,10 @@ export default function Profile() {
                   <h2 className="break-words text-xl font-bold leading-tight text-navy-900">{profile.name || 'Add your name'}</h2>
                   <Badge tone={premium ? 'mint' : 'gray'}>{isPaidPremium(profile) ? 'Premium' : premium ? `Trial · day ${trialState(profile).day}` : 'Free'}</Badge>
                 </div>
-                <p className="break-all text-[13px] text-muted">{auth.status === 'signed-in' ? auth.user?.email : profile.email || 'No email added'}</p>
-                <p className="text-[12px] text-faint">Tracking since {formatDate(profile.createdAt.slice(0, 10), 'MMM yyyy')}</p>
+                <p className="break-all text-[0.8125rem] text-muted">{auth.status === 'signed-in' ? auth.user?.email : profile.email || 'No email added'}</p>
+                <p className="text-[0.75rem] text-faint">Tracking since {formatDate(profile.createdAt.slice(0, 10), 'MMM yyyy')}</p>
                 {invites.top && (
-                  <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-mint-100 px-2 py-0.5 text-[11px] font-semibold text-mint-700">
+                  <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-mint-100 px-2 py-0.5 text-[0.6875rem] font-semibold text-mint-700">
                     <Icon name={invites.top.icon} size={12} /> {invites.top.title}
                   </span>
                 )}
@@ -139,8 +139,8 @@ export default function Profile() {
                 <Icon name="shield" size={22} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Backed up to your account</span>
-                <span className="block text-[13px] text-muted">
+                <span className="block text-[0.9375rem] font-semibold text-ink">Backed up to your account</span>
+                <span className="block text-[0.8125rem] text-muted">
                   {auth.sync.status === 'syncing'
                     ? 'Saving changes…'
                     : auth.sync.status === 'offline'
@@ -158,7 +158,7 @@ export default function Profile() {
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
                 <Icon name="eye" size={20} />
               </span>
-              <span className="flex-1 text-[15px] font-semibold text-ink">Change password</span>
+              <span className="flex-1 text-[0.9375rem] font-semibold text-ink">Change password</span>
             </Row>
             <Divider />
             <Row
@@ -178,7 +178,7 @@ export default function Profile() {
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-coral-50 text-coral-700">
                 <Icon name="x" size={20} />
               </span>
-              <span className="flex-1 text-[15px] font-semibold text-coral-700">{signingOut ? 'Signing out…' : 'Sign out'}</span>
+              <span className="flex-1 text-[0.9375rem] font-semibold text-coral-700">{signingOut ? 'Signing out…' : 'Sign out'}</span>
             </Row>
           </Card>
         ) : (
@@ -191,8 +191,8 @@ export default function Profile() {
               <Icon name="crown" size={22} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[15px] font-semibold text-ink">{premium ? 'Premium is active' : 'Upgrade to Premium'}</span>
-              <span className="block text-[13px] text-muted">
+              <span className="block text-[0.9375rem] font-semibold text-ink">{premium ? 'Premium is active' : 'Upgrade to Premium'}</span>
+              <span className="block text-[0.8125rem] text-muted">
                 {premium
                   ? `${profile?.premiumInterval === 'yearly' ? 'Yearly' : 'Monthly'} plan · renews ${profile?.premiumRenewsOn ? formatDate(profile.premiumRenewsOn) : ''}`
                   : `${used} of ${FREE_SUBSCRIPTION_LIMIT} free subscriptions used · unlimited from ${price('monthly')}/mo`}
@@ -225,8 +225,8 @@ export default function Profile() {
           <Card className="p-4">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-[15px] font-bold text-navy-900">Seven-day starter</p>
-                <p className="text-[13px] text-muted">
+                <p className="text-[0.9375rem] font-bold text-navy-900">Seven-day starter</p>
+                <p className="text-[0.8125rem] text-muted">
                   {challenge.complete ? 'All seven days done' : challenge.started ? `${challenge.completedCount} of ${CHALLENGE_DAYS_TOTAL} days done · next: ${challenge.current?.title}` : 'Starts on Home the next time you open it'}
                 </p>
               </div>
@@ -250,7 +250,7 @@ export default function Profile() {
 
         {milestoneCtx && (
           <Card className="p-4">
-            <p className="text-[15px] font-bold text-navy-900">Milestones</p>
+            <p className="text-[0.9375rem] font-bold text-navy-900">Milestones</p>
             <ul className="mt-2 divide-y divide-line">
               {[...MILESTONES].reverse().map((m) => {
                 const seenAt = settings?.milestonesSeen?.[m.id]
@@ -261,8 +261,8 @@ export default function Profile() {
                       <Icon name={m.icon} size={18} />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className={`block text-[14px] font-semibold ${earned ? 'text-ink' : 'text-muted'}`}>{m.title}</span>
-                      <span className="block text-[12px] leading-snug text-muted">{earned ? (seenAt ? `Earned ${formatDate(seenAt.slice(0, 10), 'd MMM yyyy')}` : 'Earned') : m.howTo}</span>
+                      <span className={`block text-[0.875rem] font-semibold ${earned ? 'text-ink' : 'text-muted'}`}>{m.title}</span>
+                      <span className="block text-[0.75rem] leading-snug text-muted">{earned ? (seenAt ? `Earned ${formatDate(seenAt.slice(0, 10), 'd MMM yyyy')}` : 'Earned') : m.howTo}</span>
                     </span>
                   </li>
                 )
@@ -277,8 +277,8 @@ export default function Profile() {
               <Icon name="shield" size={20} />
             </span>
             <div>
-              <p className="text-[14px] font-semibold text-ink">{auth.status === 'signed-in' ? 'Only you can see this' : 'Your data stays on this device'}</p>
-              <p className="text-[13px] leading-relaxed text-muted">
+              <p className="text-[0.875rem] font-semibold text-ink">{auth.status === 'signed-in' ? 'Only you can see this' : 'Your data stays on this device'}</p>
+              <p className="text-[0.8125rem] leading-relaxed text-muted">
                 {auth.status === 'signed-in'
                   ? 'Your list is stored under your account and never shared. Signing out removes the local copy from this device.'
                   : 'Nothing is uploaded until you create an account. Export a backup from Settings before switching phones or clearing your browser.'}
@@ -329,8 +329,8 @@ export default function Profile() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl bg-navy-50 py-2.5">
-      <span className="tabular block text-[17px] font-bold text-navy-900">{value}</span>
-      <span className="block text-[11px] font-semibold uppercase tracking-wide text-faint">{label}</span>
+      <span className="tabular block text-[1.0625rem] font-bold text-navy-900">{value}</span>
+      <span className="block text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">{label}</span>
     </div>
   )
 }
@@ -342,8 +342,8 @@ function Link({ icon, label, hint, onClick }: { icon: IconName; label: string; h
         <Icon name={icon} size={20} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[15px] font-semibold text-ink">{label}</span>
-        {hint && <span className="block text-[13px] text-muted">{hint}</span>}
+        <span className="block text-[0.9375rem] font-semibold text-ink">{label}</span>
+        {hint && <span className="block text-[0.8125rem] text-muted">{hint}</span>}
       </span>
     </Row>
   )

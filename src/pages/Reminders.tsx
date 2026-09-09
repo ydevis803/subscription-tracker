@@ -70,7 +70,7 @@ export default function Reminders() {
         backTo="/settings"
         subtitle="A nudge to check upcoming renewals and your monthly total"
         right={
-          <span className={`flex items-center gap-1 text-[12px] font-semibold text-mint-700 transition-opacity ${flash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
+          <span className={`flex items-center gap-1 text-[0.75rem] font-semibold text-mint-700 transition-opacity ${flash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
             <Icon name="check" size={14} /> {flash ?? 'Saved'}
           </span>
         }
@@ -84,8 +84,8 @@ export default function Reminders() {
         ) : (
           <>
             <Card className={`p-4 ${paused ? 'border-coral-100 bg-coral-50' : 'border-mint-100 bg-mint-50'}`}>
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">{paused ? 'Paused' : 'Next reminder'}</p>
-              <p className="mt-0.5 text-[16px] font-bold text-navy-900">
+              <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">{paused ? 'Paused' : 'Next reminder'}</p>
+              <p className="mt-0.5 text-[1rem] font-bold text-navy-900">
                 {paused
                   ? schedule.pausedUntil
                     ? `Back ${formatDate(toISO(addDays(new Date(schedule.pausedUntil + 'T12:00:00'), 1)), 'EEE d MMM')} at ${schedule.time}`
@@ -94,7 +94,7 @@ export default function Reminders() {
                     ? `${format(next, 'EEEE d MMM')} at ${format(next, 'HH:mm')}`
                     : 'Pick at least one day'}
               </p>
-              <p className="mt-0.5 text-[13px] text-muted">
+              <p className="mt-0.5 text-[0.8125rem] text-muted">
                 {describeDays(schedule.days)} · {schedule.time} · {tz}
               </p>
             </Card>
@@ -152,7 +152,7 @@ export default function Reminders() {
                 />
                 {paused && (
                   <div className="mt-2">
-                    <p className="mb-1.5 text-[13px] font-semibold text-navy-800">Resume automatically</p>
+                    <p className="mb-1.5 text-[0.8125rem] font-semibold text-navy-800">Resume automatically</p>
                     <div className="flex flex-wrap gap-2">
                       {[
                         { label: 'In 1 week', until: daysFromToday(6) },
@@ -215,10 +215,10 @@ function Delivery({ icon, title, status, tone, body }: { icon: IconName; title: 
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex flex-wrap items-center gap-2">
-          <span className={`text-[14px] font-semibold ${tone === 'mint' ? 'text-ink' : 'text-muted'}`}>{title}</span>
-          <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${tone === 'mint' ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-muted'}`}>{status}</span>
+          <span className={`text-[0.875rem] font-semibold ${tone === 'mint' ? 'text-ink' : 'text-muted'}`}>{title}</span>
+          <span className={`rounded-full px-2 py-0.5 text-[0.6875rem] font-semibold ${tone === 'mint' ? 'bg-mint-100 text-mint-700' : 'bg-navy-50 text-muted'}`}>{status}</span>
         </span>
-        <span className="block text-[12px] leading-snug text-muted">{body}</span>
+        <span className="block text-[0.75rem] leading-snug text-muted">{body}</span>
       </span>
     </div>
   )

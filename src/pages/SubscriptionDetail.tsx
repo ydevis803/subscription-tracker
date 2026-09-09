@@ -105,36 +105,36 @@ export default function SubscriptionDetail() {
                 <h2 className="text-xl font-bold text-navy-900">{sub.name}</h2>
                 <StatusBadge status={sub.status} />
               </div>
-              <p className="text-[13px] text-muted">
+              <p className="text-[0.8125rem] text-muted">
                 {cat!.name} · {CYCLE_NAME[sub.billingCycle]}
               </p>
             </div>
           </div>
           <div className="mt-5 flex items-baseline gap-2">
-            <span className="tabular text-[36px] font-bold leading-none text-navy-900">{formatMoney(sub.amount, sub.currency)}</span>
-            <span className="text-[15px] text-muted">per {CYCLE_LABEL[sub.billingCycle]}</span>
+            <span className="tabular text-[2.25rem] font-bold leading-none text-navy-900">{formatMoney(sub.amount, sub.currency)}</span>
+            <span className="text-[0.9375rem] text-muted">per {CYCLE_LABEL[sub.billingCycle]}</span>
           </div>
           {sub.status === 'cancelled' ? (
-            <p className="mt-3 rounded-xl bg-coral-50 px-4 py-3 text-[14px] text-coral-700">
+            <p className="mt-3 rounded-xl bg-coral-50 px-4 py-3 text-[0.875rem] text-coral-700">
               Cancelled {sub.cancelledAt ? formatDate(sub.cancelledAt) : ''}. You were paying about {formatMoney(monthly, sub.currency)} a month.
             </p>
           ) : sub.status === 'paused' ? (
-            <p className="mt-3 rounded-xl bg-navy-50 px-4 py-3 text-[14px] text-navy-800">Paused. It does not count toward your monthly total until you resume it.</p>
+            <p className="mt-3 rounded-xl bg-navy-50 px-4 py-3 text-[0.875rem] text-navy-800">Paused. It does not count toward your monthly total until you resume it.</p>
           ) : (
             <div className={`mt-3 flex items-center gap-3 rounded-xl px-4 py-3 ${days <= 3 ? 'bg-coral-50' : 'bg-mint-50'}`}>
               <Icon name={sub.status === 'trial' ? 'clock' : 'calendar'} size={20} className={days <= 3 ? 'text-coral-700' : 'text-mint-700'} />
               <div className="flex-1">
-                <p className={`text-[14px] font-semibold ${days <= 3 ? 'text-coral-700' : 'text-navy-900'}`}>
+                <p className={`text-[0.875rem] font-semibold ${days <= 3 ? 'text-coral-700' : 'text-navy-900'}`}>
                   {sub.status === 'trial' ? 'Trial converts' : 'Renews'} {relativeLower(sub.nextRenewalDate)}
                 </p>
-                <p className="text-[13px] text-muted">
+                <p className="text-[0.8125rem] text-muted">
                   {formatDate(sub.nextRenewalDate, 'EEEE d MMMM yyyy')} · reminder {reminderDays} {reminderDays === 1 ? 'day' : 'days'} before
                 </p>
-                <button onClick={() => navigate(`/calendar?date=${sub.nextRenewalDate}`)} className="flex min-h-11 items-center gap-1 text-[13px] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
+                <button onClick={() => navigate(`/calendar?date=${sub.nextRenewalDate}`)} className="flex min-h-11 items-center gap-1 text-[0.8125rem] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
                   <Icon name="calendar" size={14} /> View in calendar
                 </button>
                 {sub.renewalEstimated && (
-                  <p className="mt-1 text-[13px] font-semibold text-navy-800">
+                  <p className="mt-1 text-[0.8125rem] font-semibold text-navy-800">
                     Estimated date from setup.{' '}
                     <button onClick={() => navigate(`/subscriptions/${sub.id}/edit`)} className="underline decoration-mint-500 decoration-2 underline-offset-2">
                       Confirm the real date
@@ -183,7 +183,7 @@ export default function SubscriptionDetail() {
           {notes === undefined ? (
             <ListSkeleton rows={1} />
           ) : notes.length === 0 ? (
-            <Card className="p-4 text-[14px] text-muted">
+            <Card className="p-4 text-[0.875rem] text-muted">
               No notes yet. Write down why you might cancel, when the fee-free window is, or what to check before the next renewal.
             </Card>
           ) : (
@@ -202,12 +202,12 @@ export default function SubscriptionDetail() {
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge tone={n.status === 'done' ? 'gray' : 'coral'}>{REASON_LABEL[n.reason]}</Badge>
                         {n.remindOn && n.status === 'open' && (
-                          <span className={`text-[12px] font-semibold ${daysUntil(n.remindOn) <= 0 ? 'text-coral-700' : 'text-muted'}`}>
+                          <span className={`text-[0.75rem] font-semibold ${daysUntil(n.remindOn) <= 0 ? 'text-coral-700' : 'text-muted'}`}>
                             Remind {relativeLower(n.remindOn)}
                           </span>
                         )}
                       </div>
-                      <p className={`mt-1.5 text-[14px] leading-relaxed text-ink ${n.status === 'done' ? 'line-through' : ''}`}>{n.content}</p>
+                      <p className={`mt-1.5 text-[0.875rem] leading-relaxed text-ink ${n.status === 'done' ? 'line-through' : ''}`}>{n.content}</p>
                     </div>
                     <IconButton icon="trash" size={16} label="Delete note" variant="muted" className="-mr-2 -mt-1 hover:bg-coral-50 hover:text-coral-700" onClick={() => run('Note deleted', () => deleteNote(n.id!))} />
                   </div>
@@ -239,16 +239,16 @@ export default function SubscriptionDetail() {
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
                     <Icon name="tag" size={16} />
                   </span>
-                  <span className="flex-1 text-[14px]">
+                  <span className="flex-1 text-[0.875rem]">
                     <span className="block font-semibold text-ink">Started at {formatMoney(changes.length ? changes[changes.length - 1].previousAmount : sub.amount, sub.currency)}</span>
-                    <span className="block text-[12px] text-muted">{formatDate(sub.startDate)}</span>
+                    <span className="block text-[0.75rem] text-muted">{formatDate(sub.startDate)}</span>
                   </span>
                 </li>
               </ul>
             )}
           </Card>
           {changes && changes.length > 0 && (
-            <p className="mt-2 px-1 text-[13px] text-muted">
+            <p className="mt-2 px-1 text-[0.8125rem] text-muted">
               {(() => {
                 const first = changes[changes.length - 1].previousAmount
                 const diff = sub.amount - first
@@ -333,16 +333,16 @@ export default function SubscriptionDetail() {
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <Card className="p-3">
-      <span className="block text-[11px] font-semibold uppercase leading-tight tracking-wide text-faint">{label}</span>
-      <span className="tabular mt-1 block text-[16px] font-bold text-navy-900">{value}</span>
-      {hint && <span className="block text-[11px] text-faint">{hint}</span>}
+      <span className="block text-[0.6875rem] font-semibold uppercase leading-tight tracking-wide text-faint">{label}</span>
+      <span className="tabular mt-1 block text-[1rem] font-bold text-navy-900">{value}</span>
+      {hint && <span className="block text-[0.6875rem] text-faint">{hint}</span>}
     </Card>
   )
 }
 
 function Action({ icon, label, onClick, disabled }: { icon: IconName; label: string; onClick: () => void; disabled?: boolean }) {
   return (
-    <button onClick={onClick} disabled={disabled} className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-line bg-white text-[14px] font-semibold text-navy-900 shadow-card active:bg-navy-50 disabled:opacity-60">
+    <button onClick={onClick} disabled={disabled} className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-line bg-white text-[0.875rem] font-semibold text-navy-900 shadow-card active:bg-navy-50 disabled:opacity-60">
       <Icon name={icon} size={18} className="text-mint-700" />
       {label}
     </button>
@@ -352,8 +352,8 @@ function Action({ icon, label, onClick, disabled }: { icon: IconName; label: str
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex min-h-14 items-start justify-between gap-4 px-4 py-3">
-      <span className="shrink-0 text-[14px] text-muted">{label}</span>
-      <span className="text-right text-[14px] text-ink">{value}</span>
+      <span className="shrink-0 text-[0.875rem] text-muted">{label}</span>
+      <span className="text-right text-[0.875rem] text-ink">{value}</span>
     </div>
   )
 }
@@ -366,15 +366,15 @@ function PriceRow({ change, currency, onDelete }: { change: PriceChange; currenc
       <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${up ? 'bg-coral-100 text-coral-700' : 'bg-mint-100 text-mint-700'}`}>
         <Icon name={up ? 'trend' : 'trendDown'} size={16} />
       </span>
-      <span className="min-w-0 flex-1 text-[14px]">
+      <span className="min-w-0 flex-1 text-[0.875rem]">
         <span className="block font-semibold text-ink">
           {formatMoney(change.previousAmount, currency)} → {formatMoney(change.newAmount, currency)}
-          <span className={`ml-2 text-[12px] ${up ? 'text-coral-700' : 'text-mint-700'}`}>
+          <span className={`ml-2 text-[0.75rem] ${up ? 'text-coral-700' : 'text-mint-700'}`}>
             {up ? '+' : ''}
             {formatMoney(diff, currency)}
           </span>
         </span>
-        <span className="block text-[12px] text-muted">
+        <span className="block text-[0.75rem] text-muted">
           {formatDate(change.effectiveDate)}
           {change.note ? ` · ${change.note}` : ''}
         </span>
@@ -430,7 +430,7 @@ export function PriceChangeSheet({
   return (
     <Sheet open={open} onClose={onClose} title="Log a price change">
       <form onSubmit={submit} className="space-y-4" noValidate>
-        <p className="text-[14px] text-muted">Current price is {formatMoney(currentAmount, currency)}. If the change is dated today or earlier, the subscription amount updates too.</p>
+        <p className="text-[0.875rem] text-muted">Current price is {formatMoney(currentAmount, currency)}. If the change is dated today or earlier, the subscription amount updates too.</p>
         <TextField
           label="New price"
           inputMode="decimal"

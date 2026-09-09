@@ -70,14 +70,14 @@ export function ChallengeCard({ subs, notes, changes, checks, settings, currency
       <div className="p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-mint-700">Seven-day starter</p>
-            <p className="text-[16px] font-bold leading-tight text-navy-900">{state.complete ? 'Challenge complete' : `Day ${current!.day} of ${CHALLENGE_DAYS_TOTAL}`}</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-mint-700">Seven-day starter</p>
+            <p className="text-[1rem] font-bold leading-tight text-navy-900">{state.complete ? 'Challenge complete' : `Day ${current!.day} of ${CHALLENGE_DAYS_TOTAL}`}</p>
           </div>
           <ChallengeDots settings={settings} />
         </div>
 
         {lastDone && (
-          <p className="mt-3 flex items-start gap-2 rounded-xl bg-mint-50 px-3 py-2 text-[13px] leading-snug text-navy-900">
+          <p className="mt-3 flex items-start gap-2 rounded-xl bg-mint-50 px-3 py-2 text-[0.8125rem] leading-snug text-navy-900">
             <Icon name="check" size={16} className="mt-0.5 shrink-0 text-mint-700" />
             <span>
               <span className="font-semibold">Day {lastDone.day} win{lastDoneAt ? ` · ${formatDate(toISO(new Date(lastDoneAt)), 'd MMM')}` : ''}:</span> {lastDone.win(ctx)}
@@ -91,15 +91,15 @@ export function ChallengeCard({ subs, notes, changes, checks, settings, currency
               <Icon name={current.icon} size={22} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-bold leading-tight text-navy-900">{current.title}</p>
-              <p className="mt-0.5 text-[13px] leading-snug text-muted">{current.body}</p>
-              <p className="mt-1.5 text-[13px] leading-snug text-ink">
+              <p className="text-[0.9375rem] font-bold leading-tight text-navy-900">{current.title}</p>
+              <p className="mt-0.5 text-[0.8125rem] leading-snug text-muted">{current.body}</p>
+              <p className="mt-1.5 text-[0.8125rem] leading-snug text-ink">
                 <span className="font-semibold">About {current.minutes} min:</span> {current.task}
               </p>
             </div>
           </div>
         ) : (
-          <p className="mt-3 text-[13px] leading-snug text-muted">Seven small habits, all in place. Your weekly summary keeps the score from here.</p>
+          <p className="mt-3 text-[0.8125rem] leading-snug text-muted">Seven small habits, all in place. Your weekly summary keeps the score from here.</p>
         )}
 
         <div className="mt-3 flex items-center gap-2">
@@ -122,19 +122,19 @@ export function ChallengeCard({ subs, notes, changes, checks, settings, currency
         <ul className="border-t border-line">
           {state.days.map((d) => (
             <li key={d.def.day} className={`flex items-start gap-3 px-4 py-2.5 ${d.status === 'locked' ? 'opacity-60' : ''}`}>
-              <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12px] font-bold ${d.status === 'done' ? 'bg-mint-500 text-navy-900' : d.status === 'current' ? 'bg-navy-900 text-mint-400' : 'bg-navy-50 text-faint'}`}>
+              <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[0.75rem] font-bold ${d.status === 'done' ? 'bg-mint-500 text-navy-900' : d.status === 'current' ? 'bg-navy-900 text-mint-400' : 'bg-navy-50 text-faint'}`}>
                 {d.status === 'done' ? <Icon name="check" size={14} /> : d.def.day}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[14px] font-semibold text-ink">{d.def.title}</span>
-                <span className="block text-[12px] leading-snug text-muted">
+                <span className="block text-[0.875rem] font-semibold text-ink">{d.def.title}</span>
+                <span className="block text-[0.75rem] leading-snug text-muted">
                   {d.status === 'done' ? d.def.win(ctx) : d.status === 'current' ? `${d.def.task} · about ${d.def.minutes} min` : `Unlocks after day ${d.def.day - 1} · about ${d.def.minutes} min`}
                 </span>
               </span>
             </li>
           ))}
           <li className="flex items-center justify-between gap-3 px-4 py-2">
-            <span className="text-[12px] text-faint">Days never expire. Miss a week and simply pick up where you left off.</span>
+            <span className="text-[0.75rem] text-faint">Days never expire. Miss a week and simply pick up where you left off.</span>
             <TextLink
               icon={null}
               className="shrink-0"

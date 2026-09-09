@@ -19,7 +19,7 @@ export function TrialCard({ profile, subs, changes, notes, currency }: { profile
     <Card className="overflow-hidden border-mint-100">
       <div className="bg-mint-50 px-4 py-3">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[13px] font-semibold text-navy-900">
+          <p className="text-[0.8125rem] font-semibold text-navy-900">
             Premium trial · day {trial.day} of {TRIAL_DAYS}
           </p>
           <TextLink icon={null} className="h-8" onClick={() => navigate('/premium')}>
@@ -29,7 +29,7 @@ export function TrialCard({ profile, subs, changes, notes, currency }: { profile
         <div className="mt-1.5">
           <ProgressBar value={trial.day} max={TRIAL_DAYS} tone="mint" />
         </div>
-        <p className="mt-1.5 text-[12px] text-muted">
+        <p className="mt-1.5 text-[0.75rem] text-muted">
           Started {formatDate(trial.startedOn!, 'EEE d MMM')} · ends {formatDate(trial.endsOn!, 'EEE d MMM')} ({trial.daysLeft} {trial.daysLeft === 1 ? 'day' : 'days'} left) · no card needed
         </p>
       </div>
@@ -38,9 +38,9 @@ export function TrialCard({ profile, subs, changes, notes, currency }: { profile
           <Icon name={win.icon} size={20} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-faint">Today's Premium win</p>
-          <p className="text-[15px] font-semibold leading-snug text-ink">{win.title}</p>
-          <p className="mt-0.5 text-[13px] leading-snug text-muted">{win.body}</p>
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">Today's Premium win</p>
+          <p className="text-[0.9375rem] font-semibold leading-snug text-ink">{win.title}</p>
+          <p className="mt-0.5 text-[0.8125rem] leading-snug text-muted">{win.body}</p>
           <Button size="sm" variant="mint" className="mt-3" onClick={() => navigate(win.path)} leading={<Icon name="arrowRight" size={16} />}>
             {win.cta}
           </Button>
@@ -62,8 +62,8 @@ export function TrialEndedCard({ profile, subsCount }: { profile: Profile; subsC
           <Icon name="crown" size={20} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-ink">Your Premium trial ended {formatDate(trial.endsOn!, 'EEE d MMM')}</p>
-          <p className="text-[13px] leading-snug text-muted">
+          <p className="text-[0.9375rem] font-semibold text-ink">Your Premium trial ended {formatDate(trial.endsOn!, 'EEE d MMM')}</p>
+          <p className="text-[0.8125rem] leading-snug text-muted">
             All {subsCount} {subsCount === 1 ? 'subscription' : 'subscriptions'}, notes and history are exactly as you left them. The free plan keeps tracking; the yearly projection, impact report and unused detector are Premium, from {price('monthly')}/mo.
           </p>
           <div className="mt-3 flex gap-2">

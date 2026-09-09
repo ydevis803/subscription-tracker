@@ -96,8 +96,8 @@ export default function WeeklySummary() {
               <Card className="p-4">
                 {summary.completed.total === 0 ? (
                   <>
-                    <p className="text-[15px] font-semibold text-navy-900">{summary.range.isCurrent ? 'A quiet week so far' : 'A quiet week'}</p>
-                    <p className="mt-1 text-[14px] leading-relaxed text-muted">
+                    <p className="text-[0.9375rem] font-semibold text-navy-900">{summary.range.isCurrent ? 'A quiet week so far' : 'A quiet week'}</p>
+                    <p className="mt-1 text-[0.875rem] leading-relaxed text-muted">
                       {summary.range.isCurrent
                         ? 'Nothing logged yet. That is fine: one small action, like reviewing a renewal or deciding a note, is enough to make the week count.'
                         : 'No actions were recorded that week. Your subscriptions carried on being tracked, and the recommendation below is the best place to pick up.'}
@@ -105,20 +105,20 @@ export default function WeeklySummary() {
                   </>
                 ) : (
                   <>
-                    <p className="tabular text-[28px] font-bold leading-none text-navy-900">
-                      {summary.completed.total} <span className="text-[15px] font-semibold text-muted">{summary.completed.total === 1 ? 'action' : 'actions'}</span>
+                    <p className="tabular text-[1.75rem] font-bold leading-none text-navy-900">
+                      {summary.completed.total} <span className="text-[0.9375rem] font-semibold text-muted">{summary.completed.total === 1 ? 'action' : 'actions'}</span>
                     </p>
-                    <p className="mt-1 text-[13px] text-muted">
+                    <p className="mt-1 text-[0.8125rem] text-muted">
                       on {summary.completed.activeDays} {summary.completed.activeDays === 1 ? 'day' : 'days'} · {summary.range.label}
                     </p>
                     <div className="mt-3 flex items-end gap-1.5" aria-label="Actions by day">
                       {summary.completed.byDay.map((d) => (
                         <div key={d.day} className="flex flex-1 flex-col items-center gap-1" title={`${d.day}: ${d.count}`}>
-                          <span className="tabular text-[10px] font-semibold text-muted">{d.count || ''}</span>
+                          <span className="tabular text-[0.625rem] font-semibold text-muted">{d.count || ''}</span>
                           <div className="flex h-12 w-full items-end">
                             <div className={`w-full rounded-t-md ${d.future ? 'bg-navy-50' : d.count > 0 ? 'bg-mint-500' : 'bg-navy-100'}`} style={{ height: `${d.count > 0 ? Math.max(12, (d.count / maxDay) * 100) : 6}%` }} />
                           </div>
-                          <span className={`text-[10px] font-semibold ${d.isToday ? 'text-navy-900' : 'text-faint'}`}>{d.label}</span>
+                          <span className={`text-[0.625rem] font-semibold ${d.isToday ? 'text-navy-900' : 'text-faint'}`}>{d.label}</span>
                         </div>
                       ))}
                     </div>
@@ -141,12 +141,12 @@ export default function WeeklySummary() {
               <Card className="p-4">
                 {Math.abs(summary.change.delta) < 0.005 ? (
                   <>
-                    <p className="text-[15px] font-semibold text-navy-900">Monthly total held at {formatMoney(summary.change.totalEnd, currency)}</p>
-                    <p className="mt-1 text-[14px] leading-relaxed text-muted">Nothing was added, cancelled or repriced {summary.range.isCurrent ? 'this week' : 'that week'}. Steady is good.</p>
+                    <p className="text-[0.9375rem] font-semibold text-navy-900">Monthly total held at {formatMoney(summary.change.totalEnd, currency)}</p>
+                    <p className="mt-1 text-[0.875rem] leading-relaxed text-muted">Nothing was added, cancelled or repriced {summary.range.isCurrent ? 'this week' : 'that week'}. Steady is good.</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-[15px] font-semibold text-navy-900">
+                    <p className="text-[0.9375rem] font-semibold text-navy-900">
                       Monthly total {summary.change.delta < 0 ? 'down' : 'up'} {formatMoney(Math.abs(summary.change.delta), currency)}
                     </p>
                     <div className="mt-3 flex items-end gap-3">
@@ -157,16 +157,16 @@ export default function WeeklySummary() {
                         const max = Math.max(summary.change.totalStart, summary.change.totalEnd, 1)
                         return (
                           <div key={b.label} className="flex flex-1 flex-col items-center gap-1">
-                            <span className="tabular text-[13px] font-semibold text-navy-900">{formatMoney(b.value, currency)}</span>
+                            <span className="tabular text-[0.8125rem] font-semibold text-navy-900">{formatMoney(b.value, currency)}</span>
                             <div className="flex h-16 w-full items-end">
                               <div className={`w-full rounded-t-md ${b.cls}`} style={{ height: `${Math.max(8, (b.value / max) * 100)}%` }} />
                             </div>
-                            <span className="text-[11px] font-medium text-faint">{b.label}</span>
+                            <span className="text-[0.6875rem] font-medium text-faint">{b.label}</span>
                           </div>
                         )
                       })}
                     </div>
-                    <ul className="mt-3 space-y-1 text-[13px] text-muted">
+                    <ul className="mt-3 space-y-1 text-[0.8125rem] text-muted">
                       {summary.change.freedMonthly > 0 && (
                         <li className="flex items-center gap-2">
                           <Icon name="trendDown" size={14} className="text-mint-700" /> Cancelled plans freed {formatMoney(summary.change.freedMonthly, currency)} a month
@@ -196,9 +196,9 @@ export default function WeeklySummary() {
                     <Icon name={summary.recommendation.icon} size={22} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[16px] font-bold leading-tight text-navy-900">{summary.recommendation.title}</p>
-                    <p className="mt-0.5 text-[13px] leading-snug text-muted">{summary.recommendation.body}</p>
-                    {summary.recommendation.why && <p className="mt-1.5 text-[12px] text-faint">Why: {summary.recommendation.why}</p>}
+                    <p className="text-[1rem] font-bold leading-tight text-navy-900">{summary.recommendation.title}</p>
+                    <p className="mt-0.5 text-[0.8125rem] leading-snug text-muted">{summary.recommendation.body}</p>
+                    {summary.recommendation.why && <p className="mt-1.5 text-[0.75rem] text-faint">Why: {summary.recommendation.why}</p>}
                   </div>
                 </div>
                 <Button full variant={summary.recommendation.tone === 'coral' ? 'coral' : 'mint'} className="mt-3" loading={starting} onClick={go} leading={<Icon name="arrowRight" size={18} />}>

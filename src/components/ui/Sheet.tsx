@@ -107,7 +107,7 @@ export function ConfirmSheet({
 }) {
   return (
     <Sheet open={open} onClose={onClose} title={title}>
-      <p className="text-[15px] leading-relaxed text-muted">{body}</p>
+      <p className="text-[0.9375rem] leading-relaxed text-muted">{body}</p>
       <div className="mt-6 flex gap-3">
         <button onClick={onClose} className="h-12 flex-1 rounded-2xl bg-navy-50 font-semibold text-navy-900">
           Keep it
@@ -115,7 +115,7 @@ export function ConfirmSheet({
         <button
           onClick={onConfirm}
           disabled={loading}
-          className={`h-12 flex-1 rounded-2xl font-semibold text-white disabled:opacity-60 ${tone === 'danger' ? 'bg-coral-500' : 'bg-navy-900'}`}
+          className={`h-12 flex-1 rounded-2xl font-semibold text-white disabled:opacity-60 ${tone === 'danger' ? 'bg-coral-700' : 'bg-navy-900'}`}
         >
           {loading ? 'Working…' : confirmLabel}
         </button>

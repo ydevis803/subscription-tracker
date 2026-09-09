@@ -256,10 +256,10 @@ export default function SubscriptionForm() {
                       >
                         <ServiceMark name={p.name} color={categoryOf(p.categoryId).color} size={32} />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[15px] font-semibold text-ink">{p.name}</span>
-                          <span className="block text-[12px] text-muted">{categoryOf(p.categoryId).name}</span>
+                          <span className="block text-[0.9375rem] font-semibold text-ink">{p.name}</span>
+                          <span className="block text-[0.75rem] text-muted">{categoryOf(p.categoryId).name}</span>
                         </span>
-                        <span className="tabular text-[13px] font-semibold text-navy-800">
+                        <span className="tabular text-[0.8125rem] font-semibold text-navy-800">
                           {formatMoney(localAmount(p.amount, currency), currency)}/{p.billingCycle === 'monthly' ? 'mo' : p.billingCycle === 'yearly' ? 'yr' : p.billingCycle}
                         </span>
                       </button>
@@ -269,7 +269,7 @@ export default function SubscriptionForm() {
               )}
             </div>
             {duplicate && (
-              <p className="flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2.5 text-[13px] text-navy-800">
+              <p className="flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2.5 text-[0.8125rem] text-navy-800">
                 <Icon name="info" size={16} className="mt-0.5 shrink-0 text-navy-700" />
                 <span>
                   You already track <span className="font-semibold">{duplicate.name}</span> at {formatMoney(duplicate.amount, duplicate.currency)} per {CYCLE_LABEL[duplicate.billingCycle]}.{' '}
@@ -297,10 +297,10 @@ export default function SubscriptionForm() {
               value={form.amount}
               onChange={(e) => set('amount', e.target.value.replace(/[^\d.]/g, ''))}
               error={errors.amount}
-              leading={<span className="text-[15px] font-semibold">{currencySymbol(currency)}</span>}
+              leading={<span className="text-[0.9375rem] font-semibold">{currencySymbol(currency)}</span>}
             />
             <div>
-              <span className="mb-1.5 block text-[13px] font-semibold text-navy-800">Billing cycle</span>
+              <span className="mb-1.5 block text-[0.8125rem] font-semibold text-navy-800">Billing cycle</span>
               <SegmentedControl
                 value={form.billingCycle}
                 onChange={(v) => set('billingCycle', v)}
@@ -308,7 +308,7 @@ export default function SubscriptionForm() {
               />
             </div>
             {preview && (
-              <div className="flex items-center justify-between rounded-xl bg-mint-50 px-4 py-3 text-[13px]">
+              <div className="flex items-center justify-between rounded-xl bg-mint-50 px-4 py-3 text-[0.8125rem]">
                 <span className="text-mint-700">Equivalent to</span>
                 <span className="tabular font-semibold text-navy-900">
                   {formatMoney(preview.monthly, currency)}/mo · {formatMoney(preview.yearly, currency)}/yr
@@ -317,7 +317,7 @@ export default function SubscriptionForm() {
             )}
             {amountChanged && existing && (
               <div className="rounded-xl border border-coral-100 bg-coral-50 p-3">
-                <p className="flex items-center gap-2 text-[13px] font-semibold text-coral-700">
+                <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-coral-700">
                   <Icon name="trend" size={16} />
                   Price change from {formatMoney(existing.amount, currency)} to {formatMoney(amountNumber, currency)} will be recorded in history.
                 </p>
@@ -330,7 +330,7 @@ export default function SubscriptionForm() {
 
           <Card className="space-y-4 p-4">
             <div>
-              <span className="mb-1.5 block text-[13px] font-semibold text-navy-800">Status</span>
+              <span className="mb-1.5 block text-[0.8125rem] font-semibold text-navy-800">Status</span>
               <SegmentedControl
                 value={form.status}
                 onChange={(v) => set('status', v)}

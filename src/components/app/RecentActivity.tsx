@@ -49,7 +49,7 @@ export function ContinueCard() {
     <>
       <Card className="p-4">
         <div className="flex items-center justify-between">
-          <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Pick up where you left off</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Pick up where you left off</p>
           <TextLink icon={null} className="h-8" onClick={() => setOpen(true)}>
             History ({items.length})
           </TextLink>
@@ -60,20 +60,20 @@ export function ContinueCard() {
               <Icon name={next.status === 'done' ? 'check' : ICON[next.kind]} size={20} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[15px] font-semibold text-ink">
+              <span className="block text-[0.9375rem] font-semibold text-ink">
                 {next.title}
                 {next.status === 'done' ? ' · completed' : ''}
               </span>
-              <span className="block text-[13px] text-muted">
+              <span className="block text-[0.8125rem] text-muted">
                 {next.subtitle} · {when(next.at)}
               </span>
             </span>
-            <span className="flex h-10 items-center gap-1 rounded-full bg-navy-900 px-3 text-[13px] font-semibold text-white">
+            <span className="flex h-10 items-center gap-1 rounded-full bg-navy-900 px-3 text-[0.8125rem] font-semibold text-white">
               {next.status === 'done' ? 'View' : 'Continue'} <Icon name="arrowRight" size={14} />
             </span>
           </button>
         ) : (
-          <p className="mt-2 text-[13px] text-muted">
+          <p className="mt-2 text-[0.8125rem] text-muted">
             {unfinished > 0 ? 'Your renewal check is waiting above.' : 'Nothing saved yet.'}
           </p>
         )}
@@ -84,7 +84,7 @@ export function ContinueCard() {
           <EmptyState icon="clock" tone="navy" title="No history yet" body="Positions you return to, like a timeline view or a finished renewal check, show up here." />
         ) : (
           <>
-            <p className="text-[13px] text-muted">Clearing an item only removes it from this list. Your subscriptions, checks and notes stay exactly as they are.</p>
+            <p className="text-[0.8125rem] text-muted">Clearing an item only removes it from this list. Your subscriptions, checks and notes stay exactly as they are.</p>
             <ul className="mt-3 divide-y divide-line">
               {items.map((e) => (
                 <li key={e.key} className="flex items-center gap-3 py-2.5">
@@ -99,13 +99,13 @@ export function ContinueCard() {
                     }}
                     className="min-w-0 flex-1 text-left"
                   >
-                    <span className="block text-[14px] font-semibold text-ink">
+                    <span className="block text-[0.875rem] font-semibold text-ink">
                       {e.title}
-                      <span className={`ml-1.5 text-[11px] font-semibold uppercase tracking-wide ${e.status === 'in-progress' ? 'text-coral-700' : e.status === 'done' ? 'text-mint-700' : 'text-faint'}`}>
+                      <span className={`ml-1.5 text-[0.6875rem] font-semibold uppercase tracking-wide ${e.status === 'in-progress' ? 'text-coral-700' : e.status === 'done' ? 'text-mint-700' : 'text-faint'}`}>
                         {e.status === 'in-progress' ? 'in progress' : e.status === 'done' ? 'completed' : 'saved view'}
                       </span>
                     </span>
-                    <span className="block text-[12px] text-muted">
+                    <span className="block text-[0.75rem] text-muted">
                       {e.subtitle} · {when(e.at)}
                     </span>
                   </button>

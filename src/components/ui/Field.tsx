@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 
 interface Base {
@@ -9,32 +10,42 @@ interface Base {
 }
 
 const base =
-  'w-full rounded-2xl border bg-white px-4 text-[16px] text-ink outline-none transition-colors placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10'
+  'w-full rounded-2xl border bg-white px-4 text-[1rem] text-ink transition-colors placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10'
 
-function Wrap({ label, hint, error, children, htmlFor }: Base & { children: ReactNode; htmlFor?: string }) {
+/** Ids for the message under a field, so the input can point at it with aria-describedby and screen readers announce it. */
+export function useFieldIds(): { hintId: string; errorId: string } {
+  const id = useId()
+  return { hintId: `${id}-hint`, errorId: `${id}-error` }
+}
+
+function Wrap({ label, hint, error, children, htmlFor, ids }: Base & { children: ReactNode; htmlFor?: string; ids?: { hintId: string; errorId: string } }) {
   return (
     <label className="block" htmlFor={htmlFor}>
-      <span className="mb-1.5 block text-[13px] font-semibold text-navy-800">{label}</span>
+      <span className="mb-1.5 block text-[0.8125rem] font-semibold text-navy-800">{label}</span>
       {children}
       {error ? (
-        <span className="mt-1.5 block text-[13px] font-medium text-coral-700" role="alert">
+        <span id={ids?.errorId} className="mt-1.5 block text-[0.8125rem] font-medium text-coral-700" role="alert">
           {error}
         </span>
       ) : hint ? (
-        <span className="mt-1.5 block text-[13px] text-muted">{hint}</span>
+        <span id={ids?.hintId} className="mt-1.5 block text-[0.8125rem] text-muted">
+          {hint}
+        </span>
       ) : null}
     </label>
   )
 }
 
 export function TextField({ label, hint, error, trailing, leading, className = '', ...rest }: Base & InputHTMLAttributes<HTMLInputElement>) {
+  const ids = useFieldIds()
   return (
-    <Wrap label={label} hint={hint} error={error}>
+    <Wrap label={label} hint={hint} error={error} ids={ids}>
       <div className="relative">
         {leading && <span className="pointer-events-none absolute inset-y-0 left-0 flex w-12 items-center justify-center text-muted">{leading}</span>}
         <input
           className={`${base} h-13 ${leading ? 'pl-12' : ''} ${trailing ? 'pr-12' : ''} ${error ? 'border-coral-500' : 'border-line'} ${className}`}
           aria-invalid={!!error}
+        aria-describedby={error ? ids.errorId : hint ? ids.hintId : undefined}
           {...rest}
         />
         {trailing && <span className="absolute inset-y-0 right-3 flex items-center text-muted">{trailing}</span>}
@@ -44,12 +55,14 @@ export function TextField({ label, hint, error, trailing, leading, className = '
 }
 
 export function SelectField({ label, hint, error, className = '', children, ...rest }: Base & SelectHTMLAttributes<HTMLSelectElement>) {
+  const ids = useFieldIds()
   return (
-    <Wrap label={label} hint={hint} error={error}>
+    <Wrap label={label} hint={hint} error={error} ids={ids}>
       <div className="relative">
         <select
           className={`${base} h-13 appearance-none pr-10 ${error ? 'border-coral-500' : 'border-line'} ${className}`}
           aria-invalid={!!error}
+        aria-describedby={error ? ids.errorId : hint ? ids.hintId : undefined}
           {...rest}
         >
           {children}
@@ -65,11 +78,13 @@ export function SelectField({ label, hint, error, className = '', children, ...r
 }
 
 export function TextArea({ label, hint, error, className = '', ...rest }: Base & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const ids = useFieldIds()
   return (
-    <Wrap label={label} hint={hint} error={error}>
+    <Wrap label={label} hint={hint} error={error} ids={ids}>
       <textarea
         className={`${base} min-h-[96px] py-3 ${error ? 'border-coral-500' : 'border-line'} ${className}`}
         aria-invalid={!!error}
+        aria-describedby={error ? ids.errorId : hint ? ids.hintId : undefined}
         {...rest}
       />
     </Wrap>
@@ -96,8 +111,8 @@ export function Toggle({
       className="flex min-h-14 w-full items-center gap-4 py-2 text-left"
     >
       <span className="flex-1">
-        <span className="block text-[15px] font-medium text-ink">{label}</span>
-        {description && <span className="block text-[13px] text-muted">{description}</span>}
+        <span className="block text-[0.9375rem] font-medium text-ink">{label}</span>
+        {description && <span className="block text-[0.8125rem] text-muted">{description}</span>}
       </span>
       <span className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${checked ? 'bg-mint-500' : 'bg-navy-200'}`}>
         <span

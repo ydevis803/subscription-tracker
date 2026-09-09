@@ -48,7 +48,7 @@ export default function SignUp() {
       title="Create your account"
       subtitle="Free, and only takes a moment. Everything you have tracked on this device moves into the account."
       footer={
-        <p className="px-1 text-center text-[14px] text-muted">
+        <p className="px-1 text-center text-[0.875rem] text-muted">
           Already have an account?{' '}
           <Link to={`/auth/sign-in?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Sign in
@@ -58,7 +58,7 @@ export default function SignUp() {
     >
       <form onSubmit={submit} className="space-y-4" noValidate>
         {errors.form && (
-          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[14px] font-medium text-coral-700" role="alert">
+          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[0.875rem] font-medium text-coral-700" role="alert">
             <Icon name="alert" size={18} className="mt-0.5 shrink-0" />
             {errors.form}
           </p>
@@ -69,7 +69,7 @@ export default function SignUp() {
         <Button type="submit" full size="lg" variant="mint" loading={busy}>
           Create account
         </Button>
-        <p className="text-center text-[12px] leading-relaxed text-faint">Your password is stored only as a salted hash. We never ask for card details.</p>
+        <p className="text-center text-[0.75rem] leading-relaxed text-faint">Your password is stored only as a salted hash. We never ask for card details.</p>
       </form>
     </AuthLayout>
   )

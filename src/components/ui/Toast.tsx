@@ -45,7 +45,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               t.kind === 'success'
                 ? 'bg-navy-900 text-white'
                 : t.kind === 'error'
-                  ? 'bg-coral-500 text-white'
+                  ? 'bg-coral-700 text-white'
                   : 'bg-white text-ink border border-line'
             }`}
             role="status"

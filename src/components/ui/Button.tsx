@@ -15,14 +15,14 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variantClass: Record<Variant, string> = {
   primary: 'bg-navy-900 text-white hover:bg-navy-800 active:bg-navy-950 disabled:bg-navy-200',
   mint: 'bg-mint-500 text-navy-900 hover:bg-mint-400 active:bg-mint-600 disabled:bg-mint-100 disabled:text-muted',
-  coral: 'bg-coral-500 text-white hover:bg-coral-400 active:bg-coral-600 disabled:bg-coral-100',
+  coral: 'bg-coral-700 text-white hover:bg-coral-600 active:bg-coral-700 disabled:bg-coral-100 disabled:text-coral-700',
   secondary: 'bg-navy-50 text-navy-900 hover:bg-navy-100 active:bg-navy-200 disabled:text-faint',
   ghost: 'bg-transparent text-navy-900 hover:bg-navy-50 active:bg-navy-100 disabled:text-faint',
   danger: 'bg-coral-50 text-coral-700 hover:bg-coral-100 active:bg-coral-100 disabled:text-faint',
 }
 const sizeClass: Record<Size, string> = {
   sm: 'h-11 px-4 text-sm rounded-xl',
-  md: 'h-12 px-5 text-[15px] rounded-2xl',
+  md: 'h-12 px-5 text-[0.9375rem] rounded-2xl',
   lg: 'h-14 px-6 text-base rounded-2xl',
 }
 
@@ -87,7 +87,7 @@ export function TextLink({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement> & { icon?: IconName | null }) {
   return (
-    <button type="button" className={`flex min-h-11 items-center gap-1 text-[13px] font-semibold text-navy-700 hover:text-navy-900 ${className}`} {...rest}>
+    <button type="button" className={`flex min-h-11 items-center gap-1 text-[0.8125rem] font-semibold text-navy-700 hover:text-navy-900 ${className}`} {...rest}>
       {icon === 'plus' && <Icon name="plus" size={16} />}
       {children}
       {icon === 'chevronRight' && <Icon name="chevronRight" size={16} />}
@@ -101,7 +101,7 @@ export function Chip({ selected, children, className = '', ...rest }: ButtonHTML
     <button
       type="button"
       aria-pressed={selected}
-      className={`h-11 rounded-full px-3.5 text-[13px] font-semibold transition-colors ${
+      className={`h-11 rounded-full px-3.5 text-[0.8125rem] font-semibold transition-colors ${
         selected ? 'bg-navy-900 text-white' : 'border border-line bg-white text-muted hover:bg-navy-50'
       } ${className}`}
       {...rest}
@@ -118,7 +118,7 @@ export function Fab({ icon = 'plus', children, ...rest }: ButtonHTMLAttributes<H
       <div className="mx-auto flex max-w-[480px] justify-end px-4">
         <button
           type="button"
-          className="pointer-events-auto flex h-14 items-center gap-2 rounded-full bg-navy-900 pl-4 pr-5 text-[15px] font-semibold text-white shadow-float transition-colors hover:bg-navy-800 active:bg-navy-950"
+          className="pointer-events-auto flex h-14 items-center gap-2 rounded-full bg-navy-900 pl-4 pr-5 text-[0.9375rem] font-semibold text-white shadow-float transition-colors hover:bg-navy-800 active:bg-navy-950"
           {...rest}
         >
           <Icon name={icon} size={22} />

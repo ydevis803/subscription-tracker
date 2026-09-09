@@ -14,7 +14,7 @@ export function Card({ className = '', children, ...rest }: HTMLAttributes<HTMLD
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
     <div className="mb-2 flex items-end justify-between px-1">
-      <h2 className="text-[15px] font-bold text-navy-900">{children}</h2>
+      <h2 className="text-[0.9375rem] font-bold text-navy-900">{children}</h2>
       {action}
     </div>
   )
@@ -36,7 +36,7 @@ export function Badge({
     amber: 'bg-amber-100 text-amber-800',
     gray: 'bg-gray-100 text-gray-600',
   }
-  return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-semibold ${tones[tone]} ${className}`}>{children}</span>
+  return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[0.75rem] font-semibold ${tones[tone]} ${className}`}>{children}</span>
 }
 
 export function Skeleton({ className = '' }: { className?: string }) {
@@ -82,7 +82,7 @@ export function EmptyState({
         <Icon name={icon} size={28} />
       </span>
       <h3 className="text-lg font-bold text-navy-900">{title}</h3>
-      <p className="mt-1.5 max-w-[280px] text-[14px] leading-relaxed text-muted">{body}</p>
+      <p className="mt-1.5 max-w-[280px] text-[0.875rem] leading-relaxed text-muted">{body}</p>
       {actionLabel && onAction && (
         <Button className="mt-5" variant="primary" onClick={onAction}>
           {actionLabel}
@@ -99,7 +99,7 @@ export function ErrorState({ title = 'Something went wrong', body, onRetry }: { 
         <Icon name="alert" size={28} />
       </span>
       <h3 className="text-lg font-bold text-navy-900">{title}</h3>
-      <p className="mt-1.5 max-w-[300px] text-[14px] leading-relaxed text-muted">{body}</p>
+      <p className="mt-1.5 max-w-[300px] text-[0.875rem] leading-relaxed text-muted">{body}</p>
       {onRetry && (
         <Button className="mt-5" variant="secondary" onClick={onRetry} leading={<Icon name="refresh" size={18} />}>
           Try again
@@ -118,8 +118,8 @@ export function ServiceMark({ name, color, size = 44 }: { name: string; color: s
   const text = letters.length >= 2 ? (letters[0][0] + letters[1][0]).toUpperCase() : (letters[0] ?? '?').slice(0, 2).toUpperCase()
   return (
     <span
-      className="flex shrink-0 items-center justify-center rounded-xl font-bold text-white"
-      style={{ width: size, height: size, background: color, fontSize: size * 0.36 }}
+      className="flex shrink-0 items-center justify-center rounded-xl font-bold"
+      style={{ width: size, height: size, background: color, color: readableOn(color), fontSize: size * 0.36 }}
       aria-hidden="true"
     >
       {text}
@@ -154,12 +154,24 @@ export function Divider() {
   return <div className="h-px bg-line" />
 }
 
-export function ProgressBar({ value, max, tone = 'mint' }: { value: number; max: number; tone?: 'mint' | 'coral' | 'navy' }) {
+export function ProgressBar({ value, max, tone = 'mint', label }: { value: number; max: number; tone?: 'mint' | 'coral' | 'navy'; label?: string }) {
   const pct = max <= 0 ? 0 : Math.min(100, Math.round((value / max) * 100))
   const colors = { mint: 'bg-mint-500', coral: 'bg-coral-500', navy: 'bg-navy-600' }
   return (
-    <div className="h-2.5 w-full overflow-hidden rounded-full bg-navy-50" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+    <div className="h-2.5 w-full overflow-hidden rounded-full bg-navy-50" role="progressbar" aria-label={label ?? `${pct}% complete`} aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-valuetext={`${pct}%`}>
       <div className={`h-full rounded-full transition-all ${colors[tone]}`} style={{ width: `${pct}%` }} />
     </div>
   )
+}
+
+/** White where it reads (4.5:1 or better), otherwise navy, so initials stay legible on light category colours like mint. */
+export function readableOn(background: string): string {
+  const hex = background.replace('#', '')
+  if (!/^[0-9a-fA-F]{6}$/.test(hex)) return '#FFFFFF'
+  const channel = (i: number) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+  }
+  const luminance = 0.2126 * channel(0) + 0.7152 * channel(2) + 0.0722 * channel(4)
+  return (1.05) / (luminance + 0.05) >= 4.5 ? '#FFFFFF' : '#0B1F3A'
 }

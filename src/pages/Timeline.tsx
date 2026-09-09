@@ -5,6 +5,7 @@ import type { CategoryId } from '@/db/schema'
 import { useNotes, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
 import { categoryOf, REASON_LABEL } from '@/lib/categories'
 import { formatMoney } from '@/lib/money'
+import { useReducedMotion } from '@/lib/motion'
 import { daysFromToday, daysUntil, formatDate, relativeLower, renewalsInRange, todayISO, type RenewalOccurrence } from '@/lib/dates'
 import { buildRenewalCalendar, buildTimelineSummary } from '@/lib/ics'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -30,7 +31,13 @@ const DEFAULT_VIEW: TimelineView = { horizon: 30, category: null }
 function useCountUp(value: number, ms = 420): number {
   const [shown, setShown] = useState(value)
   const from = useRef(value)
+  const reduced = useReducedMotion()
   useEffect(() => {
+    if (reduced) {
+      from.current = value
+      setShown(value)
+      return
+    }
     const start = performance.now()
     const begin = from.current
     let raf = 0
@@ -43,7 +50,7 @@ function useCountUp(value: number, ms = 420): number {
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [value, ms])
+  }, [value, ms, reduced])
   return shown
 }
 
@@ -189,8 +196,8 @@ export default function Timeline() {
       <Page className="space-y-4 pb-24">
         {!introSeen && settings && (
           <Card className="fade border-navy-800 bg-navy-900 p-4 text-white">
-            <p className="text-[15px] font-semibold">Your money, in the order it leaves</p>
-            <ul className="mt-2 space-y-1.5 text-[13px] leading-snug text-navy-100">
+            <p className="text-[0.9375rem] font-semibold">Your money, in the order it leaves</p>
+            <ul className="mt-2 space-y-1.5 text-[0.8125rem] leading-snug text-navy-100">
               <li className="flex gap-2">
                 <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint-400" /> Each row is one charge, with a running total so you can see what a week really costs.
               </li>
@@ -210,8 +217,8 @@ export default function Timeline() {
         <Card className="p-4">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">{selectedCat ? `${selectedCat.name} in the next ${view.horizon} days` : `Leaving your account in ${view.horizon} days`}</p>
-              {model ? <p className="tabular text-[34px] font-bold leading-none text-navy-900">{formatMoney(animatedTotal, currency)}</p> : <Skeleton className="mt-1 h-9 w-32" />}
+              <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">{selectedCat ? `${selectedCat.name} in the next ${view.horizon} days` : `Leaving your account in ${view.horizon} days`}</p>
+              {model ? <p className="tabular text-[2.125rem] font-bold leading-none text-navy-900">{formatMoney(animatedTotal, currency)}</p> : <Skeleton className="mt-1 h-9 w-32" />}
             </div>
             {selectedCat && (
               <TextLink icon={null} onClick={() => patch({ category: null })}>
@@ -239,7 +246,7 @@ export default function Timeline() {
                 type="button"
                 onClick={() => patch({ horizon: h })}
                 aria-pressed={view.horizon === h}
-                className={`h-11 min-w-11 rounded-full px-2 text-[13px] font-semibold ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted'}`}
+                className={`h-11 min-w-11 rounded-full px-2 text-[0.8125rem] font-semibold ${view.horizon === h ? 'bg-navy-900 text-white' : 'text-muted'}`}
               >
                 {h}d
               </button>
@@ -249,7 +256,7 @@ export default function Timeline() {
 
         {model && model.categories.length > 0 && (
           <Card className="p-4">
-            <p className="text-[15px] font-bold text-navy-900">Category totals</p>
+            <p className="text-[0.9375rem] font-bold text-navy-900">Category totals</p>
             <div className="mt-3 flex h-3 w-full overflow-hidden rounded-full bg-navy-50">
               {model.categories.map((c) => (
                 <div
@@ -266,7 +273,7 @@ export default function Timeline() {
                 <Chip key={c.id} selected={view.category === c.id} onClick={() => patch({ category: view.category === c.id ? null : c.id })} className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full" style={{ background: c.color }} />
                   {c.name}
-                  <span className={`tabular text-[12px] ${view.category === c.id ? 'text-mint-300' : 'text-muted'}`}>{formatMoney(c.total, currency)}</span>
+                  <span className={`tabular text-[0.75rem] ${view.category === c.id ? 'text-mint-300' : 'text-muted'}`}>{formatMoney(c.total, currency)}</span>
                 </Chip>
               ))}
             </div>
@@ -303,8 +310,8 @@ export default function Timeline() {
               <li key={g.label} className="relative">
                 <span className={`absolute top-1.5 -left-5 h-4 w-4 rounded-full border-4 border-canvas ${g.label === 'Today' || g.label === 'This week' ? 'bg-coral-500' : 'bg-mint-500'}`} aria-hidden="true" />
                 <div className="mb-1.5 flex items-baseline justify-between px-1">
-                  <span className="text-[13px] font-bold text-navy-900">{g.label}</span>
-                  <span className="tabular text-[13px] font-semibold text-muted">{formatMoney(g.total, currency)}</span>
+                  <span className="text-[0.8125rem] font-bold text-navy-900">{g.label}</span>
+                  <span className="tabular text-[0.8125rem] font-semibold text-muted">{formatMoney(g.total, currency)}</span>
                 </div>
                 <Card className="divide-y divide-line overflow-hidden">
                   {g.items.map(({ occ, running, key }) => {
@@ -318,19 +325,19 @@ export default function Timeline() {
                         <button type="button" onClick={() => setExpanded(open ? null : key)} aria-expanded={open} className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-navy-50">
                           <ServiceMark name={sub.name} color={cat.color} size={40} />
                           <span className="min-w-0 flex-1">
-                            <span className="block break-words text-[15px] font-semibold text-ink">{sub.name}</span>
-                            <span className={`block text-[12px] ${daysUntil(occ.date) <= lead ? 'font-semibold text-coral-700' : 'text-muted'}`}>
+                            <span className="block break-words text-[0.9375rem] font-semibold text-ink">{sub.name}</span>
+                            <span className={`block text-[0.75rem] ${daysUntil(occ.date) <= lead ? 'font-semibold text-coral-700' : 'text-muted'}`}>
                               {formatDate(occ.date, 'EEE d MMM')} · {relativeLower(occ.date)}
                               {sub.status === 'trial' ? ' · trial converts' : ''}
                             </span>
                           </span>
                           <span className="text-right">
-                            <span className="tabular block text-[15px] font-bold text-navy-900">{formatMoney(occ.amount, sub.currency)}</span>
-                            <span className="tabular block text-[11px] text-faint">so far {formatMoney(running, currency)}</span>
+                            <span className="tabular block text-[0.9375rem] font-bold text-navy-900">{formatMoney(occ.amount, sub.currency)}</span>
+                            <span className="tabular block text-[0.6875rem] text-faint">so far {formatMoney(running, currency)}</span>
                           </span>
                         </button>
                         {subNotes.map((n) => (
-                          <p key={n.id} className="mx-4 mb-3 flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2 text-[13px] leading-snug text-coral-700">
+                          <p key={n.id} className="mx-4 mb-3 flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2 text-[0.8125rem] leading-snug text-coral-700">
                             <Icon name="note" size={14} className="mt-0.5 shrink-0" />
                             <span>
                               <span className="font-semibold">{REASON_LABEL[n.reason]}</span>
@@ -359,7 +366,7 @@ export default function Timeline() {
         )}
 
         {model && model.occurrences.length > 0 && (
-          <p className="px-1 text-center text-[12px] text-faint">
+          <p className="px-1 text-center text-[0.75rem] text-faint">
             {model.openNotes.filter((n) => model.occurrences.some((o) => o.subscription.id === n.subscriptionId)).length} {model.openNotes.filter((n) => model.occurrences.some((o) => o.subscription.id === n.subscriptionId)).length === 1 ? 'note' : 'notes'} on this timeline.{' '}
             {view.category || view.horizon !== 30 ? (
               <button type="button" onClick={reset} className="font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
@@ -392,8 +399,8 @@ export default function Timeline() {
         />
       )}
       <Sheet open={copyText !== null} onClose={() => setCopyText(null)} title="Copy your summary">
-        <p className="text-[14px] text-muted">Your browser blocked automatic copying. Select the text below and copy it.</p>
-        <textarea readOnly value={copyText ?? ''} onFocus={(e) => e.target.select()} className="mt-3 h-56 w-full rounded-2xl border border-line bg-canvas p-3 font-mono text-[12px] text-ink" />
+        <p className="text-[0.875rem] text-muted">Your browser blocked automatic copying. Select the text below and copy it.</p>
+        <textarea readOnly value={copyText ?? ''} onFocus={(e) => e.target.select()} className="mt-3 h-56 w-full rounded-2xl border border-line bg-canvas p-3 font-mono text-[0.75rem] text-ink" />
         <Button full size="lg" variant="secondary" className="mt-3" onClick={() => setCopyText(null)}>
           Done
         </Button>

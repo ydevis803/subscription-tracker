@@ -20,7 +20,7 @@ export function AccountExplainerSheet({ open, onClose, reason, next = '/' }: { o
   }
   return (
     <Sheet open={open} onClose={onClose} title="Keep your subscriptions safe">
-      <p className="text-[15px] leading-relaxed text-muted">
+      <p className="text-[0.9375rem] leading-relaxed text-muted">
         {reason ?? 'Everything you track lives on this device. A free account backs it up so clearing your browser or switching phones never loses it.'}
       </p>
       <ul className="mt-4 space-y-3">
@@ -30,8 +30,8 @@ export function AccountExplainerSheet({ open, onClose, reason, next = '/' }: { o
               <Icon name={r.icon} size={18} />
             </span>
             <span>
-              <span className="block text-[15px] font-semibold text-ink">{r.title}</span>
-              <span className="block text-[13px] leading-snug text-muted">{r.body}</span>
+              <span className="block text-[0.9375rem] font-semibold text-ink">{r.title}</span>
+              <span className="block text-[0.8125rem] leading-snug text-muted">{r.body}</span>
             </span>
           </li>
         ))}
@@ -42,7 +42,7 @@ export function AccountExplainerSheet({ open, onClose, reason, next = '/' }: { o
       <Button full size="lg" variant="ghost" className="mt-2" onClick={() => go('/auth/sign-in')}>
         I already have one
       </Button>
-      <button onClick={onClose} className="mt-1 h-12 w-full rounded-2xl text-[15px] font-semibold text-muted">
+      <button onClick={onClose} className="mt-1 h-12 w-full rounded-2xl text-[0.9375rem] font-semibold text-muted">
         Not now
       </button>
     </Sheet>
@@ -58,8 +58,8 @@ export function SaveProgressCard({ count, onOpen, onDismiss }: { count: number; 
           <Icon name="shield" size={20} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-ink">Save your progress</p>
-          <p className="text-[13px] leading-snug text-muted">
+          <p className="text-[0.9375rem] font-semibold text-ink">Save your progress</p>
+          <p className="text-[0.8125rem] leading-snug text-muted">
             {count} {count === 1 ? 'subscription is' : 'subscriptions are'} only on this device. A free account backs them up and restores them on a new phone.
           </p>
           <div className="mt-3 flex gap-2">

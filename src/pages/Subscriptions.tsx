@@ -167,7 +167,7 @@ export default function Subscriptions() {
           <Card>
             <EmptyState icon="list" title="Know what you pay for" body="Add the subscriptions that leave your account each month and your total, renewals and reminders take care of themselves." actionLabel="Add your first subscription" onAction={onAdd} />
             <div className="px-6 pb-6 text-center">
-              <button type="button" onClick={explore} disabled={loadingSamples} className="h-11 text-[14px] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2 disabled:opacity-60">
+              <button type="button" onClick={explore} disabled={loadingSamples} className="h-11 text-[0.875rem] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2 disabled:opacity-60">
                 {loadingSamples ? 'Adding samples…' : 'Or explore with sample data'}
               </button>
             </div>
@@ -184,7 +184,7 @@ export default function Subscriptions() {
                 onAction={onAdd}
               />
               <div className="px-6 pb-6 text-center">
-                <button type="button" onClick={() => patch({ status: 'cancelled' })} className="h-11 text-[14px] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
+                <button type="button" onClick={() => patch({ status: 'cancelled' })} className="h-11 text-[0.875rem] font-semibold text-navy-700 underline decoration-mint-500 decoration-2 underline-offset-2">
                   Show cancelled
                 </button>
               </div>

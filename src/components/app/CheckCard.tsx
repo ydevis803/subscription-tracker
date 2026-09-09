@@ -47,8 +47,8 @@ export function CheckCard({ subs, currency }: { subs: Subscription[]; currency: 
             <Icon name="clock" size={20} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-semibold">Renewal check in progress</p>
-            <p className="text-[13px] text-navy-100">
+            <p className="text-[0.9375rem] font-semibold">Renewal check in progress</p>
+            <p className="text-[0.8125rem] text-navy-100">
               {active.decisions.length} of {total} reviewed · your progress is saved
             </p>
             <div className="mt-3">
@@ -98,10 +98,10 @@ export function CheckCard({ subs, currency }: { subs: Subscription[]; currency: 
             <Icon name="bell" size={20} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-semibold text-navy-900">
+            <p className="text-[0.9375rem] font-semibold text-navy-900">
               {unchecked.length} new {unchecked.length === 1 ? 'renewal' : 'renewals'} since your last check
             </p>
-            <p className="text-[13px] text-muted">
+            <p className="text-[0.8125rem] text-muted">
               {unchecked.map((o) => o.subscription.name).slice(0, 3).join(', ')}
               {unchecked.length > 3 ? ` and ${unchecked.length - 3} more` : ''} · {formatMoney(amount, currency)} not yet reviewed.
             </p>
@@ -123,8 +123,8 @@ export function CheckCard({ subs, currency }: { subs: Subscription[]; currency: 
             <Icon name="check" size={20} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-semibold text-navy-900">All clear · checked {ago === 0 ? 'today' : ago === 1 ? 'yesterday' : `${ago} days ago`}</p>
-            <p className="text-[13px] text-muted">
+            <p className="text-[0.9375rem] font-semibold text-navy-900">All clear · checked {ago === 0 ? 'today' : ago === 1 ? 'yesterday' : `${ago} days ago`}</p>
+            <p className="text-[0.8125rem] text-muted">
               {s ? `${s.reviewed} ${s.reviewed === 1 ? 'renewal' : 'renewals'} reviewed${s.reminded ? ` · ${s.reminded} ${s.reminded === 1 ? 'reminder' : 'reminders'}` : ''}${s.cancelled ? ` · ${s.cancelled} cancelled` : ''}` : 'Nothing was due.'}
               {' · next check '}
               {formatDate(daysFromToday(CHECK_FRESH_DAYS - ago), 'EEE d MMM')}
@@ -145,8 +145,8 @@ export function CheckCard({ subs, currency }: { subs: Subscription[]; currency: 
           <Icon name="check" size={20} />
         </span>
         <div className="flex-1">
-          <p className="text-[15px] font-semibold text-navy-900">Nothing renews in the next {CHECK_WINDOW_DAYS} days</p>
-          <p className="text-[13px] text-muted">{subs.length === 0 ? 'Add a subscription and we will watch its renewals.' : 'Enjoy the quiet. We will flag the next one here.'}</p>
+          <p className="text-[0.9375rem] font-semibold text-navy-900">Nothing renews in the next {CHECK_WINDOW_DAYS} days</p>
+          <p className="text-[0.8125rem] text-muted">{subs.length === 0 ? 'Add a subscription and we will watch its renewals.' : 'Enjoy the quiet. We will flag the next one here.'}</p>
         </div>
       </Card>
     )
@@ -159,8 +159,8 @@ export function CheckCard({ subs, currency }: { subs: Subscription[]; currency: 
           <Icon name="sparkle" size={20} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-navy-900">Check your next {CHECK_WINDOW_DAYS} days</p>
-          <p className="text-[13px] text-muted">
+          <p className="text-[0.9375rem] font-semibold text-navy-900">Check your next {CHECK_WINDOW_DAYS} days</p>
+          <p className="text-[0.8125rem] text-muted">
             {upcoming.length} {upcoming.length === 1 ? 'renewal' : 'renewals'} worth {formatMoney(due, currency)}. One tap each, about a minute in total.
             {latest?.completedAt ? ` Last checked ${formatDate(localDay(latest.completedAt), 'd MMM')}.` : ''}
           </p>

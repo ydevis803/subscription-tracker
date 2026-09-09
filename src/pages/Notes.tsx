@@ -102,14 +102,14 @@ export default function Notes() {
             </Card>
             {suggestions.length > 0 && (
               <Card className="p-4">
-                <p className="text-[15px] font-bold text-navy-900">Start with what renews soonest</p>
+                <p className="text-[0.9375rem] font-bold text-navy-900">Start with what renews soonest</p>
                 <ul className="mt-2 divide-y divide-line">
                   {suggestions.map((o) => (
                     <li key={`${o.subscription.id}-${o.date}`} className="flex items-center gap-3 py-2">
                       <ServiceMark name={o.subscription.name} color={categoryOf(o.subscription.categoryId).color} size={36} />
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-semibold text-ink">{o.subscription.name}</span>
-                        <span className="block text-[12px] text-muted">{formatMoney(o.amount, o.subscription.currency)} · renews {relativeLower(o.date)}</span>
+                        <span className="block text-[0.875rem] font-semibold text-ink">{o.subscription.name}</span>
+                        <span className="block text-[0.75rem] text-muted">{formatMoney(o.amount, o.subscription.currency)} · renews {relativeLower(o.date)}</span>
                       </span>
                       <Button size="sm" variant="secondary" onClick={() => setTarget(o.subscription.id!)}>
                         Add note
@@ -125,26 +125,26 @@ export default function Notes() {
             <Card className="p-4">
               <div className="flex items-end justify-between gap-3">
                 <div>
-                  <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Decisions made</p>
-                  <p className="tabular text-[28px] font-bold leading-none text-navy-900">
-                    {progress.done} <span className="text-[16px] font-semibold text-muted">of {progress.total}</span>
+                  <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Decisions made</p>
+                  <p className="tabular text-[1.75rem] font-bold leading-none text-navy-900">
+                    {progress.done} <span className="text-[1rem] font-semibold text-muted">of {progress.total}</span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Freed per month</p>
-                  <p className={`tabular text-[22px] font-bold leading-none ${progress.freedMonthly > 0 ? 'text-mint-700' : 'text-navy-900'}`}>{formatMoney(progress.freedMonthly, currency)}</p>
+                  <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Freed per month</p>
+                  <p className={`tabular text-[1.375rem] font-bold leading-none ${progress.freedMonthly > 0 ? 'text-mint-700' : 'text-navy-900'}`}>{formatMoney(progress.freedMonthly, currency)}</p>
                 </div>
               </div>
               <div className="mt-3">
                 <ProgressBar value={progress.done} max={Math.max(progress.total, 1)} tone={progress.overdue > 0 ? 'coral' : 'mint'} />
               </div>
-              <p className="mt-2 text-[13px] text-muted">
+              <p className="mt-2 text-[0.8125rem] text-muted">
                 {progress.open === 0
                   ? 'Everything is decided.'
                   : `${progress.open} still to decide${progress.overdue > 0 ? ` · ${progress.overdue} overdue` : progress.dueSoon > 0 ? ` · ${progress.dueSoon} due within ${lead} ${lead === 1 ? 'day' : 'days'}` : ''}`}
                 {progress.decidedThisWeek > 0 ? ` · ${progress.decidedThisWeek} decided this week` : ''}
               </p>
-              <p className="mt-2 flex items-center gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[13px] text-navy-800">
+              <p className="mt-2 flex items-center gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[0.8125rem] text-navy-800">
                 <Icon name="sparkle" size={16} className="shrink-0 text-mint-700" />
                 <span>
                   {progress.nextDecisionMilestone !== null
@@ -157,19 +157,19 @@ export default function Notes() {
 
             {progress.nextUp && (
               <Card className={`p-4 ${progress.nextUp.note.remindOn && progress.nextUp.note.remindOn < todayISO() ? 'border-coral-100' : 'border-mint-100'}`}>
-                <p className="text-[12px] font-semibold uppercase tracking-wide text-faint">Next up</p>
+                <p className="text-[0.75rem] font-semibold uppercase tracking-wide text-faint">Next up</p>
                 <button onClick={() => navigate(`/subscriptions/${progress.nextUp!.sub.id}`)} className="mt-2 flex min-h-11 w-full items-center gap-3 text-left">
                   <ServiceMark name={progress.nextUp.sub.name} color={categoryOf(progress.nextUp.sub.categoryId).color} size={40} />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[15px] font-semibold text-ink">{progress.nextUp.sub.name}</span>
-                    <span className="block text-[12px] text-muted">
+                    <span className="block text-[0.9375rem] font-semibold text-ink">{progress.nextUp.sub.name}</span>
+                    <span className="block text-[0.75rem] text-muted">
                       {formatMoney(progress.nextUp.sub.amount, progress.nextUp.sub.currency)}
                       {progress.nextUp.sub.status === 'cancelled' ? ' · cancelled' : ` · renews ${relativeLower(progress.nextUp.sub.nextRenewalDate)}`}
                       {progress.nextUp.note.remindOn ? ` · decide ${relativeLower(progress.nextUp.note.remindOn)}${progress.nextUp.note.remindOn < todayISO() ? ' (overdue)' : ''}` : ''}
                     </span>
                   </span>
                 </button>
-                <p className="mt-2 text-[14px] leading-relaxed text-ink">{progress.nextUp.note.content}</p>
+                <p className="mt-2 text-[0.875rem] leading-relaxed text-ink">{progress.nextUp.note.content}</p>
                 <div className="mt-3 grid grid-cols-3 gap-2">
                   <Button size="sm" variant="mint" loading={busyAction} disabled={busyAction} onClick={() => act(`Keeping ${progress.nextUp!.sub.name}`, () => decideNote(progress.nextUp!.note.id!, 'keep'))} leading={<Icon name="check" size={16} />}>
                     Keep
@@ -186,13 +186,13 @@ export default function Notes() {
 
             {progress.open === 0 && !filtersActive && (
               <Card className="border-mint-100 bg-mint-50 p-4">
-                <p className="flex items-center gap-2 text-[15px] font-semibold text-navy-900">
+                <p className="flex items-center gap-2 text-[0.9375rem] font-semibold text-navy-900">
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-mint-500 text-navy-900">
                     <Icon name="check" size={16} />
                   </span>
                   All {progress.total} {progress.total === 1 ? 'decision' : 'decisions'} made
                 </p>
-                <p className="mt-1 text-[13px] text-muted">
+                <p className="mt-1 text-[0.8125rem] text-muted">
                   {progress.freedMonthly > 0 ? `${formatMoney(progress.freedMonthly, currency)} a month no longer leaves your account. ` : ''}
                   {suggestions.length > 0 ? `Next: ${suggestions[0].subscription.name} renews ${relativeLower(suggestions[0].date)}. Worth a note?` : 'Nothing renews in the next 30 days without a note.'}
                 </p>
@@ -216,7 +216,7 @@ export default function Notes() {
             {model.open.length === 0 && filtersActive && model.done.length === 0 ? (
               <FilteredEmpty query={view.query} filters={view.reasons.map((r) => REASON_LABEL[r])} noun="notes" onClear={reset} />
             ) : model.open.length === 0 ? (
-              <Card className="p-4 text-[14px] text-muted">{filtersActive ? 'No open notes match. Completed matches are below.' : 'Everything is decided. Nice.'}</Card>
+              <Card className="p-4 text-[0.875rem] text-muted">{filtersActive ? 'No open notes match. Completed matches are below.' : 'Everything is decided. Nice.'}</Card>
             ) : (
               <div className="space-y-2">
                 {model.open.map(({ note, sub }) => {
@@ -226,8 +226,8 @@ export default function Notes() {
                       <button onClick={() => navigate(`/subscriptions/${sub!.id}`)} className="flex min-h-11 w-full items-center gap-3 text-left">
                         <ServiceMark name={sub!.name} color={categoryOf(sub!.categoryId).color} size={36} />
                         <span className="min-w-0 flex-1">
-                          <span className="block break-words text-[15px] font-semibold text-ink">{sub!.name}</span>
-                          <span className="block text-[12px] text-muted">
+                          <span className="block break-words text-[0.9375rem] font-semibold text-ink">{sub!.name}</span>
+                          <span className="block text-[0.75rem] text-muted">
                             {formatMoney(sub!.amount, sub!.currency)} · {sub!.status === 'cancelled' ? 'cancelled' : `renews ${relativeLower(sub!.nextRenewalDate)}`}
                           </span>
                         </span>
@@ -241,7 +241,7 @@ export default function Notes() {
                           </Badge>
                         )}
                       </div>
-                      <p className="mt-2 text-[14px] leading-relaxed text-ink">{note.content}</p>
+                      <p className="mt-2 text-[0.875rem] leading-relaxed text-ink">{note.content}</p>
                       <div className="mt-3 flex gap-2">
                         <Button variant="mint" size="sm" className="flex-1" disabled={busyAction} leading={<Icon name="check" size={16} />} onClick={() => act('Marked as done', () => updateNote(note.id!, { status: 'done' }))}>
                           Done
@@ -272,12 +272,12 @@ export default function Notes() {
                       <Card key={note.id} className="p-4 opacity-70">
                         <div className="flex items-center gap-3">
                           <ServiceMark name={sub!.name} color="#A0AEC0" size={32} />
-                          <span className="flex-1 text-[14px] font-semibold text-ink">{sub!.name}</span>
+                          <span className="flex-1 text-[0.875rem] font-semibold text-ink">{sub!.name}</span>
                           <Button variant="secondary" size="sm" onClick={() => act('Reopened', () => updateNote(note.id!, { status: 'open' }))}>
                             Reopen
                           </Button>
                         </div>
-                        <p className="mt-2 text-[13px] text-muted line-through">{note.content}</p>
+                        <p className="mt-2 text-[0.8125rem] text-muted line-through">{note.content}</p>
                       </Card>
                     ))}
                   </div>
@@ -303,8 +303,8 @@ export default function Notes() {
                   className="flex min-h-14 w-full items-center gap-3 py-2 text-left"
                 >
                   <ServiceMark name={s.name} color={categoryOf(s.categoryId).color} size={36} />
-                  <span className="flex-1 text-[15px] font-semibold text-ink">{s.name}</span>
-                  <span className="text-[13px] text-muted">{formatMoney(s.amount, s.currency)}</span>
+                  <span className="flex-1 text-[0.9375rem] font-semibold text-ink">{s.name}</span>
+                  <span className="text-[0.8125rem] text-muted">{formatMoney(s.amount, s.currency)}</span>
                 </button>
               </li>
             ))}

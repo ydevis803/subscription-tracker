@@ -56,7 +56,7 @@ export function SearchField({ value, onChange, placeholder, label }: { value: st
         placeholder={placeholder}
         aria-label={label}
         enterKeyHint="search"
-        className="h-12 w-full rounded-2xl border border-line bg-white pl-11 pr-11 text-[16px] outline-none placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10"
+        className="h-12 w-full rounded-2xl border border-line bg-white pl-11 pr-11 text-[1rem] placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10"
       />
       {value && (
         <button type="button" onClick={() => onChange('')} aria-label="Clear search" className="absolute inset-y-0 right-1 my-auto flex h-10 w-10 items-center justify-center rounded-full text-muted hover:bg-navy-50">
@@ -95,13 +95,13 @@ export function ChipRow<T extends string>({
   }
   return (
     <div role="group" aria-label={label}>
-      <span className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-faint">{label}</span>
+      <span className="mb-1.5 block text-[0.75rem] font-semibold uppercase tracking-wide text-faint">{label}</span>
       <div className="flex flex-wrap gap-2">
         {options.map((o) => (
           <Chip key={o.value} selected={isOn(o.value)} onClick={() => toggle(o.value)} className="flex items-center gap-1.5">
             {o.dot && <span className="h-2 w-2 rounded-full" style={{ background: o.dot }} />}
             {o.label}
-            {o.count !== undefined && <span className={`text-[11px] ${isOn(o.value) ? 'text-mint-300' : 'text-faint'}`}>{o.count}</span>}
+            {o.count !== undefined && <span className={`text-[0.6875rem] ${isOn(o.value) ? 'text-mint-300' : 'text-faint'}`}>{o.count}</span>}
           </Chip>
         ))}
       </div>
@@ -112,7 +112,7 @@ export function ChipRow<T extends string>({
 export function SortSelect<T extends string>({ value, onChange, options, label = 'Sort' }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[]; label?: string }) {
   return (
     <div className="relative">
-      <select value={value} onChange={(e) => onChange(e.target.value as T)} aria-label={label} className="h-11 w-full appearance-none rounded-xl border border-line bg-white pl-3 pr-9 text-[14px] font-medium outline-none">
+      <select value={value} onChange={(e) => onChange(e.target.value as T)} aria-label={label} className="h-11 w-full appearance-none rounded-xl border border-line bg-white pl-3 pr-9 text-[0.875rem] font-medium">
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {label}: {o.label}
@@ -131,11 +131,11 @@ export function FilterToggle({ open, count, onClick }: { open: boolean; count: n
       type="button"
       onClick={onClick}
       aria-expanded={open}
-      className={`flex h-11 items-center gap-2 rounded-xl border px-3.5 text-[14px] font-semibold transition-colors ${count > 0 ? 'border-navy-900 bg-navy-900 text-white' : 'border-line bg-white text-navy-800'}`}
+      className={`flex h-11 items-center gap-2 rounded-xl border px-3.5 text-[0.875rem] font-semibold transition-colors ${count > 0 ? 'border-navy-900 bg-navy-900 text-white' : 'border-line bg-white text-navy-800'}`}
     >
       <Icon name="settings" size={16} />
       Filters
-      {count > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-mint-500 px-1 text-[11px] font-bold text-navy-900">{count}</span>}
+      {count > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-mint-500 px-1 text-[0.6875rem] font-bold text-navy-900">{count}</span>}
       <Icon name="chevronDown" size={16} className={open ? 'rotate-180' : ''} />
     </button>
   )
@@ -145,7 +145,7 @@ export function FilterToggle({ open, count, onClick }: { open: boolean; count: n
 export function ResultsBar({ shown, total, noun, active, onClear, extra }: { shown: number; total: number; noun: string; active: boolean; onClear: () => void; extra?: ReactNode }) {
   return (
     <div className="flex min-h-10 items-center justify-between gap-3 px-1">
-      <span className="text-[13px] text-muted">
+      <span className="text-[0.8125rem] text-muted">
         {active ? (
           <>
             Showing <span className="font-semibold text-navy-900">{shown}</span> of {total} {noun}
@@ -158,7 +158,7 @@ export function ResultsBar({ shown, total, noun, active, onClear, extra }: { sho
         {extra}
       </span>
       {active && (
-        <button type="button" onClick={onClear} className="flex h-10 items-center gap-1 rounded-full bg-coral-50 px-3 text-[13px] font-semibold text-coral-700 hover:bg-coral-100">
+        <button type="button" onClick={onClear} className="flex h-10 items-center gap-1 rounded-full bg-coral-50 px-3 text-[0.8125rem] font-semibold text-coral-700 hover:bg-coral-100">
           <Icon name="x" size={14} /> Clear filters
         </button>
       )}

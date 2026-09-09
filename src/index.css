@@ -19,7 +19,7 @@
   --color-mint-100: #CCFBF1;
   --color-mint-50: #F0FDFA;
 
-  --color-coral-700: #C2402F;
+  --color-coral-700: #B03A2B;
   --color-coral-600: #E85A48;
   --color-coral-500: #FF6B5B;
   --color-coral-400: #FF7A6B;
@@ -29,7 +29,7 @@
 
   --color-ink: #0B1F3A;
   --color-muted: #5B6B82;
-  --color-faint: #8A97AB;
+  --color-faint: #5F6F86;
   --color-surface: #FFFFFF;
   --color-canvas: #F4F6FA;
   --color-line: #E4E9F1;
@@ -53,6 +53,9 @@
   }
   input, select, textarea, button { font: inherit; color: inherit; }
   button { cursor: pointer; }
+  /* One visible focus style everywhere: a mint ring that reads on white, canvas and navy. */
+  :focus-visible { outline: 3px solid var(--color-mint-600); outline-offset: 2px; border-radius: 0.5rem; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; }
 }
 .tabular { font-variant-numeric: tabular-nums; }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
@@ -93,7 +96,9 @@ input.horizon::-moz-range-thumb { width: 20px; height: 20px; border-radius: 9999
 }
 .confetti-dot { animation: burst 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .pop, .confetti-dot, .rise, .sheet-up, .fade { animation: none !important; }
+  /* Nothing decorative moves: entrances, celebrations, shimmer and count-ups are all skipped. */
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .pop, .confetti-dot, .rise, .sheet-up, .fade, .skeleton { animation: none !important; }
   .confetti-dot { display: none; }
 }
 @keyframes pop {

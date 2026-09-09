@@ -56,7 +56,7 @@ export function Donut({ totals, size = 150, currency }: { totals: CategoryTotal[
           })}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-faint">per month</span>
+        <span className="text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">per month</span>
         <span className="tabular text-lg font-bold text-navy-900">{formatMoney(total, currency, { compact: true })}</span>
       </div>
     </div>
@@ -70,11 +70,11 @@ export function CategoryBars({ totals, currency, limit }: { totals: CategoryTota
     <ul className="space-y-3">
       {list.map((t) => (
         <li key={t.id}>
-          <div className="mb-1 flex items-center justify-between text-[14px]">
+          <div className="mb-1 flex items-center justify-between text-[0.875rem]">
             <span className="flex items-center gap-2 font-medium text-ink">
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: t.color }} />
               {t.name}
-              <span className="text-[12px] text-faint">
+              <span className="text-[0.75rem] text-faint">
                 {t.count} {t.count === 1 ? 'item' : 'items'}
               </span>
             </span>

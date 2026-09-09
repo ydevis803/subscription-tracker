@@ -17,9 +17,9 @@ export function InviteCard({ settings, reason }: { settings: Settings; reason: s
           <Icon name="gift" size={22} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-mint-700">{reason}</p>
-          <p className="text-[16px] font-bold leading-tight text-navy-900">Know someone who would like this feeling?</p>
-          <p className="mt-1 text-[13px] leading-snug text-muted">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-mint-700">{reason}</p>
+          <p className="text-[1rem] font-bold leading-tight text-navy-900">Know someone who would like this feeling?</p>
+          <p className="mt-1 text-[0.8125rem] leading-snug text-muted">
             {progress.next ? `Send a personal invitation. ${progress.next.at - progress.count === 1 ? 'One more' : `${progress.next.at - progress.count} more`} earns the ${progress.next.title} badge.` : 'Send a personal invitation with your link.'}
           </p>
         </div>

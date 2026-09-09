@@ -32,7 +32,7 @@ export function BottomNav() {
               key={it.to}
               to={it.to}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex h-16 flex-1 flex-col items-center justify-center gap-1 text-[11px] font-semibold transition-colors ${
+              className={`flex h-16 flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-semibold transition-colors ${
                 isActive ? 'text-navy-900' : 'text-faint hover:text-muted'
               }`}
             >

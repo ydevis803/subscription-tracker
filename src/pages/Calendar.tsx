@@ -236,7 +236,7 @@ export default function Calendar() {
                 setSelectedDay(null)
               }}
             />
-            <h2 className="text-[17px] font-bold text-navy-900">{format(month, 'MMMM yyyy')}</h2>
+            <h2 className="text-[1.0625rem] font-bold text-navy-900">{format(month, 'MMMM yyyy')}</h2>
             <IconButton
               icon="chevronRight"
               label="Next month"
@@ -246,7 +246,7 @@ export default function Calendar() {
               }}
             />
           </div>
-          <div className="-mx-3 grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-faint">
+          <div className="-mx-3 grid grid-cols-7 text-center text-[0.6875rem] font-semibold uppercase tracking-wide text-faint">
             {weekdayLabels.map((d, i) => (
               <span key={i} className="py-1">
                 {d}
@@ -256,7 +256,7 @@ export default function Calendar() {
           {!model ? (
             <Skeleton className="mt-2 h-56" />
           ) : (
-            <div className="-mx-3 mt-1 grid grid-cols-7 gap-y-1" role="grid" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div className="-mx-3 mt-1 grid grid-cols-7 gap-y-1" role="group" aria-label="Days of the month" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
               {days.map((d) => {
                 const iso = toISO(d)
                 const inMonth = isSameMonth(d, month)
@@ -270,8 +270,7 @@ export default function Calendar() {
                 return (
                   <button
                     key={iso}
-                    role="gridcell"
-                    aria-selected={selected}
+                    aria-current={selected ? 'date' : undefined}
                     aria-label={`${formatDate(iso, 'd MMMM')}${items.length ? `, ${items.length} ${isPaidDay ? 'paid' : 'renewals'}, ${formatMoney(dayTotal, currency)}` : ''}`}
                     disabled={!inMonth}
                     onClick={() => {
@@ -283,7 +282,7 @@ export default function Calendar() {
                       !inMonth ? 'text-navy-100' : selected ? 'bg-navy-900 text-white' : isToday ? 'bg-mint-100 text-navy-900' : 'text-ink hover:bg-navy-50'
                     }`}
                   >
-                    <span className={`text-[14px] leading-none ${isToday || items.length ? 'font-bold' : 'font-medium'}`}>{format(d, 'd')}</span>
+                    <span className={`text-[0.875rem] leading-none ${isToday || items.length ? 'font-bold' : 'font-medium'}`}>{format(d, 'd')}</span>
                     {items.length > 0 && inMonth && (
                       <>
                         <span className="mt-1 flex gap-0.5">
@@ -291,7 +290,7 @@ export default function Calendar() {
                             <span key={i} className={`h-1.5 w-1.5 rounded-full ${isPaidDay ? 'opacity-40' : ''}`} style={{ background: selected ? '#5EEAD4' : categoryOf(o.subscription.categoryId).color }} />
                           ))}
                         </span>
-                        <span className={`tabular mt-0.5 text-[10px] font-semibold ${selected ? 'text-mint-300' : isPaidDay ? 'text-faint line-through' : 'text-muted'}`}>{formatMoney(dayTotal, currency, { compact: true }).replace(/\.00$/, '')}</span>
+                        <span className={`tabular mt-0.5 text-[0.625rem] font-semibold ${selected ? 'text-mint-300' : isPaidDay ? 'text-faint line-through' : 'text-muted'}`}>{formatMoney(dayTotal, currency, { compact: true }).replace(/\.00$/, '')}</span>
                       </>
                     )}
                   </button>
@@ -308,8 +307,8 @@ export default function Calendar() {
                 <Icon name="check" size={20} />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-[15px] font-semibold text-navy-900">{format(month, 'MMMM')} is settled</p>
-                <p className="text-[13px] text-muted">
+                <p className="text-[0.9375rem] font-semibold text-navy-900">{format(month, 'MMMM')} is settled</p>
+                <p className="text-[0.8125rem] text-muted">
                   {model.paid.length > 0 ? `${model.paid.length} ${model.paid.length === 1 ? 'charge' : 'charges'} worth ${formatMoney(model.paidTotal, currency)} already went out.` : 'Nothing was charged this month.'}{' '}
                   {model.nextMonth.length > 0
                     ? `Next up: ${format(addMonths(month, 1), 'MMMM')}, ${formatMoney(model.nextMonth.reduce((s, o) => s + o.amount, 0), currency)} across ${model.nextMonth.length} ${model.nextMonth.length === 1 ? 'renewal' : 'renewals'}.`
@@ -331,8 +330,8 @@ export default function Calendar() {
         {model && model.categories.length > 0 && (
           <Card className="p-4">
             <div className="flex items-baseline justify-between">
-              <h3 className="text-[15px] font-bold text-navy-900">Category totals</h3>
-              {isCurrentMonth && <span className="text-[12px] text-muted">{formatMoney(model.remaining, currency)} still to come</span>}
+              <h3 className="text-[0.9375rem] font-bold text-navy-900">Category totals</h3>
+              {isCurrentMonth && <span className="text-[0.75rem] text-muted">{formatMoney(model.remaining, currency)} still to come</span>}
             </div>
             <div className="mt-3 flex h-3 w-full overflow-hidden rounded-full bg-navy-50">
               {model.categories.map((c) => (
@@ -341,7 +340,7 @@ export default function Calendar() {
             </div>
             <ul className="mt-3 grid grid-cols-1 gap-x-4 gap-y-2 min-[380px]:grid-cols-2">
               {model.categories.map((c) => (
-                <li key={c.name} className="flex items-center justify-between gap-2 text-[13px]">
+                <li key={c.name} className="flex items-center justify-between gap-2 text-[0.8125rem]">
                   <span className="flex min-w-0 items-center gap-2 text-ink">
                     <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: c.color }} />
                     <span className="break-words">{c.name}</span>
@@ -355,7 +354,7 @@ export default function Calendar() {
 
         <section>
           <div className="mb-2 flex items-center justify-between px-1">
-            <h2 className="text-[15px] font-bold text-navy-900">{selectedDay ? formatDate(selectedDay, 'EEEE d MMMM') : 'Timeline'}</h2>
+            <h2 className="text-[0.9375rem] font-bold text-navy-900">{selectedDay ? formatDate(selectedDay, 'EEEE d MMMM') : 'Timeline'}</h2>
             {!selectedDay && <TextLink onClick={() => navigate('/timeline')}>Rolling timeline</TextLink>}
             {selectedDay && (
               <TextLink icon={null} onClick={() => setSelectedDay(null)}>
@@ -407,11 +406,11 @@ export default function Calendar() {
                   <li key={g.date} className="relative">
                     <span className={`absolute top-1.5 -left-5 h-4 w-4 rounded-full border-4 border-canvas ${g.date === today ? 'bg-coral-500' : past ? 'bg-navy-200' : 'bg-mint-500'}`} aria-hidden="true" />
                     <div className="mb-1.5 flex items-baseline justify-between px-1">
-                      <span className={`text-[13px] font-bold ${past ? 'text-faint' : 'text-navy-900'}`}>
+                      <span className={`text-[0.8125rem] font-bold ${past ? 'text-faint' : 'text-navy-900'}`}>
                         {formatDate(g.date, 'EEE d MMM')}
                         <span className="ml-2 font-medium text-muted">{g.date === today ? 'Today' : formatRelative(g.date)}</span>
                       </span>
-                      <span className={`tabular text-[13px] font-semibold ${past ? 'text-faint' : 'text-navy-900'}`}>{formatMoney(dayTotal, currency)}</span>
+                      <span className={`tabular text-[0.8125rem] font-semibold ${past ? 'text-faint' : 'text-navy-900'}`}>{formatMoney(dayTotal, currency)}</span>
                     </div>
                     <Card className={`divide-y divide-line overflow-hidden ${past ? 'opacity-60' : ''}`}>
                       {g.items.map((o) => {
@@ -426,16 +425,16 @@ export default function Calendar() {
                             <span className="flex items-center gap-3">
                               <ServiceMark name={o.subscription.name} color={cat.color} size={40} />
                               <span className="min-w-0 flex-1">
-                                <span className="block break-words text-[15px] font-semibold text-ink">{o.subscription.name}</span>
-                                <span className="block text-[12px] text-muted">
+                                <span className="block break-words text-[0.9375rem] font-semibold text-ink">{o.subscription.name}</span>
+                                <span className="block text-[0.75rem] text-muted">
                                   {cat.name}
                                   {o.subscription.status === 'trial' ? ' · trial converts to paid' : ''}
                                 </span>
                               </span>
-                              <span className="tabular text-[15px] font-bold text-navy-900">{formatMoney(o.amount, o.subscription.currency)}</span>
+                              <span className="tabular text-[0.9375rem] font-bold text-navy-900">{formatMoney(o.amount, o.subscription.currency)}</span>
                             </span>
                             {subNotes.map((n) => (
-                              <span key={n.id} className="mt-2 flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2 text-[13px] leading-snug text-coral-700">
+                              <span key={n.id} className="mt-2 flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2 text-[0.8125rem] leading-snug text-coral-700">
                                 <Icon name="note" size={14} className="mt-0.5 shrink-0" />
                                 <span>
                                   <span className="font-semibold">{REASON_LABEL[n.reason]}</span>
@@ -526,13 +525,13 @@ function DaySheet({
         <>
           {allLogged ? (
             <div className="fade rounded-2xl bg-mint-50 p-4">
-              <p className="flex items-center gap-2 text-[15px] font-semibold text-navy-900">
+              <p className="flex items-center gap-2 text-[0.9375rem] font-semibold text-navy-900">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-mint-500 text-navy-900">
                   <Icon name="check" size={16} />
                 </span>
                 {isToday ? "Today's charges are logged" : 'All charges for this day are logged'}
               </p>
-              <ul className="mt-2 space-y-1 text-[13px] text-muted">
+              <ul className="mt-2 space-y-1 text-[0.8125rem] text-muted">
                 {justPaid.map((p, i) => (
                   <li key={i}>
                     {p.name} paid · next {formatDate(p.next, 'd MMM')}
@@ -540,16 +539,16 @@ function DaySheet({
                 ))}
               </ul>
               {nextAfter && (
-                <p className="mt-2 text-[13px] text-navy-800">
+                <p className="mt-2 text-[0.8125rem] text-navy-800">
                   Next up: <span className="font-semibold">{nextAfter.subscription.name}</span> on {formatDate(nextAfter.date, 'EEE d MMM')} for {formatMoney(nextAfter.amount, currency)}.
                 </p>
               )}
             </div>
           ) : upcoming.length + paid.length === 0 ? (
-            <p className="rounded-2xl bg-navy-50 px-4 py-3 text-[14px] text-navy-800">{isPast ? 'Nothing was charged on this day.' : 'Nothing is due on this day.'}</p>
+            <p className="rounded-2xl bg-navy-50 px-4 py-3 text-[0.875rem] text-navy-800">{isPast ? 'Nothing was charged on this day.' : 'Nothing is due on this day.'}</p>
           ) : (
             <>
-              <p className="tabular text-[13px] text-muted">
+              <p className="tabular text-[0.8125rem] text-muted">
                 {upcoming.length + paid.length} {upcoming.length + paid.length === 1 ? 'charge' : 'charges'} · {formatMoney(total, currency)}
               </p>
               <ul className="mt-2 divide-y divide-line">
@@ -561,13 +560,13 @@ function DaySheet({
                       <div className="flex items-center gap-3">
                         <ServiceMark name={sub.name} color={done ? '#A0AEC0' : cat.color} size={40} />
                         <button type="button" onClick={() => onOpen(sub)} className="min-h-11 min-w-0 flex-1 text-left">
-                          <span className="block text-[15px] font-semibold text-ink">{sub.name}</span>
-                          <span className="block text-[12px] text-muted">
+                          <span className="block text-[0.9375rem] font-semibold text-ink">{sub.name}</span>
+                          <span className="block text-[0.75rem] text-muted">
                             {cat.name}
                             {done ? ' · paid' : sub.status === 'trial' ? ' · trial converts' : ''}
                           </span>
                         </button>
-                        <span className={`tabular text-[15px] font-bold ${done ? 'text-faint line-through' : 'text-navy-900'}`}>{formatMoney(o.amount, sub.currency)}</span>
+                        <span className={`tabular text-[0.9375rem] font-bold ${done ? 'text-faint line-through' : 'text-navy-900'}`}>{formatMoney(o.amount, sub.currency)}</span>
                       </div>
                       {!done && day <= today && (
                         <div className="mt-2 flex gap-2">

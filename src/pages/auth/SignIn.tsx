@@ -62,7 +62,7 @@ export default function SignIn() {
       title="Sign in"
       subtitle="Pick up exactly where you left off, on any device."
       footer={
-        <p className="px-1 text-center text-[14px] text-muted">
+        <p className="px-1 text-center text-[0.875rem] text-muted">
           New here?{' '}
           <Link to={`/auth/sign-up?next=${encodeURIComponent(next)}`} className="inline-flex min-h-11 items-center font-semibold text-navy-800 underline decoration-mint-500 decoration-2 underline-offset-2">
             Create a free account
@@ -72,7 +72,7 @@ export default function SignIn() {
     >
       <form onSubmit={submit} className="space-y-4" noValidate>
         {errors.form && (
-          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[14px] font-medium text-coral-700" role="alert">
+          <p className="flex items-start gap-2 rounded-xl bg-coral-50 px-3 py-2.5 text-[0.875rem] font-medium text-coral-700" role="alert">
             <Icon name="alert" size={18} className="mt-0.5 shrink-0" />
             {errors.form}
           </p>
@@ -82,13 +82,13 @@ export default function SignIn() {
         <Button type="submit" full size="lg" loading={busy}>
           Sign in
         </Button>
-        <Link to="/auth/forgot" className="flex min-h-11 items-center justify-center text-center text-[14px] font-semibold text-navy-700">
+        <Link to="/auth/forgot" className="flex min-h-11 items-center justify-center text-center text-[0.875rem] font-semibold text-navy-700">
           Forgot your password?
         </Link>
       </form>
 
       <Sheet open={pendingMerge !== null} onClose={() => undefined} title="Keep what is on this device?">
-        <p className="text-[15px] leading-relaxed text-muted">
+        <p className="text-[0.9375rem] leading-relaxed text-muted">
           This device has {pendingMerge?.count} {pendingMerge?.count === 1 ? 'subscription' : 'subscriptions'} tracked as a guest, and your account already has its own list. Add them to your account, or leave them out and they are removed from this device.
         </p>
         <Button full size="lg" variant="mint" className="mt-5" loading={merging === 'keep'} disabled={merging !== null} onClick={() => finishMerge(true)}>

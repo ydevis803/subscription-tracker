@@ -159,12 +159,12 @@ export default function Home() {
         <div className="mx-auto max-w-[480px] px-4 pt-4 safe-top">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[13px] font-medium text-navy-100">{greeting()}</p>
-              <h1 className="text-[22px] font-bold leading-tight">{profile ? profile.name || 'Your subscriptions' : <Skeleton className="h-6 w-28 bg-navy-700" />}</h1>
+              <p className="text-[0.8125rem] font-medium text-navy-100">{greeting()}</p>
+              <h1 className="text-[1.375rem] font-bold leading-tight">{profile ? profile.name || 'Your subscriptions' : <Skeleton className="h-6 w-28 bg-navy-700" />}</h1>
             </div>
-            <IconButton icon="bell" label="Reminders" variant="light" onClick={() => navigate('/notes')}>
+            <IconButton icon="bell" label={model && model.alerts.length > 0 ? `Reminders, ${model.alerts.length} ${model.alerts.length === 1 ? 'item needs' : 'items need'} a decision` : 'Reminders'} variant="light" onClick={() => navigate('/notes')}>
               {model && model.alerts.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-coral-500 px-1 text-[11px] font-bold text-white">
+                <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-coral-700 px-1 text-[0.6875rem] font-bold text-white" aria-hidden="true">
                   {model.alerts.length}
                 </span>
               )}
@@ -179,22 +179,22 @@ export default function Home() {
             className="mt-6 block w-full cursor-pointer rounded-2xl text-left active:bg-white/5"
             aria-label="Monthly total details"
           >
-            <p className="flex items-center gap-1.5 text-[13px] font-semibold uppercase tracking-wide text-mint-400">
+            <p className="flex items-center gap-1.5 text-[0.8125rem] font-semibold uppercase tracking-wide text-mint-400">
               Monthly total <Icon name="chevronRight" size={14} className="text-mint-400" />
             </p>
             {loading || !model ? (
               <Skeleton className="mt-2 h-12 w-48 bg-navy-700" />
             ) : (
-              <p className="tabular mt-1 text-[44px] font-bold leading-none">{formatMoney(model.monthly, currency)}</p>
+              <p className="tabular mt-1 text-[2.75rem] font-bold leading-none">{formatMoney(model.monthly, currency)}</p>
             )}
             {model && (
-              <p className="mt-2 text-[14px] text-navy-100">
+              <p className="mt-2 text-[0.875rem] text-navy-100">
                 {model.active.length} active {model.active.length === 1 ? 'subscription' : 'subscriptions'} · {formatMoney(model.monthly * 12, currency, { compact: true })} a year
               </p>
             )}
             {model && budget !== null && (
               <div className="mt-4">
-                <div className="mb-1.5 flex justify-between text-[13px]">
+                <div className="mb-1.5 flex justify-between text-[0.8125rem]">
                   <span className="text-navy-100">Budget {formatMoney(budget, currency)}</span>
                   <span className={`font-semibold ${model.monthly > budget ? 'text-coral-400' : 'text-mint-400'}`}>
                     {model.monthly > budget
@@ -249,8 +249,8 @@ export default function Home() {
                 <Icon name="chart" size={22} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Your week · {week.range.label}</span>
-                <span className="block text-[13px] text-muted">
+                <span className="block text-[0.9375rem] font-semibold text-ink">Your week · {week.range.label}</span>
+                <span className="block text-[0.8125rem] text-muted">
                   {week.completed.total === 0 ? 'Nothing logged yet' : `${week.completed.total} ${week.completed.total === 1 ? 'action' : 'actions'} on ${week.completed.activeDays} ${week.completed.activeDays === 1 ? 'day' : 'days'}`}
                   {' · '}
                   {Math.abs(week.change.delta) < 0.005 ? 'total unchanged' : `total ${week.change.delta < 0 ? 'down' : 'up'} ${formatMoney(Math.abs(week.change.delta), currency)}`}
@@ -277,8 +277,8 @@ export default function Home() {
                       <Icon name={a.icon} size={18} />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[14px] font-semibold text-ink">{a.title}</span>
-                      <span className="block text-[13px] leading-snug text-muted">{a.body}</span>
+                      <span className="block text-[0.875rem] font-semibold text-ink">{a.title}</span>
+                      <span className="block text-[0.8125rem] leading-snug text-muted">{a.body}</span>
                     </span>
                     <Icon name="chevronRight" size={18} className="mt-2 shrink-0 text-faint" />
                   </button>
@@ -323,14 +323,14 @@ export default function Home() {
                     <ServiceMark name={o.subscription.name} color={cat.color} size={40} />
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
-                        <span className="break-words text-[15px] font-semibold text-ink">{o.subscription.name}</span>
+                        <span className="break-words text-[0.9375rem] font-semibold text-ink">{o.subscription.name}</span>
                         {model.openNoteSubIds.has(o.subscription.id!) && <Icon name="note" size={14} className="text-coral-600" />}
                       </span>
-                      <span className={`block text-[13px] ${d <= model.lead ? 'font-semibold text-coral-700' : 'text-muted'}`}>
+                      <span className={`block text-[0.8125rem] ${d <= model.lead ? 'font-semibold text-coral-700' : 'text-muted'}`}>
                         {o.subscription.status === 'trial' ? `Trial converts ${relativeLower(o.date)}` : formatRelative(o.date)} · {formatDate(o.date, 'EEE d MMM')}
                       </span>
                     </span>
-                    <span className="tabular text-[15px] font-bold text-navy-900">{formatMoney(o.amount, o.subscription.currency)}</span>
+                    <span className="tabular text-[0.9375rem] font-bold text-navy-900">{formatMoney(o.amount, o.subscription.currency)}</span>
                   </button>
                 )
               })}
@@ -345,8 +345,8 @@ export default function Home() {
                 <Icon name="trend" size={22} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Renewal timeline</span>
-                <span className="block text-[13px] text-muted">See every charge in order, with category totals and your notes. Save it to your calendar.</span>
+                <span className="block text-[0.9375rem] font-semibold text-ink">Renewal timeline</span>
+                <span className="block text-[0.8125rem] text-muted">See every charge in order, with category totals and your notes. Save it to your calendar.</span>
               </span>
               <Icon name="chevronRight" size={18} className="shrink-0 text-faint" />
             </button>
@@ -367,7 +367,7 @@ export default function Home() {
               {headline && (
                 <button type="button" onClick={() => navigate(headline.to ?? '/insights')} className="mt-4 flex w-full items-center gap-3 rounded-xl bg-navy-50 px-3 py-2.5 text-left">
                   <Icon name={headline.icon} size={18} className={`shrink-0 ${headline.tone === 'coral' ? 'text-coral-700' : 'text-mint-700'}`} />
-                  <span className="min-w-0 flex-1 text-[13px] leading-snug text-navy-800">{headline.text}</span>
+                  <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-navy-800">{headline.text}</span>
                   <Icon name="chevronRight" size={16} className="shrink-0 text-faint" />
                 </button>
               )}
@@ -406,12 +406,12 @@ function StatCard({ label, value, sub, onClick, accent }: { label: string; value
   return (
     <Card className="overflow-hidden">
       <button onClick={onClick} className="w-full p-4 text-left active:bg-navy-50">
-        <span className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-muted">
+        <span className="flex items-center gap-1.5 text-[0.75rem] font-semibold uppercase tracking-wide text-muted">
           <span className={`h-2 w-2 rounded-full ${accent === 'coral' ? 'bg-coral-500' : 'bg-mint-500'}`} />
           {label}
         </span>
-        {value === null ? <Skeleton className="mt-2 h-7 w-24" /> : <span className="tabular mt-1 block text-[22px] font-bold text-navy-900">{value}</span>}
-        <span className="block text-[12px] text-faint">{sub}</span>
+        {value === null ? <Skeleton className="mt-2 h-7 w-24" /> : <span className="tabular mt-1 block text-[1.375rem] font-bold text-navy-900">{value}</span>}
+        <span className="block text-[0.75rem] text-faint">{sub}</span>
       </button>
     </Card>
   )
@@ -419,7 +419,7 @@ function StatCard({ label, value, sub, onClick, accent }: { label: string; value
 
 function QuickAction({ icon, label, onClick }: { icon: IconName; label: string; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="flex h-14 items-center justify-center gap-2 rounded-2xl border border-line bg-white text-[14px] font-semibold text-navy-900 shadow-card active:bg-navy-50">
+    <button onClick={onClick} className="flex h-14 items-center justify-center gap-2 rounded-2xl border border-line bg-white text-[0.875rem] font-semibold text-navy-900 shadow-card active:bg-navy-50">
       <Icon name={icon} size={18} className="text-mint-700" />
       {label}
     </button>

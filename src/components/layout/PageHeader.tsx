@@ -25,8 +25,8 @@ export function PageHeader({
           <IconButton icon="chevronLeft" size={24} label="Back" className="-ml-2" onClick={() => goBack(backTo ?? '/')} />
         )}
         <div className="min-w-0 flex-1">
-          <h1 className={`break-words font-bold leading-tight text-navy-900 ${large ? 'text-[26px]' : 'text-lg'}`}>{title}</h1>
-          {subtitle && <p className="break-words text-[13px] text-muted">{subtitle}</p>}
+          <h1 className={`break-words font-bold leading-tight text-navy-900 ${large ? 'text-[1.625rem]' : 'text-lg'}`}>{title}</h1>
+          {subtitle && <p className="break-words text-[0.8125rem] text-muted">{subtitle}</p>}
         </div>
         {right}
       </div>

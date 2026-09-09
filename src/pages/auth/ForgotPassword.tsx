@@ -40,10 +40,10 @@ export default function ForgotPassword() {
             <Icon name="mail" size={28} />
           </span>
           <h2 className="text-lg font-bold text-navy-900">Check your inbox</h2>
-          <p className="mt-1.5 max-w-[300px] text-[14px] leading-relaxed text-muted">
+          <p className="mt-1.5 max-w-[300px] text-[0.875rem] leading-relaxed text-muted">
             If an account exists for <span className="font-semibold text-ink">{email.trim()}</span>, a reset link is on its way. It works for one hour.
           </p>
-          {import.meta.env.DEV && <p className="mt-3 rounded-xl bg-navy-50 px-3 py-2 text-[12px] text-navy-800">Development build: the email is saved to server/outbox instead of being sent.</p>}
+          {import.meta.env.DEV && <p className="mt-3 rounded-xl bg-navy-50 px-3 py-2 text-[0.75rem] text-navy-800">Development build: the email is saved to server/outbox instead of being sent.</p>}
           <Link to="/auth/sign-in" className="mt-5 h-12 w-full">
             <Button full size="lg" variant="secondary">
               Back to sign in

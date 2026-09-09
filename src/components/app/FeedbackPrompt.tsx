@@ -49,9 +49,9 @@ export function FeedbackPrompt() {
             <Icon name="star" size={22} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-mint-700">Second check done</p>
-            <p className="text-[16px] font-bold leading-tight text-navy-900">How is Subscription Tracker working for you?</p>
-            <p className="mt-1 text-[13px] leading-snug text-muted">One tap. A low score opens a private note to us; a high one, a chance to rate the app.</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-mint-700">Second check done</p>
+            <p className="text-[1rem] font-bold leading-tight text-navy-900">How is Subscription Tracker working for you?</p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-muted">One tap. A low score opens a private note to us; a high one, a chance to rate the app.</p>
           </div>
         </div>
         <div className="mt-3 grid grid-cols-5 gap-2" role="radiogroup" aria-label="Score out of five">
@@ -70,7 +70,7 @@ export function FeedbackPrompt() {
           ))}
         </div>
         <div className="mt-3 flex items-center justify-between gap-3">
-          <p className="text-[11px] leading-snug text-faint">{RATING_CAP_TEXT}</p>
+          <p className="text-[0.6875rem] leading-snug text-faint">{RATING_CAP_TEXT}</p>
           <Button size="sm" variant="ghost" className="shrink-0 whitespace-nowrap" onClick={notNow}>
             Not now
           </Button>
@@ -104,8 +104,8 @@ export function FeedbackPrompt() {
             <Icon name="star" size={22} fill="currentColor" />
           </span>
           <div>
-            <p className="text-[16px] font-bold leading-tight text-navy-900">{score === 5 ? 'Love it? A rating helps others find it.' : 'Glad it is working. A rating helps others find it.'}</p>
-            <p className="mt-1 text-[13px] leading-snug text-muted">{storeUrl() ? 'Opens the store listing in a new tab.' : 'The store listing is not live yet. Tapping records that you would rate it, and we will not ask again.'}</p>
+            <p className="text-[1rem] font-bold leading-tight text-navy-900">{score === 5 ? 'Love it? A rating helps others find it.' : 'Glad it is working. A rating helps others find it.'}</p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{storeUrl() ? 'Opens the store listing in a new tab.' : 'The store listing is not live yet. Tapping records that you would rate it, and we will not ask again.'}</p>
           </div>
         </div>
         <div className="mt-4 space-y-2">
@@ -171,12 +171,12 @@ export function FeedbackSheet({ open, score, source, onClose, onSaved }: { open:
 
   return (
     <Sheet open={open} onClose={onClose} title={score !== null && score < RATING_HIGH_SCORE ? 'What should be better?' : 'Send feedback'}>
-      {score !== null && <p className="text-[13px] text-muted">You gave {score} of 5. Sorry it is not there yet. Tell us what got in the way and it goes straight on the fix list.</p>}
+      {score !== null && <p className="text-[0.8125rem] text-muted">You gave {score} of 5. Sorry it is not there yet. Tell us what got in the way and it goes straight on the fix list.</p>}
       <TextArea label="Your note" value={message} onChange={(e) => {
           setMessage(e.target.value)
           if (error) setError('')
         }} error={error} placeholder="What was confusing, missing or wrong?" autoFocus rows={4} maxLength={1000} className="mt-3" />
-      <p className="mt-2 flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[12px] leading-snug text-navy-800">
+      <p className="mt-2 flex items-start gap-2 rounded-xl bg-navy-50 px-3 py-2 text-[0.75rem] leading-snug text-navy-800">
         <Icon name="shield" size={14} className="mt-0.5 shrink-0 text-mint-700" />
         <span>Private. This note is stored with your own data and is never posted publicly or shown to other users.</span>
       </p>

@@ -123,7 +123,7 @@ export default function Settings() {
         back
         backTo="/profile"
         right={
-          <span className={`flex items-center gap-1 text-[12px] font-semibold text-mint-700 transition-opacity ${savedFlash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
+          <span className={`flex items-center gap-1 text-[0.75rem] font-semibold text-mint-700 transition-opacity ${savedFlash ? 'opacity-100' : 'opacity-0'}`} aria-live="polite">
             <Icon name="check" size={14} /> {savedFlash ?? 'Saved'}
           </span>
         }
@@ -179,8 +179,8 @@ export default function Settings() {
             <Row onClick={() => navigate('/reminders')} className="-mx-4 mt-2 border-t border-line">
               <IconBox name="bell" />
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Reminder schedule</span>
-                <span className="block text-[13px] text-muted">{scheduleSummary}</span>
+                <span className="block text-[0.9375rem] font-semibold text-ink">Reminder schedule</span>
+                <span className="block text-[0.8125rem] text-muted">{scheduleSummary}</span>
               </span>
             </Row>
             <div className="mt-2 divide-y divide-line">
@@ -213,8 +213,8 @@ export default function Settings() {
             <Row onClick={doExport} chevron={false}>
               <IconBox name="download" />
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Export backup</span>
-                <span className="block text-[13px] text-muted">Download everything as JSON</span>
+                <span className="block text-[0.9375rem] font-semibold text-ink">Export backup</span>
+                <span className="block text-[0.8125rem] text-muted">Download everything as JSON</span>
               </span>
             </Row>
             {subs && subs.length === 0 && (
@@ -223,8 +223,8 @@ export default function Settings() {
                 <Row onClick={() => act('Sample subscriptions added', loadSamples)} chevron={false}>
                   <IconBox name="sparkle" />
                   <span className="flex-1">
-                    <span className="block text-[15px] font-semibold text-ink">Load sample subscriptions</span>
-                    <span className="block text-[13px] text-muted">Ten realistic examples to explore with</span>
+                    <span className="block text-[0.9375rem] font-semibold text-ink">Load sample subscriptions</span>
+                    <span className="block text-[0.8125rem] text-muted">Ten realistic examples to explore with</span>
                   </span>
                 </Row>
               </>
@@ -233,8 +233,8 @@ export default function Settings() {
             <Row onClick={() => setConfirmReset(true)} chevron={false}>
               <IconBox name="trash" tone="coral" />
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-coral-700">Erase all data</span>
-                <span className="block text-[13px] text-muted">Removes subscriptions, notes and profile</span>
+                <span className="block text-[0.9375rem] font-semibold text-coral-700">Erase all data</span>
+                <span className="block text-[0.8125rem] text-muted">Removes subscriptions, notes and profile</span>
               </span>
             </Row>
           </Card>
@@ -245,15 +245,15 @@ export default function Settings() {
             <SectionTitle>Account</SectionTitle>
             <Card className="overflow-hidden">
               <div className="px-4 py-3">
-                <span className="block text-[15px] font-semibold text-ink">{auth.user.email}</span>
-                <span className="block text-[13px] text-muted">Password and sign-out are on your Profile.</span>
+                <span className="block text-[0.9375rem] font-semibold text-ink">{auth.user.email}</span>
+                <span className="block text-[0.8125rem] text-muted">Password and sign-out are on your Profile.</span>
               </div>
               <Divider />
               <Row chevron={false} onClick={() => setDel({ open: true, password: '', show: false, error: '', busy: false })}>
                 <IconBox name="trash" tone="coral" />
                 <span className="flex-1">
-                  <span className="block text-[15px] font-semibold text-coral-700">Delete account</span>
-                  <span className="block text-[13px] text-muted">Removes your account and everything in it</span>
+                  <span className="block text-[0.9375rem] font-semibold text-coral-700">Delete account</span>
+                  <span className="block text-[0.8125rem] text-muted">Removes your account and everything in it</span>
                 </span>
               </Row>
             </Card>
@@ -268,8 +268,8 @@ export default function Settings() {
                 <Icon name="mail" size={20} />
               </span>
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-ink">Send feedback</span>
-                <span className="block text-[13px] text-muted">{settings.feedback?.length ? `${settings.feedback.length} private ${settings.feedback.length === 1 ? 'note' : 'notes'} kept with your data` : 'A private note. Never posted publicly.'}</span>
+                <span className="block text-[0.9375rem] font-semibold text-ink">Send feedback</span>
+                <span className="block text-[0.8125rem] text-muted">{settings.feedback?.length ? `${settings.feedback.length} private ${settings.feedback.length === 1 ? 'note' : 'notes'} kept with your data` : 'A private note. Never posted publicly.'}</span>
               </span>
             </Row>
           </Card>
@@ -283,10 +283,10 @@ export default function Settings() {
                 <Icon name="crown" size={20} />
               </span>
               <span className="flex-1">
-                <span className="block text-[15px] font-semibold text-ink">
+                <span className="block text-[0.9375rem] font-semibold text-ink">
                   {isPaidPremium(profile) ? `Premium ${profile.premiumInterval}` : trialState(profile).status === 'active' ? `Premium trial · day ${trialState(profile).day} of ${TRIAL_DAYS}` : 'Free plan'}
                 </span>
-                <span className="block text-[13px] text-muted">
+                <span className="block text-[0.8125rem] text-muted">
                   {isPaidPremium(profile)
                     ? 'Manage or restore your plan'
                     : trialState(profile).status === 'active'
@@ -298,11 +298,11 @@ export default function Settings() {
           </Card>
         </section>
 
-        <p className="px-1 text-center text-[12px] text-faint">Subscription Tracker 1.0 · {auth.status === 'signed-in' ? 'Backed up to your account' : 'Data is stored locally in your browser'}</p>
+        <p className="px-1 text-center text-[0.75rem] text-faint">Subscription Tracker 1.0 · {auth.status === 'signed-in' ? 'Backed up to your account' : 'Data is stored locally in your browser'}</p>
       </Page>
 
       <Sheet open={del.open} onClose={() => setDel((d) => ({ ...d, open: false }))} title="Delete your account?">
-        <p className="text-[15px] leading-relaxed text-muted">
+        <p className="text-[0.9375rem] leading-relaxed text-muted">
           This permanently deletes your account, all {subs?.length ?? 0} subscriptions, every price change and note, and the copy on this device. There is no undo. Export a backup first if you want to keep a record.
         </p>
         <form

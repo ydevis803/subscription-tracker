@@ -7,18 +7,8 @@ import { Icon } from '@/components/ui/Icon'
 import { Card } from '@/components/ui/Primitives'
 import { Sheet } from '@/components/ui/Sheet'
 import { useToast } from '@/components/ui/Toast'
+import { useReducedMotion } from '@/lib/motion'
 
-function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(() => (typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false))
-  useEffect(() => {
-    if (!window.matchMedia) return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = () => setReduced(mq.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-  return reduced
-}
 
 const DOTS = Array.from({ length: 10 }).map((_, i) => {
   const angle = (i / 10) * Math.PI * 2
@@ -83,9 +73,9 @@ export function MilestoneCard({ subs, notes, changes, checks, settings, currency
             </span>
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-mint-700">Milestone</p>
-            <p className="text-[17px] font-bold leading-tight text-navy-900">{showing.title}</p>
-            <p className="mt-1 text-[13px] leading-snug text-muted">{showing.body(ctx)}</p>
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-mint-700">Milestone</p>
+            <p className="text-[1.0625rem] font-bold leading-tight text-navy-900">{showing.title}</p>
+            <p className="mt-1 text-[0.8125rem] leading-snug text-muted">{showing.body(ctx)}</p>
           </div>
         </div>
         <div className="mt-3 flex gap-2">
@@ -98,7 +88,7 @@ export function MilestoneCard({ subs, notes, changes, checks, settings, currency
         </div>
       </Card>
       <Sheet open={copyText !== null} onClose={() => setCopyText(null)} title="Copy to share">
-        <textarea readOnly value={copyText ?? ''} onFocus={(e) => e.target.select()} className="h-32 w-full rounded-2xl border border-line bg-canvas p-3 text-[14px] text-ink" />
+        <textarea readOnly value={copyText ?? ''} onFocus={(e) => e.target.select()} className="h-32 w-full rounded-2xl border border-line bg-canvas p-3 text-[0.875rem] text-ink" />
         <Button full size="lg" variant="secondary" className="mt-3" onClick={() => setCopyText(null)}>
           Done
         </Button>

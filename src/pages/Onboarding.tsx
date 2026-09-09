@@ -157,22 +157,22 @@ export default function Onboarding() {
           <div className="flex items-center gap-3 px-4 pt-4 safe-top">
             <IconButton icon="chevronLeft" size={24} label="Back" className="-ml-2" onClick={back} />
             <Progress step={draft.step} />
-            <span className="w-11 text-right text-[12px] font-semibold text-muted">
+            <span className="w-11 text-right text-[0.75rem] font-semibold text-muted">
               {draft.step + 1}/{STEPS}
             </span>
           </div>
 
           {draft.step === 1 && (
             <section className="rise flex flex-1 flex-col px-5 pt-5">
-              <h1 className="text-[26px] font-bold leading-tight text-navy-900">Which of these do you pay for?</h1>
-              <p className="mt-2 text-[15px] text-muted">Tap everything that applies. Typical prices are filled in and you can adjust any of them later.</p>
+              <h1 className="text-[1.625rem] font-bold leading-tight text-navy-900">Which of these do you pay for?</h1>
+              <p className="mt-2 text-[0.9375rem] text-muted">Tap everything that applies. Typical prices are filled in and you can adjust any of them later.</p>
               <label className="mt-4 flex items-center justify-between rounded-2xl border border-line bg-white px-4 py-2">
-                <span className="text-[14px] font-semibold text-navy-800">Prices in</span>
+                <span className="text-[0.875rem] font-semibold text-navy-800">Prices in</span>
                 <span className="relative">
                   <select
                     value={currency}
                     onChange={(e) => patch({ currency: e.target.value })}
-                    className="h-11 appearance-none rounded-xl bg-navy-50 pl-3 pr-9 text-[14px] font-semibold text-navy-900 outline-none"
+                    className="h-11 appearance-none rounded-xl bg-navy-50 pl-3 pr-9 text-[0.875rem] font-semibold text-navy-900"
                     aria-label="Currency"
                   >
                     {CURRENCIES.map((c) => (
@@ -197,8 +197,8 @@ export default function Onboarding() {
                     >
                       <ServiceMark name={p.name} color={categoryOf(p.categoryId).color} size={34} />
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[14px] font-semibold leading-tight text-ink">{p.name}</span>
-                        <span className="tabular block text-[12px] text-muted">{formatMoney(localAmount(p.amount, currency), currency)}/mo</span>
+                        <span className="block text-[0.875rem] font-semibold leading-tight text-ink">{p.name}</span>
+                        <span className="tabular block text-[0.75rem] text-muted">{formatMoney(localAmount(p.amount, currency), currency)}/mo</span>
                       </span>
                       <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${on ? 'bg-mint-500 text-navy-900' : 'border-2 border-navy-100'}`}>
                         {on && <Icon name="check" size={12} />}
@@ -207,7 +207,7 @@ export default function Onboarding() {
                   )
                 })}
               </div>
-              <p className="mt-3 text-center text-[13px] text-muted">
+              <p className="mt-3 text-center text-[0.8125rem] text-muted">
                 {picked.length === 0 ? 'Nothing yet? You can add anything else from the dashboard.' : `${picked.length} selected · about ${formatMoney(monthlyTotal, currency)} a month`}
               </p>
               <div className="sticky bottom-0 mt-auto -mx-5 bg-canvas/95 px-5 pt-3 pb-6 backdrop-blur safe-bottom">
@@ -220,8 +220,8 @@ export default function Onboarding() {
 
           {draft.step === 2 && (
             <section className="rise flex flex-1 flex-col px-5 pt-5">
-              <h1 className="text-[26px] font-bold leading-tight text-navy-900">What is a comfortable monthly limit?</h1>
-              <p className="mt-2 text-[15px] text-muted">Your dashboard shows how close each month gets to it.</p>
+              <h1 className="text-[1.625rem] font-bold leading-tight text-navy-900">What is a comfortable monthly limit?</h1>
+              <p className="mt-2 text-[0.9375rem] text-muted">Your dashboard shows how close each month gets to it.</p>
               <div className="mt-5 grid grid-cols-2 gap-2.5" role="group" aria-label="Monthly limit">
                 {budgetPills.map((b) => {
                   const on = draft.customBudget.trim() === '' && draft.budget === b
@@ -231,7 +231,7 @@ export default function Onboarding() {
                       type="button"
                       aria-pressed={on}
                       onClick={() => patch({ budget: b, customBudget: '' })}
-                      className={`tabular h-14 rounded-2xl border-2 bg-white text-[17px] font-bold transition-colors ${on ? 'border-mint-500 bg-mint-50 text-navy-900' : 'border-line text-navy-800'}`}
+                      className={`tabular h-14 rounded-2xl border-2 bg-white text-[1.0625rem] font-bold transition-colors ${on ? 'border-mint-500 bg-mint-50 text-navy-900' : 'border-line text-navy-800'}`}
                     >
                       {formatMoney(b, currency, { compact: true })}
                     </button>
@@ -239,35 +239,36 @@ export default function Onboarding() {
                 })}
               </div>
               <label className="mt-3 block">
-                <span className="mb-1.5 block text-[13px] font-semibold text-navy-800">Or type your own</span>
+                <span className="mb-1.5 block text-[0.8125rem] font-semibold text-navy-800">Or type your own</span>
                 <span className="relative block">
-                  <span className="pointer-events-none absolute inset-y-0 left-0 flex w-12 items-center justify-center text-[15px] font-semibold text-muted">{currencySymbol(currency)}</span>
+                  <span className="pointer-events-none absolute inset-y-0 left-0 flex w-12 items-center justify-center text-[0.9375rem] font-semibold text-muted">{currencySymbol(currency)}</span>
                   <input
                     inputMode="decimal"
                     placeholder="120"
                     value={draft.customBudget}
                     onChange={(e) => patch({ customBudget: e.target.value })}
                     aria-invalid={!!customCheck.error}
-                    className={`h-13 w-full rounded-2xl border bg-white pl-12 pr-4 text-[16px] outline-none placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 ${customCheck.error ? 'border-coral-500' : 'border-line'}`}
+                    aria-describedby={customCheck.error ? 'custom-limit-error' : undefined}
+                    className={`h-13 w-full rounded-2xl border bg-white pl-12 pr-4 text-[1rem] placeholder:text-faint focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 ${customCheck.error ? 'border-coral-500' : 'border-line'}`}
                     aria-label="Custom monthly limit"
                   />
                 </span>
                 {customCheck.error && (
-                  <span className="mt-1.5 block text-[13px] font-medium text-coral-700" role="alert">
+                  <span id="custom-limit-error" className="mt-1.5 block text-[0.8125rem] font-medium text-coral-700" role="alert">
                     {customCheck.error}
                   </span>
                 )}
               </label>
               {picked.length > 0 && budget !== null && (
-                <p className={`mt-3 rounded-xl px-4 py-3 text-[14px] font-semibold ${monthlyTotal > budget ? 'bg-coral-50 text-coral-700' : 'bg-mint-50 text-mint-700'}`}>
+                <p className={`mt-3 rounded-xl px-4 py-3 text-[0.875rem] font-semibold ${monthlyTotal > budget ? 'bg-coral-50 text-coral-700' : 'bg-mint-50 text-mint-700'}`}>
                   {monthlyTotal > budget
                     ? `Your picks already total ${formatMoney(monthlyTotal, currency)}, ${formatMoney(monthlyTotal - budget, currency)} over this limit.`
                     : `Your picks total ${formatMoney(monthlyTotal, currency)}, leaving ${formatMoney(budget - monthlyTotal, currency)} of room.`}
                 </p>
               )}
 
-              <h2 className="mt-7 text-[17px] font-bold text-navy-900">How early should we warn you?</h2>
-              <p className="mt-1 text-[14px] text-muted">Renewals inside this window are flagged on your dashboard.</p>
+              <h2 className="mt-7 text-[1.0625rem] font-bold text-navy-900">How early should we warn you?</h2>
+              <p className="mt-1 text-[0.875rem] text-muted">Renewals inside this window are flagged on your dashboard.</p>
               <div className="mt-3 grid grid-cols-4 gap-2" role="group" aria-label="Heads-up before a charge">
                 {([1, 3, 7, 14] as LeadDays[]).map((d) => (
                   <button
@@ -275,7 +276,7 @@ export default function Onboarding() {
                     type="button"
                     aria-pressed={leadDays === d}
                     onClick={() => patch({ leadDays: d })}
-                    className={`h-12 rounded-2xl border-2 bg-white text-[15px] font-semibold transition-colors ${leadDays === d ? 'border-mint-500 bg-mint-50 text-navy-900' : 'border-line text-muted'}`}
+                    className={`h-12 rounded-2xl border-2 bg-white text-[0.9375rem] font-semibold transition-colors ${leadDays === d ? 'border-mint-500 bg-mint-50 text-navy-900' : 'border-line text-muted'}`}
                   >
                     {d} {d === 1 ? 'day' : 'days'}
                   </button>
@@ -293,16 +294,16 @@ export default function Onboarding() {
             <section className="rise flex flex-1 flex-col px-5 pt-5">
               {picked.length > 0 ? (
                 <>
-                  <p className="text-[13px] font-semibold uppercase tracking-wide text-mint-700">Your first win</p>
-                  <h1 className="mt-1 text-[26px] font-bold leading-tight text-navy-900">You already know your number.</h1>
+                  <p className="text-[0.8125rem] font-semibold uppercase tracking-wide text-mint-700">Your first win</p>
+                  <h1 className="mt-1 text-[1.625rem] font-bold leading-tight text-navy-900">You already know your number.</h1>
                   <div className="mt-4 rounded-3xl bg-navy-900 p-5 text-white">
-                    <p className="text-[13px] font-semibold uppercase tracking-wide text-mint-400">Monthly total</p>
-                    <p className="tabular mt-1 text-[40px] font-bold leading-none">{formatMoney(monthlyTotal, currency)}</p>
-                    <p className="mt-2 text-[14px] text-navy-100">
+                    <p className="text-[0.8125rem] font-semibold uppercase tracking-wide text-mint-400">Monthly total</p>
+                    <p className="tabular mt-1 text-[2.5rem] font-bold leading-none">{formatMoney(monthlyTotal, currency)}</p>
+                    <p className="mt-2 text-[0.875rem] text-navy-100">
                       {picked.length} {picked.length === 1 ? 'subscription' : 'subscriptions'} · {formatMoney(monthlyTotal * 12, currency, { compact: true })} a year
                     </p>
                     {budget !== null && (
-                      <p className={`mt-3 rounded-xl px-3 py-2 text-[14px] font-semibold ${monthlyTotal > budget ? 'bg-coral-500/20 text-coral-300' : 'bg-mint-500/15 text-mint-300'}`}>
+                      <p className={`mt-3 rounded-xl px-3 py-2 text-[0.875rem] font-semibold ${monthlyTotal > budget ? 'bg-coral-500/20 text-coral-300' : 'bg-mint-500/15 text-mint-300'}`}>
                         {monthlyTotal > budget
                           ? `${formatMoney(monthlyTotal - budget, currency)} over your ${formatMoney(budget, currency, { compact: true })} limit`
                           : `${formatMoney(budget - monthlyTotal, currency)} under your ${formatMoney(budget, currency, { compact: true })} limit`}
@@ -314,9 +315,9 @@ export default function Onboarding() {
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-coral-100 text-coral-700">
                         <Icon name="bell" size={20} />
                       </span>
-                      <span className="flex-1 text-[14px] text-ink">
+                      <span className="flex-1 text-[0.875rem] text-ink">
                         <span className="block font-semibold">Next charge: {firstCharge.name} on {formatDate(firstCharge.renewsOn, 'd MMM')}</span>
-                        <span className="block text-[13px] text-muted">
+                        <span className="block text-[0.8125rem] text-muted">
                           We will flag it {leadDays} {leadDays === 1 ? 'day' : 'days'} before. Dates are estimates until you confirm them.
                         </span>
                       </span>
@@ -326,9 +327,9 @@ export default function Onboarding() {
                     {picked.map((p) => (
                       <li key={p.id} className="flex items-center gap-3 px-4 py-2.5">
                         <ServiceMark name={p.name} color={categoryOf(p.categoryId).color} size={32} />
-                        <span className="flex-1 text-[14px] font-semibold text-ink">{p.name}</span>
-                        <span className="text-[12px] text-muted">est. {formatDate(p.renewsOn, 'd MMM')}</span>
-                        <span className="tabular text-[14px] font-bold text-navy-900">{formatMoney(p.amount, currency)}</span>
+                        <span className="flex-1 text-[0.875rem] font-semibold text-ink">{p.name}</span>
+                        <span className="text-[0.75rem] text-muted">est. {formatDate(p.renewsOn, 'd MMM')}</span>
+                        <span className="tabular text-[0.875rem] font-bold text-navy-900">{formatMoney(p.amount, currency)}</span>
                       </li>
                     ))}
                   </ul>
@@ -340,27 +341,27 @@ export default function Onboarding() {
                 </>
               ) : (
                 <>
-                  <p className="text-[13px] font-semibold uppercase tracking-wide text-mint-700">You are set up</p>
-                  <h1 className="mt-1 text-[26px] font-bold leading-tight text-navy-900">Now let us find your number.</h1>
+                  <p className="text-[0.8125rem] font-semibold uppercase tracking-wide text-mint-700">You are set up</p>
+                  <h1 className="mt-1 text-[1.625rem] font-bold leading-tight text-navy-900">Now let us find your number.</h1>
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center gap-3 rounded-2xl border border-line bg-white p-4">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint-100 text-mint-700">
                         <Icon name="wallet" size={20} />
                       </span>
-                      <span className="flex-1 text-[14px]">
+                      <span className="flex-1 text-[0.875rem]">
                         <span className="block font-semibold text-ink">{budget === null ? 'No monthly limit yet' : `Monthly limit ${formatMoney(budget, currency)}`}</span>
-                        <span className="block text-[13px] text-muted">Change it any time in Settings.</span>
+                        <span className="block text-[0.8125rem] text-muted">Change it any time in Settings.</span>
                       </span>
                     </div>
                     <div className="flex items-center gap-3 rounded-2xl border border-line bg-white p-4">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-coral-100 text-coral-700">
                         <Icon name="bell" size={20} />
                       </span>
-                      <span className="flex-1 text-[14px]">
+                      <span className="flex-1 text-[0.875rem]">
                         <span className="block font-semibold text-ink">
                           Heads-up {leadDays} {leadDays === 1 ? 'day' : 'days'} before every charge
                         </span>
-                        <span className="block text-[13px] text-muted">Your monthly total appears as soon as you add one subscription.</span>
+                        <span className="block text-[0.8125rem] text-muted">Your monthly total appears as soon as you add one subscription.</span>
                       </span>
                     </div>
                   </div>
@@ -397,7 +398,7 @@ function Welcome({ onNext }: { onNext: () => void }) {
     <section className="fade flex flex-1 flex-col bg-navy-900 text-white">
       <div className="flex items-center gap-3 px-4 pt-4 safe-top">
         <Progress step={0} light />
-        <span className="w-11 text-right text-[12px] font-semibold text-navy-100">1/{STEPS}</span>
+        <span className="w-11 text-right text-[0.75rem] font-semibold text-navy-100">1/{STEPS}</span>
       </div>
       <div className="flex flex-1 flex-col justify-center px-6 py-10">
         <svg width="64" height="64" viewBox="0 0 128 128" aria-hidden="true">
@@ -405,13 +406,13 @@ function Welcome({ onNext }: { onNext: () => void }) {
           <circle cx="64" cy="64" r="34" fill="none" stroke="#5EEAD4" strokeWidth="10" />
           <path d="M64 38v26l16 10" fill="none" stroke="#FF7A6B" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <h1 className="mt-8 text-[34px] font-bold leading-[1.1]">
+        <h1 className="mt-8 text-[2.125rem] font-bold leading-[1.1]">
           Know your monthly total <span className="text-mint-400">before</span> the next charge lands.
         </h1>
-        <p className="mt-4 text-[16px] leading-relaxed text-navy-100">Two quick questions. In under a minute you will see what you really spend and which renewal is next.</p>
+        <p className="mt-4 text-[1rem] leading-relaxed text-navy-100">Two quick questions. In under a minute you will see what you really spend and which renewal is next.</p>
         <ul className="mt-8 space-y-3">
           {['Every renewal on one timeline', 'A monthly total that never surprises you', 'Notes on what to cancel before it renews'].map((t) => (
-            <li key={t} className="flex items-center gap-3 text-[15px]">
+            <li key={t} className="flex items-center gap-3 text-[0.9375rem]">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-mint-500 text-navy-900">
                 <Icon name="check" size={16} />
               </span>
@@ -424,8 +425,8 @@ function Welcome({ onNext }: { onNext: () => void }) {
         <Button full size="lg" variant="mint" onClick={onNext} leading={<Icon name="arrowRight" size={20} />}>
           Show me my total
         </Button>
-        <p className="mt-3 text-center text-[12px] text-navy-100">Free for up to ten subscriptions. No account needed to start.</p>
-        <Link to="/auth/sign-in" className="mt-2 flex h-12 items-center justify-center rounded-2xl text-[15px] font-semibold text-mint-400">
+        <p className="mt-3 text-center text-[0.75rem] text-navy-100">Free for up to ten subscriptions. No account needed to start.</p>
+        <Link to="/auth/sign-in" className="mt-2 flex h-12 items-center justify-center rounded-2xl text-[0.9375rem] font-semibold text-mint-400">
           Already have an account? Sign in
         </Link>
       </div>

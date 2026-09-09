@@ -20,6 +20,7 @@ import { StatusBadge } from '@/components/app/SubscriptionRow'
 import { PaywallSheet } from '@/components/app/Paywall'
 import { useSmartBack } from '@/lib/navigation'
 import { describeError } from '@/lib/errors'
+import { useDraft } from '@/lib/drafts'
 
 export default function SubscriptionDetail() {
   const { id } = useParams()
@@ -466,9 +467,12 @@ export function NoteSheet({
   defaultRemindOn: string
 }) {
   const toast = useToast()
-  const [reason, setReason] = useState<CancellationReason>('not-using')
-  const [content, setContent] = useState('')
-  const [remind, setRemind] = useState(defaultRemindOn)
+  // The note text survives a closed sheet, a refresh or a lost connection until it is saved or discarded.
+  const draft = useDraft<{ reason: CancellationReason; content: string; remind: string }>(`note:${subscriptionId}`, { reason: 'not-using', content: '', remind: defaultRemindOn }, (v) => v.content.trim() !== '')
+  const { reason, content, remind } = draft.value
+  const setReason = (r: CancellationReason) => draft.setValue((v) => ({ ...v, reason: r }))
+  const setContent = (c: string) => draft.setValue((v) => ({ ...v, content: c }))
+  const setRemind = (r: string) => draft.setValue((v) => ({ ...v, remind: r }))
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const submitting = useRef(false)
@@ -482,6 +486,7 @@ export function NoteSheet({
     try {
       await addNote({ subscriptionId, reason, content: content.trim(), remindOn: remind || null, status: 'open' })
       toast.success('Note saved')
+      draft.clear()
       setContent('')
       onClose()
     } catch (err) {

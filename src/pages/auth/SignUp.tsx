@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { describeError } from '@/lib/errors'
+import { useDraft } from '@/lib/drafts'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
 import { Button } from '@/components/ui/Button'
@@ -13,8 +14,10 @@ export default function SignUp() {
   const navigate = useNavigate()
   const toast = useToast()
   const next = useNextPath()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const draft = useDraft<{ name: string; email: string }>('auth:sign-up', { name: '', email: '' }, (v) => v.name.trim() !== '' || v.email.trim() !== '')
+  const { name, email } = draft.value
+  const setName = (n: string) => draft.setValue((v) => ({ ...v, name: n }))
+  const setEmail = (e: string) => draft.setValue((v) => ({ ...v, email: e }))
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string; form?: string }>({})
@@ -34,6 +37,7 @@ export default function SignUp() {
     setBusy(true)
     try {
       await signUp({ name: name.trim(), email: email.trim(), password })
+      draft.clear()
       toast.success('Account created. Your data is backed up.')
       navigate(next === '/' ? '/' : next, { replace: true })
     } catch (err) {

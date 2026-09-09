@@ -72,6 +72,10 @@ Guests can use everything without an account; data stays in the browser. A free 
 
 `npm run audit:mobile` (dev server running) opens every screen and sheet at 320 and 360 px in a fresh browser context and reports horizontal overflow, clipped text, controls under 44 px, content hidden behind fixed bars, sheets that do not fit, and inputs a keyboard-height viewport would hide. Shared controls (buttons, chips, text links, segmented tabs, icon buttons) are at least 44 px tall; calendar day cells are 40 px wide at 320 px because seven columns must fit, and 56 px tall.
 
+## Offline behaviour
+
+The app is local-first, so adding, editing and deciding keep working without a connection and are never lost. What needs the network is signing in or up, account backup and Premium activation, and the app says so rather than claiming full offline support. A sticky banner appears when the network is down or a backup cannot reach the server, with Retry; it clears itself when a request gets through and a pending backup is pushed automatically when the browser comes back online. Typed input in the subscription form, cancellation note sheet, feedback sheet and the sign-up / sign-in forms (never passwords) is kept in local storage until it is saved or discarded, so a refresh, a lost connection or an accidental Back restores it with a "we kept what you typed" notice.
+
 ## Performance
 
 Screens other than Home and onboarding are code-split and lazy-loaded behind a page-shaped skeleton (never a spinner); the chunks behind the tabs are prefetched once Home is idle, and libraries (React, Dexie, date-fns) sit in their own long-lived chunks. Home renders the total, next charges and today's action first and defers the weekly summary and category breakdown to an idle callback behind same-size placeholders. Data hooks keep the last result per scope in memory, so a screen visited before paints instantly while IndexedDB is re-read. Account pulls send `If-None-Match` with the last snapshot validator and the server answers `304` when nothing changed. The app renders no raster images; service marks are text and every icon is an inline SVG with a viewBox.

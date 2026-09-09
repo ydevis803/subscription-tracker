@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { describeError } from '@/lib/errors'
+import { useDraft } from '@/lib/drafts'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
 import { Button } from '@/components/ui/Button'
@@ -14,7 +15,9 @@ export default function SignIn() {
   const navigate = useNavigate()
   const toast = useToast()
   const next = useNextPath()
-  const [email, setEmail] = useState('')
+  const draft = useDraft<{ email: string }>('auth:sign-in', { email: '' }, (v) => v.email.trim() !== '')
+  const email = draft.value.email
+  const setEmail = (e: string) => draft.setValue({ email: e })
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({})
@@ -35,6 +38,7 @@ export default function SignIn() {
     try {
       const { merge } = await signIn({ email: email.trim(), password })
       if (merge) return // the keep-or-drop sheet below must be answered first; it navigates afterwards
+      draft.clear()
       toast.success('Welcome back')
       navigate(next, { replace: true })
     } catch (err) {

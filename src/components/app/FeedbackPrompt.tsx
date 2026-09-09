@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { recordRatingAsk, recordRatingDismiss, recordRatingOutcome, saveFeedback } from '@/db/repo'
 import { RATING_CAP_TEXT, RATING_HIGH_SCORE, storeUrl } from '@/lib/feedback'
 import { describeError } from '@/lib/errors'
+import { useDraft } from '@/lib/drafts'
 import { Button } from '@/components/ui/Button'
 import { TextArea } from '@/components/ui/Field'
 import { Icon } from '@/components/ui/Icon'
@@ -144,7 +145,9 @@ export function FeedbackPrompt() {
 /** Private feedback form. The note is saved with the user's own data only; it is never posted anywhere. */
 export function FeedbackSheet({ open, score, source, onClose, onSaved }: { open: boolean; score: number | null; source: 'prompt' | 'settings'; onClose: () => void; onSaved: () => void }) {
   const toast = useToast()
-  const [message, setMessage] = useState('')
+  const draft = useDraft<{ message: string }>(`feedback:${source}`, { message: '' }, (v) => v.message.trim() !== '')
+  const message = draft.value.message
+  const setMessage = (m: string) => draft.setValue({ message: m })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const inFlight = useRef(false)
@@ -158,6 +161,7 @@ export function FeedbackSheet({ open, score, source, onClose, onSaved }: { open:
     try {
       await saveFeedback({ score, message, source })
       if (source === 'prompt' && score !== null) await recordRatingOutcome('feedback', score)
+      draft.clear()
       setMessage('')
       toast.success('Thank you. Your note is kept private with your data.')
       onSaved()

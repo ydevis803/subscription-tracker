@@ -19,7 +19,7 @@ export function PageHeader({
 }) {
   const goBack = useSmartBack()
   return (
-    <header className="sticky top-0 z-30 bg-canvas/90 backdrop-blur safe-top">
+    <header className="sticky z-30 bg-canvas/90 backdrop-blur safe-top" style={{ top: 'var(--banner-h, 0px)' }}>
       <div className="mx-auto flex max-w-[480px] items-center gap-2 px-4 pt-3 pb-2">
         {back && (
           <IconButton icon="chevronLeft" size={24} label="Back" className="-ml-2" onClick={() => goBack(backTo ?? '/')} />

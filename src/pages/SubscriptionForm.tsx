@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { readDraft, useDraft } from '@/lib/drafts'
 import { useNavigate, useParams } from 'react-router-dom'
 import { addSubscription, updateSubscription, type SubscriptionInput } from '@/db/repo'
 import { CATEGORIES, type BillingCycle, type CategoryId, type SubscriptionStatus } from '@/db/schema'
@@ -11,7 +12,7 @@ import { categoryOf } from '@/lib/categories'
 import { ServiceMark } from '@/components/ui/Primitives'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Page } from '@/components/layout/AppShell'
-import { Button } from '@/components/ui/Button'
+import { Button, TextLink } from '@/components/ui/Button'
 import { SegmentedControl, SelectField, TextArea, TextField } from '@/components/ui/Field'
 import { Card, EmptyState, ListSkeleton } from '@/components/ui/Primitives'
 import { useToast } from '@/components/ui/Toast'
@@ -58,7 +59,23 @@ export default function SubscriptionForm() {
 
   const linkedDate = new URLSearchParams(window.location.search).get('date')
   const prefilledDate = linkedDate && /^\d{4}-\d{2}-\d{2}$/.test(linkedDate) && linkedDate >= todayISO() ? linkedDate : null
-  const [form, setForm] = useState<FormState>({
+  const draftKey = isEdit ? (existing ? `subscription:edit:${editingId}` : null) : 'subscription:new'
+  const fromExisting = (e: NonNullable<typeof existing>): FormState => ({
+    name: e.name,
+    categoryId: e.categoryId,
+    amount: e.amount.toFixed(2),
+    billingCycle: e.billingCycle,
+    nextRenewalDate: e.nextRenewalDate,
+    startDate: e.startDate,
+    status: e.status,
+    paymentMethod: e.paymentMethod,
+    website: e.website,
+    notes: e.notes,
+    trialEndsAt: e.trialEndsAt ?? daysFromToday(7),
+    reminderDaysBefore: e.reminderDaysBefore === null ? '' : String(e.reminderDaysBefore),
+    priceChangeNote: '',
+  })
+  const draft = useDraft<FormState>(draftKey, {
     name: '',
     categoryId: 'streaming',
     amount: '',
@@ -72,7 +89,9 @@ export default function SubscriptionForm() {
     trialEndsAt: daysFromToday(7),
     reminderDaysBefore: '',
     priceChangeNote: '',
-  })
+  }, (v) => (isEdit ? !!existing && JSON.stringify(v) !== JSON.stringify(fromExisting(existing)) : v.name.trim() !== '' || v.amount.trim() !== '' || v.notes.trim() !== ''))
+  const form = draft.value
+  const setForm = draft.setValue
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [saving, setSaving] = useState(false)
   const [paywall, setPaywall] = useState(false)
@@ -95,23 +114,12 @@ export default function SubscriptionForm() {
 
   useEffect(() => {
     if (isEdit && existing && !hydrated) {
-      setForm({
-        name: existing.name,
-        categoryId: existing.categoryId,
-        amount: existing.amount.toFixed(2),
-        billingCycle: existing.billingCycle,
-        nextRenewalDate: existing.nextRenewalDate,
-        startDate: existing.startDate,
-        status: existing.status,
-        paymentMethod: existing.paymentMethod,
-        website: existing.website,
-        notes: existing.notes,
-        trialEndsAt: existing.trialEndsAt ?? daysFromToday(7),
-        reminderDaysBefore: existing.reminderDaysBefore === null ? '' : String(existing.reminderDaysBefore),
-        priceChangeNote: '',
-      })
+      // A meaningful unsaved draft wins over the stored values; the notice above the form says so.
+      const saved = draftKey ? readDraft<FormState>(draftKey) : null
+      if (!saved || JSON.stringify(saved) === JSON.stringify(fromExisting(existing))) setForm(fromExisting(existing))
       setHydrated(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, existing, hydrated])
 
   // Adding while over the free limit shows the paywall instead of a form that cannot save.
@@ -186,10 +194,12 @@ export default function SubscriptionForm() {
     try {
       if (isEdit && editingId !== undefined) {
         await updateSubscription(editingId, input, form.priceChangeNote.trim())
+        draft.clear()
         toast.success(amountChanged ? 'Saved, price change recorded' : 'Changes saved')
         goBack(`/subscriptions/${editingId}`)
       } else {
         const newId = await addSubscription(input)
+        draft.clear()
         toast.success(`${input.name} added`)
         navigate(`/subscriptions/${newId}`, { replace: true })
       }
@@ -225,6 +235,22 @@ export default function SubscriptionForm() {
     <div>
       <PageHeader title={isEdit ? 'Edit subscription' : 'New subscription'} back backTo={isEdit ? `/subscriptions/${editingId}` : '/subscriptions'} />
       <form onSubmit={onSubmit} noValidate>
+        {draft.restored && (
+          <div className="mb-4 flex items-center gap-3 rounded-2xl border border-mint-100 bg-mint-50 px-4 py-3" role="status">
+            <Icon name="refresh" size={18} className="shrink-0 text-mint-700" />
+            <span className="min-w-0 flex-1 text-[0.8125rem] leading-snug text-navy-900">We kept what you typed earlier, so nothing was lost.</span>
+            <TextLink
+              icon={null}
+              className="shrink-0"
+              onClick={() => {
+                draft.discard()
+                if (isEdit && existing) setForm(fromExisting(existing))
+              }}
+            >
+              Discard
+            </TextLink>
+          </div>
+        )}
         <Page className="space-y-5">
           <Card className="space-y-4 p-4">
             <div className="relative">

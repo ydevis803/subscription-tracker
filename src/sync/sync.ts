@@ -79,6 +79,14 @@ export async function pushToServer(): Promise<string> {
 
 export type SyncState = { status: 'idle' | 'syncing' | 'synced' | 'offline' | 'error'; at: string | null; message?: string }
 
+/** Set by startAutoSync so the offline banner can push a pending backup on demand. */
+let pushNow: (() => Promise<void>) | null = null
+
+/** Push whatever is pending right now (no-op when auto-sync is not running). Resolves once the attempt is over. */
+export async function retrySync(): Promise<void> {
+  if (pushNow) await pushNow()
+}
+
 /** Watches every table and pushes a debounced snapshot after each change. Returns an unsubscribe function. */
 export function startAutoSync(onState: (s: SyncState) => void): () => void {
   let timer: number | undefined
@@ -100,31 +108,45 @@ export function startAutoSync(onState: (s: SyncState) => void): () => void {
       .catch(() => undefined)
   }
   window.addEventListener('pagehide', flush)
+  const attempt = async () => {
+    dirty = false
+    if (stopped) return
+    try {
+      onState({ status: 'syncing', at: null })
+      const at = await pushToServer()
+      onState({ status: 'synced', at: at || new Date().toISOString() })
+    } catch (e) {
+      // The change stays in IndexedDB and lastSynced is untouched, so the next attempt sends it again.
+      dirty = true
+      const offline = e instanceof Error && e.name === 'OfflineError'
+      onState({ status: offline ? 'offline' : 'error', at: null, message: e instanceof Error ? e.message : 'Sync failed' })
+    }
+  }
+  pushNow = async () => {
+    window.clearTimeout(timer)
+    await attempt()
+  }
+  // When the browser regains a connection, send anything that failed while it was away.
+  const onOnline = () => {
+    if (dirty && !stopped) void attempt()
+  }
+  window.addEventListener('online', onOnline)
   const sub = observable.subscribe({
     next: () => {
       if (stopped) return
       dirty = true
       window.clearTimeout(timer)
-      timer = window.setTimeout(async () => {
-        dirty = false
-        if (stopped) return
-        try {
-          onState({ status: 'syncing', at: null })
-          const at = await pushToServer()
-          onState({ status: 'synced', at: at || new Date().toISOString() })
-        } catch (e) {
-          const offline = e instanceof Error && e.name === 'OfflineError'
-          onState({ status: offline ? 'offline' : 'error', at: null, message: e instanceof Error ? e.message : 'Sync failed' })
-        }
-      }, 1200)
+      timer = window.setTimeout(attempt, 1200)
     },
     error: () => undefined,
   })
   return () => {
     flush()
     stopped = true
+    pushNow = null
     window.clearTimeout(timer)
     window.removeEventListener('pagehide', flush)
+    window.removeEventListener('online', onOnline)
     sub.unsubscribe()
   }
 }

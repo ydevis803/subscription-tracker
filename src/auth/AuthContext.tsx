@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { GUEST_DB_NAME, SubscriptionTrackerDB, deleteScope, openScope } from '@/db/schema'
 import { ensureInitialized, mergeSnapshot, replaceWithSnapshot, resetAllData, type Snapshot } from '@/db/repo'
 import { api, ApiError, type AccountUser } from './api'
-import { pullFromServer, pushToServer, resetSyncMemory, startAutoSync, type SyncState } from '@/sync/sync'
+import { pullFromServer, pushToServer, resetSyncMemory, retrySync as retrySyncNow, startAutoSync, type SyncState } from '@/sync/sync'
 
 const USER_CACHE = 'subscription-tracker.account'
 
@@ -20,6 +20,8 @@ interface AuthApi {
   /** Changes whenever the active database changes; hooks use it to re-subscribe. */
   scopeKey: string
   sync: SyncState
+  /** Push a pending backup immediately (used by the offline banner's Retry). */
+  retrySync: () => Promise<void>
   pendingMerge: PendingMerge | null
   signUp: (input: { email: string; password: string; name: string }) => Promise<void>
   /** Resolves with merge: true when the device had guest data and the user must choose to keep or drop it. */
@@ -267,9 +269,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [enterScope],
   )
 
+  const retrySync = useCallback(async () => {
+    if (status !== 'signed-in') return
+    await retrySyncNow()
+  }, [status])
+
   const value = useMemo<AuthApi>(
-    () => ({ status, user, scopeKey, sync, pendingMerge, signUp, signIn, resolveMerge, signOut, updateName, changePassword, deleteAccount, requestReset, resetPassword }),
-    [status, user, scopeKey, sync, pendingMerge, signUp, signIn, resolveMerge, signOut, updateName, changePassword, deleteAccount, requestReset, resetPassword],
+    () => ({ status, user, scopeKey, sync, pendingMerge, retrySync, signUp, signIn, resolveMerge, signOut, updateName, changePassword, deleteAccount, requestReset, resetPassword }),
+    [status, user, scopeKey, sync, pendingMerge, retrySync, signUp, signIn, resolveMerge, signOut, updateName, changePassword, deleteAccount, requestReset, resetPassword],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

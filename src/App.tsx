@@ -4,6 +4,7 @@ import { ensureInitialized, rolloverRenewals } from '@/db/repo'
 import { useProfile } from '@/hooks/useData'
 import { AuthProvider, useAuth } from '@/auth/AuthContext'
 import { ToastProvider } from '@/components/ui/Toast'
+import { OfflineBanner } from '@/components/app/OfflineBanner'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, ErrorState, Skeleton } from '@/components/ui/Primitives'
 import { Spinner } from '@/components/ui/Button'
@@ -127,12 +128,15 @@ function AppRoutes() {
 
   if (!profile.onboardingComplete) {
     return (
-      <Suspense fallback={<PageSkeleton />}>
-        <Routes>
-          {authRoutes}
-          <Route path="*" element={<Onboarding />} />
-        </Routes>
-      </Suspense>
+      <>
+        <OfflineBanner />
+        <Suspense fallback={<PageSkeleton />}>
+          <Routes>
+            {authRoutes}
+            <Route path="*" element={<Onboarding />} />
+          </Routes>
+        </Suspense>
+      </>
     )
   }
 
@@ -140,6 +144,7 @@ function AppRoutes() {
 
   return (
     <AppShell nav={!fullScreen}>
+      <OfflineBanner />
       <Suspense fallback={<PageSkeleton />}>
         <Routes>
         {authRoutes}

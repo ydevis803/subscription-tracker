@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { apiUrl } from '@/lib/apiBase'
 
 /**
  * Connectivity as the app experiences it: the browser's own online flag, plus whether the last request to
@@ -39,7 +40,7 @@ if (typeof window !== 'undefined') {
 /** Ask the server for anything cheap. Resolves true when it answers, false when the network is down. */
 export async function probeConnection(): Promise<boolean> {
   try {
-    const res = await fetch('/api/auth/me', { method: 'GET', cache: 'no-store', credentials: 'same-origin' })
+    const res = await fetch(apiUrl('/api/auth/me'), { method: 'GET', cache: 'no-store', credentials: 'same-origin' })
     await res.arrayBuffer().catch(() => undefined)
     reportOnline()
     return true

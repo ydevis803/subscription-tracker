@@ -1,4 +1,5 @@
 import { liveQuery } from 'dexie'
+import { apiUrl } from '@/lib/apiBase'
 import { db } from '@/db/schema'
 import { readSnapshot, replaceWithSnapshot, type Snapshot } from '@/db/repo'
 import { api } from '@/auth/api'
@@ -103,7 +104,7 @@ export function startAutoSync(onState: (s: SyncState) => void): () => void {
     readSnapshot()
       .then((snap) => {
         const body = new Blob([JSON.stringify({ snapshot: snap })], { type: 'application/json' })
-        navigator.sendBeacon('/api/data', body)
+        navigator.sendBeacon(apiUrl('/api/data'), body)
       })
       .catch(() => undefined)
   }

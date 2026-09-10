@@ -1,4 +1,5 @@
 import { reportOffline, reportOnline } from '@/lib/connectivity'
+import { apiUrl } from '@/lib/apiBase'
 export interface AccountUser {
   id: number
   email: string
@@ -24,7 +25,7 @@ export class OfflineError extends Error {
 
 async function call(method: string, path: string, body?: unknown, headers: Record<string, string> = {}): Promise<Response> {
   try {
-    const res = await fetch(path, {
+    const res = await fetch(apiUrl(path), {
       method,
       headers: { 'Content-Type': 'application/json', ...headers },
       body: body === undefined ? undefined : JSON.stringify(body),

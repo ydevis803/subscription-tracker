@@ -1,5 +1,6 @@
 import { db } from '@/db/schema'
 import { todayISO, toISO } from '@/lib/dates'
+import { apiUrl } from '@/lib/apiBase'
 
 /**
  * Owner-only, count-only analytics. Six milestones, each sent at most once per profile, as `{ event, day }`
@@ -39,7 +40,7 @@ function writeQueue(q: { event: AnalyticsEvent; day: string }[]) {
 
 async function send(event: AnalyticsEvent, day: string): Promise<boolean> {
   try {
-    const res = await fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event, day }), credentials: 'omit' })
+    const res = await fetch(apiUrl('/api/analytics'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event, day }), credentials: 'omit' })
     // Drain the (empty) body so the browser can release the connection and count the request as finished.
     await res.arrayBuffer().catch(() => undefined)
     return res.ok

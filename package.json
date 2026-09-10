@@ -18,9 +18,15 @@
     "test:journeys": "node scripts/journeys-test.mjs",
     "qa:visual": "node scripts/visual-qa.mjs",
     "logo:export": "node scripts/logo-export.mjs",
-    "store:shots": "node scripts/store-shots.mjs"
+    "store:shots": "node scripts/store-shots.mjs",
+    "build:ios": "tsc -b && vite build --mode ios",
+    "ios:sync": "npm run build:ios && cap sync ios",
+    "ios:open": "cap open ios",
+    "ios:assets": "node scripts/ios-assets.mjs"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.1",
+    "@capacitor/ios": "^8.5.1",
     "date-fns": "^4.1.0",
     "dexie": "^4.0.11",
     "dexie-react-hooks": "^1.1.7",
@@ -30,6 +36,7 @@
     "react-router-dom": "^7.6.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.1",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^24.13.4",
     "@types/react": "^19.1.6",

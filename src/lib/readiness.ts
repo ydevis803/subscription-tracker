@@ -1,4 +1,5 @@
 import { APP_VERSION, CONTACT_IS_PLACEHOLDER } from '@/lib/legal'
+import { apiUrl } from '@/lib/apiBase'
 
 export type ReadinessStatus = 'pass' | 'fix' | 'confirm' | 'running'
 
@@ -267,7 +268,7 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     route: '/auth/forgot',
     run: async () => {
       try {
-        const res = await fetch('/api/health', { cache: 'no-store' })
+        const res = await fetch(apiUrl('/api/health'), { cache: 'no-store' })
         const body = (await res.json()) as { mail?: string }
         return body.mail === 'smtp'
           ? { status: 'pass', evidence: 'The API reports SMTP delivery for reset emails.' }

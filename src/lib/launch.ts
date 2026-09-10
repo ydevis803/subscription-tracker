@@ -1,4 +1,5 @@
 import { CONTACT_IS_PLACEHOLDER, SUPPORT_EMAIL } from '@/lib/legal'
+import { apiUrl } from '@/lib/apiBase'
 import { isStandalone } from '@/lib/install'
 
 /**
@@ -136,7 +137,7 @@ export const LAUNCH_ITEMS: LaunchItem[] = [
     how: 'Create a test account on the live site, sign out, sign in again and see the same subscriptions. Delete the test account afterwards from Settings → Delete account.',
     route: '/auth/sign-up',
     auto: async () => {
-      const health = await fetch('/api/health', { cache: 'no-store' }).then((r) => r.json()).catch(() => null)
+      const health = await fetch(apiUrl('/api/health'), { cache: 'no-store' }).then((r) => r.json()).catch(() => null)
       const ok = !!(health as { ok?: boolean } | null)?.ok
       const mail = (health as { mail?: string } | null)?.mail
       return { ok, evidence: ok ? `API is up; password reset mail mode: ${mail}.` : 'The API did not answer, so sign-up cannot work.' }

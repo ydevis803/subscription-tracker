@@ -88,6 +88,9 @@ const ALLOWED_HOSTS = (process.env.ALLOWED_ORIGIN_HOSTS ?? '').split(',').map((h
 
 function assertSameOrigin(req) {
   const origin = req.headers.origin
+  // The native iOS shell (Capacitor) serves its pages from capacitor://localhost; browsers can never send
+  // that scheme as an Origin, so accepting it does not widen the web surface.
+  if (origin === 'capacitor://localhost') return requireJson(req)
   if (origin) {
     let originHost
     try {
@@ -100,6 +103,9 @@ function assertSameOrigin(req) {
   }
   const site = req.headers['sec-fetch-site']
   if (site && !['same-origin', 'same-site', 'none'].includes(site)) throw new HttpError(403, 'Cross-site request blocked')
+  requireJson(req)
+}
+function requireJson(req) {
   if (!/^application\/json/.test(req.headers['content-type'] ?? '')) throw new HttpError(415, 'Send JSON')
 }
 

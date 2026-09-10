@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { apiUrl } from '@/lib/apiBase'
 import { Link } from 'react-router-dom'
 import { Logo } from '@/components/ui/Logo'
 import { Button } from '@/components/ui/Button'
@@ -50,7 +51,7 @@ export default function OwnerAnalytics() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/analytics/summary', { headers: ownerKey ? { 'X-Owner-Key': ownerKey } : {}, cache: 'no-store' })
+      const res = await fetch(apiUrl('/api/analytics/summary'), { headers: ownerKey ? { 'X-Owner-Key': ownerKey } : {}, cache: 'no-store' })
       if (res.status === 401) {
         setSummary(null)
         setError('The server wants the owner key (OWNER_KEY on the API server). Enter it below; it is kept for this tab only.')

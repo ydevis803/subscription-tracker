@@ -27,7 +27,7 @@ import {
 } from './auth.mjs'
 import { mailMode, sendMail } from './mailer.mjs'
 
-const PORT = Number(process.env.API_PORT ?? 8787)
+const PORT = Number(process.env.API_PORT ?? process.env.PORT ?? 8787)
 const COOKIE = 'st_session'
 const SECURE_COOKIE = process.env.COOKIE_SECURE === '1'
 const SERVE_STATIC = process.env.SERVE_STATIC === '1'

@@ -28,6 +28,20 @@ export interface Tools {
 const PLACEHOLDER = /\[Your |\[Postal|\[Country|Lorem ipsum|\bTODO\b|placeholder text|support@example\.com/i
 const RAW_ERROR = /\b(TypeError|ReferenceError|undefined|NaN|\[object Object\])\b/
 
+/**
+ * App screens (Settings, Premium, Reminders) redirect to the welcome flow until this browser has finished
+ * onboarding, so on a fresh device the frame shows the welcome screen instead of the screen under test.
+ * Report that as a confirm step rather than a false "fix".
+ */
+function welcomeRedirect(route: string, text: string): ReadinessResult | null {
+  if (!/Know your monthly total|Show me my total/.test(text)) return null
+  return {
+    status: 'confirm',
+    evidence: `${route} redirected to the welcome flow because this browser has not finished onboarding yet.`,
+    action: 'Open the app in this browser, finish onboarding once (sample data is fine), then come back and press Run again.',
+  }
+}
+
 export const READINESS_ITEMS: ReadinessItem[] = [
   {
     id: 'legal-before-signup',
@@ -94,6 +108,8 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     route: '/settings',
     run: async ({ page }) => {
       const { text } = await page('/settings')
+      const redirected = welcomeRedirect('/settings', text)
+      if (redirected) return redirected
       const ok = /Delete account/.test(text)
       return ok ? { status: 'pass', evidence: 'Settings shows a Delete account row that opens the deletion page.' } : { status: 'fix', evidence: 'No Delete account row on Settings.', action: 'Restore the row in src/pages/Settings.tsx.' }
     },
@@ -105,6 +121,8 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     route: '/premium',
     run: async ({ page }) => {
       const { text } = await page('/premium')
+      const redirected = welcomeRedirect('/premium', text)
+      if (redirected) return redirected
       const ok = /Restore purchase/.test(text) || /End Premium|Manage/.test(text)
       return ok ? { status: 'pass', evidence: 'Restore purchase (or manage) is present on the plan screen.' } : { status: 'fix', evidence: 'No restore or manage action found.', action: 'Restore the actions in src/pages/Premium.tsx.' }
     },
@@ -116,6 +134,8 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     route: '/reminders',
     run: async ({ page }) => {
       const { text } = await page('/reminders')
+      const redirected = welcomeRedirect('/reminders', text)
+      if (redirected) return redirected
       const ok = /Browser notification/i.test(text) && /while the app is open/i.test(text)
       return ok
         ? { status: 'pass', evidence: 'The app asks for no camera, location, contacts or background permissions. Notification permission is requested only when the user turns on browser notifications on the Reminders screen, which explains it works while the app is open.' }
@@ -172,7 +192,9 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     title: 'Bottom navigation has five tabs and every tab screen loads',
     route: '/',
     run: async ({ page }) => {
-      const { doc } = await page('/')
+      const { doc, text } = await page('/')
+      const redirected = welcomeRedirect('/', text)
+      if (redirected) return redirected
       const tabs = [...(doc?.querySelectorAll('nav[aria-label="Main"] a') ?? [])].map((a) => a.getAttribute('href') ?? '')
       if (tabs.length !== 5) return { status: 'fix', evidence: `Found ${tabs.length} tabs.`, action: 'Bottom navigation must show Home, Subscriptions, Calendar, Insights, Profile.' }
       const broken: string[] = []
@@ -190,6 +212,8 @@ export const READINESS_ITEMS: ReadinessItem[] = [
     route: '/does-not-exist',
     run: async ({ page }) => {
       const { text } = await page('/does-not-exist')
+      const redirected = welcomeRedirect('/does-not-exist', text)
+      if (redirected) return redirected
       const ok = /Home|Back/.test(text) && !RAW_ERROR.test(text)
       return ok ? { status: 'pass', evidence: 'Unknown paths render the not-found screen with a way back.' } : { status: 'fix', evidence: 'Not-found screen is missing or broken.', action: 'Restore src/pages/NotFound.tsx.' }
     },

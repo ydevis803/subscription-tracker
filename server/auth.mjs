@@ -67,6 +67,9 @@ export function userForSession(token) {
 export function purgeExpired() {
   db.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(nowISO())
   db.prepare('DELETE FROM password_resets WHERE expires_at <= ? OR used_at IS NOT NULL').run(nowISO())
+  // Accounts created by scripts/journeys-test.mjs use unreachable example.com addresses; remove any that an
+  // interrupted run left behind once they are an hour old (deletes cascade to the account's rows).
+  db.prepare("DELETE FROM users WHERE email LIKE 'test-journeys-%@example.com' AND created_at <= ?").run(new Date(Date.now() - 3600000).toISOString())
 }
 
 export function destroySession(token) {

@@ -36,7 +36,9 @@ export default function Readiness() {
           }, 900)
         }
         frame.onload = finish
-        frame.src = path + (path.includes('?') ? '&' : '?') + 'readiness=1'
+        // Owner pages inside the frame need the same key this page was opened with.
+        const gate = path.startsWith('/__') && provided ? `&key=${encodeURIComponent(provided)}` : ''
+        frame.src = path + (path.includes('?') ? '&' : '?') + 'readiness=1' + gate
         window.setTimeout(finish, 6000)
       })
     const fetchStatus = async (path: string) => {
@@ -49,7 +51,7 @@ export default function Readiness() {
       }
     }
     return { page, fetchStatus }
-  }, [])
+  }, [provided])
 
   const runAll = useCallback(async () => {
     if (running.current) return

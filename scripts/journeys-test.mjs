@@ -25,7 +25,7 @@ const rawErrors = []
 const browser = await chromium.launch({ executablePath: CHROME, headless: true })
 const context = await browser.newContext({ viewport: { width: 375, height: 740 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
 const page = await context.newPage()
-context.setDefaultTimeout(8000)
+context.setDefaultTimeout(Number(process.env.NAV_TIMEOUT ?? 8000))
 page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 160)}`))
 page.on('console', (m) => {
   if (m.type() === 'error' && !/favicon|net::ERR_|Failed to load resource|401 \(Unauthorized\)/.test(m.text())) consoleErrors.push(`console: ${m.text().slice(0, 160)}`)
@@ -93,6 +93,7 @@ const probeButtons = async (path, max = 8) => {
 const stamp = Date.now()
 const EMAIL = `test-journeys-${stamp}@example.com`
 const PASSWORD = 'a long enough passphrase'
+console.log(`test account for this run: ${EMAIL}`)
 
 try {
   // ---------- 1. New visitor → first win ----------

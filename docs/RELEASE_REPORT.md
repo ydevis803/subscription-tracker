@@ -4,13 +4,11 @@ Audit date: 9 September 2026. Audited as a first-time customer, a returning cust
 
 ## Live URL to test
 
-There is no public deployment yet. `VITE_APP_URL` is unset in the repository, so the checklist pages report "not on the published site" everywhere except the address the build was made for.
+    https://subscription-tracker-production-3487.up.railway.app
 
-For this audit the production build was made with `VITE_APP_URL=http://127.0.0.1:8791` and served with `SERVE_STATIC=1 API_PORT=8791 node server/index.mjs`. Every "live" check below ran against:
+Published on 10 September 2026 as a single Railway service: the API serves the production build and stores accounts in SQLite on a mounted volume at /data. Owner pages need `?key=<VITE_STORE_PREVIEW_KEY>`, for example `/__launch?key=…`; the analytics dashboard additionally asks for OWNER_KEY.
 
-    http://127.0.0.1:8791
-
-To test the real release, build with `VITE_APP_URL=https://<your-domain>` and open `https://<your-domain>/__launch?key=<VITE_STORE_PREVIEW_KEY>`; that page only accepts "Tested live" marks on that origin.
+Before the public deploy, the same checks ran against a local production build at http://127.0.0.1:8791 and http://localhost:8791.
 
 ## Tested journeys
 
@@ -38,10 +36,11 @@ Automated suites on the development server: journeys 50/50 with zero raw-error h
 
 ## Remaining manual store tasks (cannot be done inside the app)
 
-1. Fill `VITE_OWNER_NAME`, `VITE_OWNER_ADDRESS`, `VITE_SUPPORT_EMAIL` and `VITE_LEGAL_JURISDICTION` in `.env`; the legal pages show bracketed placeholders until then and the readiness scan keeps two items on Fix.
-2. Set `VITE_APP_URL` to the public https address and rebuild, then run the launch checklist on that origin.
-3. Configure `SMTP_URL` (and `MAIL_FROM`) on the API server so password-reset emails are delivered; until then they are written to `server/outbox/`.
-4. For a native store build, route Premium purchases through StoreKit / Google Play Billing or remove the Start Premium button from that build; this build records Premium locally with no payment.
-5. Capture the store screenshots with `npm run store:shots`, and complete the App Store and Google Play preparation sections on `/__launch` (Team ID, Issuer ID, Key ID, .p8 stored securely, bundle and package names, 1024 px and 512 px icons, feature graphic, version numbers, closed-test confirmation).
-6. Answer the store data-safety questionnaires from the Privacy Policy's "Data types we use" section, including the seven anonymous milestone counts.
-7. Set `OWNER_KEY` on the API server so the analytics summary is not limited to loopback.
+Done on the live service: public https address, VITE_APP_URL, owner preview key, OWNER_KEY, contact details in the legal pages, persistent database volume.
+
+1. Configure `SMTP_URL` (and `MAIL_FROM`) on the Railway service so password-reset emails are delivered; until then they are written to `server/outbox/` on the volume.
+2. Work through `/__launch?key=…` on a signed-out phone and mark each of the 11 items after testing it live.
+3. For a native store build, route Premium purchases through StoreKit / Google Play Billing or remove the Start Premium button from that build; this build records Premium locally with no payment.
+4. Capture the store screenshots with `npm run store:shots`, and complete the App Store and Google Play preparation sections on `/__launch` when a native build is planned.
+5. Answer the store data-safety questionnaires from the Privacy Policy's "Data types we use" section, including the seven anonymous milestone counts.
+6. Optional: attach a custom domain in Railway, then update `VITE_APP_URL` and redeploy.

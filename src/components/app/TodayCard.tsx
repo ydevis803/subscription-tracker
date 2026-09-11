@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { recordVisit, startCheck } from '@/db/repo'
@@ -170,7 +171,8 @@ export function TodayCard({
       <StreakRow subs={subs} notes={notes} changes={changes} checks={checks} settings={settings} />
 
       {reward && (
-        <button type="button" onClick={() => reward.path && navigate(reward.path)} className={`flex w-full items-start gap-3 border-t border-line px-4 py-3 text-left ${reward.path ? 'active:bg-navy-50' : ''}`}>
+        // A reward with a destination is a button; one without is plain text, never a button that does nothing.
+        <RewardRow path={reward.path} onOpen={() => reward.path && navigate(reward.path)}>
           <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${toneBox[reward.tone]}`}>
             <Icon name={reward.icon} size={16} />
           </span>
@@ -179,8 +181,18 @@ export function TodayCard({
             <span className="block text-[0.8125rem] leading-snug text-ink">{reward.text}</span>
           </span>
           {reward.path && <Icon name="chevronRight" size={16} className="mt-2 shrink-0 text-faint" />}
-        </button>
+        </RewardRow>
       )}
     </Card>
+  )
+}
+
+const rewardRowClass = 'flex w-full items-start gap-3 border-t border-line px-4 py-3 text-left'
+function RewardRow({ path, onOpen, children }: { path?: string; onOpen: () => void; children: React.ReactNode }) {
+  if (!path) return <div className={rewardRowClass}>{children}</div>
+  return (
+    <button type="button" onClick={onOpen} className={`${rewardRowClass} active:bg-navy-50`}>
+      {children}
+    </button>
   )
 }

@@ -32,6 +32,15 @@ edit by hand (icons, Info.plist) are worth committing.
 
 After any change to the web app, run `npm run ios:sync` again before building in Xcode.
 
+## Reminders on iOS
+
+The web app fires a browser notification only while its tab is open. Inside the shell the same schedule (days, time,
+pause rules, the same settings flag) is handed to iOS as local notifications by `src/lib/nativeNotifications.ts`:
+the next six weeks of reminder moments are booked with the system and refreshed on every settings or data change
+and whenever the app returns to the foreground. They fire with the app closed and need no server. Tapping one opens
+the renewal check. The Reminders screen asks for the iOS notification permission the first time the switch is turned on.
+The web build never loads this module (it is imported lazily behind `isNativeApp()`).
+
 ## Identity
 
 - Bundle identifier: `com.ydevis.subscriptiontracker`
@@ -42,6 +51,5 @@ After any change to the web app, run `npm run ios:sync` again before building in
 
 - Premium is recorded in the app with no payment. Apple requires StoreKit for digital subscriptions, so review
   will reject a Premium purchase until StoreKit is added.
-- Reminders are browser notifications and only fire while the app is open. Native push is not wired.
 - The end-of-session backup beacon (`navigator.sendBeacon`) is best effort inside the shell; the regular sync
   on the next open covers it.

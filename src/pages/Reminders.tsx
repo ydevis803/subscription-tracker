@@ -15,9 +15,12 @@ import { Icon, type IconName } from '@/components/ui/Icon'
 import { Card, SectionTitle, Skeleton } from '@/components/ui/Primitives'
 import { useToast } from '@/components/ui/Toast'
 import { format } from 'date-fns'
+import { isNativeApp } from '@/lib/native'
 
 type Permission = 'unsupported' | 'default' | 'granted' | 'denied'
 const readPermission = (): Permission => (typeof Notification === 'undefined' ? 'unsupported' : (Notification.permission as Permission))
+// Inside the iOS shell the device delivers reminders (local notifications); the browser path is untouched.
+const native = isNativeApp()
 
 export default function Reminders() {
   const navigate = useNavigate()
@@ -26,7 +29,11 @@ export default function Reminders() {
   const settings = useSettings()
   const schedule = useMemo(() => scheduleOf(settings), [settings])
   const [flash, setFlash] = useState<string | null>(null)
-  const [permission, setPermission] = useState<Permission>(readPermission)
+  const [permission, setPermission] = useState<Permission>(native ? 'default' : readPermission)
+  useEffect(() => {
+    if (!native) return
+    void import('@/lib/nativeNotifications').then((m) => m.nativePermission()).then(setPermission)
+  }, [])
   const lock = useRef(false)
   const tz = useMemo(() => timeZoneLabel(), [])
   const [now, setNow] = useState(() => new Date())
@@ -50,6 +57,15 @@ export default function Reminders() {
   }
 
   const enableBrowser = async (on: boolean) => {
+    if (native) {
+      if (!on) return save({ browserNotifications: false }, 'Notifications off')
+      const m = await import('@/lib/nativeNotifications')
+      let p = await m.nativePermission()
+      if (p === 'default') p = await m.requestNativePermission()
+      setPermission(p)
+      if (p === 'granted') return save({ browserNotifications: true }, 'Notifications on')
+      return toast.error('Notifications are off for this app in iOS Settings. Allow them there, then try again.')
+    }
     if (!on) return save({ browserNotifications: false }, 'Browser notifications off')
     if (typeof Notification === 'undefined') return toast.error('This browser does not support notifications, so we cannot turn them on.')
     let p = Notification.permission
@@ -178,9 +194,15 @@ export default function Reminders() {
                 <Delivery icon="home" title="In the app, on your Today card" status="Always on" tone="mint" body="Every visit shows whether today's reminder is due, done or paused." />
                 <div className="px-4 py-3">
                   <Toggle
-                    label="Browser notification while the app is open"
+                    label={native ? 'Notification on this phone' : 'Browser notification while the app is open'}
                     description={
-                      permission === 'unsupported'
+                      native
+                        ? permission === 'denied'
+                          ? 'Turned off for this app in iOS Settings.'
+                          : schedule.browserNotifications && permission === 'granted'
+                            ? 'Allowed. iOS shows the reminder at the chosen time, even when the app is closed.'
+                            : 'Asks iOS for permission. Fires at the chosen time even when the app is closed.'
+                        : permission === 'unsupported'
                         ? 'Not supported by this browser.'
                         : permission === 'denied'
                           ? 'Blocked in your browser settings for this site.'
@@ -192,7 +214,11 @@ export default function Reminders() {
                     onChange={enableBrowser}
                   />
                 </div>
-                <Delivery icon="bell" title="Push while the app is closed" status="Not available in this version" tone="navy" body="This build has no push service, so nothing can reach a closed app or a locked phone. We say so rather than promise it." />
+                {native ? (
+                  <Delivery icon="bell" title="While the app is closed" status={schedule.browserNotifications && permission === 'granted' ? 'Scheduled on this phone' : 'Needs the switch above'} tone={schedule.browserNotifications && permission === 'granted' ? 'mint' : 'navy'} body="Reminders are booked with iOS for the next six weeks and refreshed every time you open the app, so no server is involved." />
+                ) : (
+                  <Delivery icon="bell" title="Push while the app is closed" status="Not available in this version" tone="navy" body="This build has no push service, so nothing can reach a closed app or a locked phone. We say so rather than promise it." />
+                )}
                 <Delivery icon="mail" title="Email reminders" status="Not available yet" tone="navy" body="No email service is connected in this version." />
               </Card>
             </section>

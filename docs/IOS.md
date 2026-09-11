@@ -41,6 +41,13 @@ and whenever the app returns to the foreground. They fire with the app closed an
 the renewal check. The Reminders screen asks for the iOS notification permission the first time the switch is turned on.
 The web build never loads this module (it is imported lazily behind `isNativeApp()`).
 
+## Files and the install guide on iOS
+
+- "Add to calendar" on the timeline cannot download inside the app, so in the shell `src/lib/nativeShare.ts` writes the
+  `.ics` to the app cache and opens the iOS share sheet (Calendar, Files, Mail…). The web keeps its download.
+- The Support page's install guide treats the shell as already installed (`isStandalone()` is true inside the app), so it
+  shows the "already using the installed app" line rather than Safari steps.
+
 ## Identity
 
 - Bundle identifier: `com.ydevis.subscriptiontracker`

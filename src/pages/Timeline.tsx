@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { isNativeApp } from '@/lib/native'
 import { recordActivity, updateSettings } from '@/db/repo'
 import type { CategoryId } from '@/db/schema'
 import { useNotes, useProfile, useSettings, useSubscriptions } from '@/hooks/useData'
@@ -147,10 +148,17 @@ export default function Timeline() {
   const introSeen = settings?.timelineIntroSeen ?? false
   const selectedCat = view.category ? categoryOf(view.category) : null
 
-  const download = () => {
+  const download = async () => {
     if (!model) return
     try {
       const ics = buildRenewalCalendar(model.occurrences, model.openNotes, lead)
+      const count = `${model.occurrences.length} ${model.occurrences.length === 1 ? 'renewal' : 'renewals'}`
+      if (isNativeApp()) {
+        // Inside the iOS app a download has nowhere to land: hand the file to the share sheet instead.
+        const { shareTextFile } = await import('@/lib/nativeShare')
+        if (await shareTextFile(`renewals-next-${view.horizon}-days.ics`, ics, 'Renewal calendar')) toast.success(`Calendar file with ${count} ready`)
+        return
+      }
       const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')

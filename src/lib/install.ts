@@ -1,3 +1,4 @@
+import { isNativeApp } from '@/lib/native'
 /** Add-to-home-screen guidance that matches the browser the user is actually holding. */
 export type Platform = 'ios-safari' | 'ios-other' | 'android-chrome' | 'android-other' | 'desktop-chrome' | 'desktop-safari' | 'desktop-other'
 
@@ -15,6 +16,8 @@ export function detectPlatform(ua: string = typeof navigator === 'undefined' ? '
 
 export function isStandalone(): boolean {
   if (typeof window === 'undefined') return false
+  // The iOS app is the installed app; the web view does not report standalone on its own.
+  if (isNativeApp()) return true
   return window.matchMedia?.('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
 }
 

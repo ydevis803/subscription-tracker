@@ -16,6 +16,9 @@ edit by hand (icons, Info.plist) are worth committing.
   browsers can never send that scheme, so the web surface is unchanged.
 - Owner-only pages (`/__launch`, `/__readiness`, ...) are hidden in the app because `.env.ios` leaves
   `VITE_STORE_PREVIEW_KEY` empty.
+- The Keyboard plugin runs with `resize: 'native'`, so the web view shrinks by the keyboard height (the same
+  behaviour the web app gets from `interactive-widget=resizes-content` in Safari). Without it, iOS scrolls
+  the whole document to reveal the focused field and the page header slides under the status bar.
 
 ## Commands
 

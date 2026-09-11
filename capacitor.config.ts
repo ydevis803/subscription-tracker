@@ -13,6 +13,9 @@ const config: CapacitorConfig = {
   plugins: {
     CapacitorHttp: { enabled: true },
     CapacitorCookies: { enabled: true },
+    // Shrink the web view when the keyboard opens (as Safari does with interactive-widget=resizes-content)
+    // instead of scrolling the whole document under the status bar.
+    Keyboard: { resize: 'native', resizeOnFullScreen: true },
   },
   ios: {
     contentInset: 'never',
